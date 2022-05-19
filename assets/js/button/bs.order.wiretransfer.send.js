@@ -49,8 +49,7 @@ $(document).on('bs-order-wiretransfer-send', function (e, element, button) {
         $.ajax({
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'Lang',
-                condition: {isActive: 1}
+                table: 'Lang'
             },
             dataType: 'json'
         }).done(function (res2) {

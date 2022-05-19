@@ -920,11 +920,6 @@ $.decodeGetStringFromUrl = function (url) {
     if (getString.length == 2) return $.extend({baseUrl: getString[0]}, $.decodeGetString(getString[1]));
 };
 
-/**
- * @deprecated
- * @param url
- * @returns {*}
- */
 $.myDecodeGetStringFromUrl = function (url) {
     "use strict";
     if ('undefined' === typeof url) url = window.location.href;
@@ -964,16 +959,11 @@ $.encodeGetString = function (o) {
     }
     $.each(o, function (k, v) {
         if (k == 'baseUrl') return;
-        a.push(encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        a.push(k + "=" + v);
     });
     return r + '?' + a.join('&');
 };
 
-/**
- * @deprecated
- * @param o
- * @returns {string}
- */
 $.myEncodeGetString = function (o) {
     "use strict";
     let a = [];

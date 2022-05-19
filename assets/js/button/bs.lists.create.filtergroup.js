@@ -3,7 +3,6 @@ window.buttonSetup = {
     icon: "fa-file-o fa-plus",
     permission: "/admin/product/delete&&allShops",
     permission:"/admin/product/add&&allShops",
-    permission:"allShops||worker",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Aggiungi un nuovo Segmento di Pubblico",

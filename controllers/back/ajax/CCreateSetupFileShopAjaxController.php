@@ -66,6 +66,29 @@ class CCreateSetupFileShopAjaxController extends AAjaxController
         fwrite($myfile, $json);
 
         fclose($myfile);
+        $indexFile='index.php';
+        if(ENV=='dev') {
+            $myIndexfile = fopen("/media/sf_sites/iwespro/temp/" . $indexFile,"w");
+            $nameIndexFile="/media/sf_sites/iwespro/temp/" . $indexFile;
+        }else{
+            $myIndexfile = fopen("/home/iwespro/public_html/temp/" . $indexFile,"w");
+            $nameIndexFile="/home/iwespro/public_html/temp/" . $indexFile;
+        }
+        $codesetup="<?php
+copy('/home/shared/setup/preinstall.zip','/home/".$shop->remotePath."/public_html/preinstall.zip');
+\$zip = new ZipArchive;
+if (\$zip->open('preinstall.zip') === TRUE) {
+    \$zip->extractTo('/home/".$shop->remotePath."/public_html/');
+    \$zip->close();
+    echo ' decompressione pacchetto ok';
+} else {
+    echo 'failed';
+}
+?>
+<a href='/setup/dist/index.php'>installa</a>";
+        fwrite($myIndexfile, $codesetup);
+
+        fclose($myIndexfile);
 
 
         try {
@@ -73,7 +96,9 @@ class CCreateSetupFileShopAjaxController extends AAjaxController
             $sftp->login($shop->ftpUser, $shop->ftpPassword);
             $sftp->uploadFile($nameLocalFile, $root);
             unlink($nameLocalFile);
-            return 'File Setup Creato per lanciare l\'installazione  vai su '.$shop->urlSite.'/setup.php';
+            $sftp->uploadFile($nameIndexFile, $root);
+            unlink($nameIndexFile);
+            return 'File Setup Creato per lanciare l\'installazione  vai su '.$shop->urlSite;
         }
         catch (\Exception $e) {
             \Monkey::app()->applicationLog('CCreateSetupFileShopAjaxController','Error','sftp Tranfer'. $nameLocalFile,$e->getMessage(),$e->getLine());

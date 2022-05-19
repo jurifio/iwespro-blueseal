@@ -41,7 +41,7 @@ $(document).on('bs-manage-cards-photo', function () {
 
     body.html(bodyContent);
     let dropzone = new Dropzone("#dropzoneModal",{
-        url: "/blueseal/xhr/ProductPhotoAjaxManage",
+        url: "/blueseal/xhr/ProductCardsPhotoAjaxManage",
         maxFilesize: 5,
         maxFiles: 100,
         parallelUploads: 10,

@@ -3,7 +3,7 @@
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <title>99Monkeys - <?php echo $page->getTitle(); ?></title>
     <!--<script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
     <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>

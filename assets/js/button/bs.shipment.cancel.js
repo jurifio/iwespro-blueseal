@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-shipment-cancel",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Cancella e Riprenota la Spedizione",
+    title: "Cancella una spedizione",
     placement: "bottom",
     toggle: "modal"
 };

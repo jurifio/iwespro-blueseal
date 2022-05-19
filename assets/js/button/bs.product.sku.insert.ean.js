@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-file-text-o",
     permission:"/admin/product/edit",
-    event:"bs-product-sku.insert-ean",
+    event:"bs-ean-update",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Gestisci etichette",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs-product-sku.insert-ean', function () {
+$(document).on('bs-ean-update', function () {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 

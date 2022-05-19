@@ -58,8 +58,7 @@ $(document).on('bs-order-cancel-send', function (e, element, button) {
         $.ajax({
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'Lang',
-                condition: {isActive: 1}
+                table: 'Lang'
             },
             dataType: 'json'
         }).done(function (res2) {

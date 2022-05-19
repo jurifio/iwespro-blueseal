@@ -1,5 +1,5 @@
 (function ($) {
-    $(document).on('bs.adding.presta', function () {
+    $(document).on('bs.add.presta.product', function () {
 
         let loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
         //Prendo tutti i lotti selezionati
@@ -30,22 +30,19 @@
                     <select id="modifyPrice">
                         <option value="nf">Non modificare</option>
                         <option value="p+">Percentuale +</option>
-                        <option value="p-">Percentuale -</option> 
+                        <option value="p-">Percentuale -</option>
+                        <option value="f+">Fisso +</option>
+                        <option value="f-">Fisso -</option>
                     </select>
                     
                     <p>Inserisci l'importo con cui variare il prezzo</p>
-                    <input type="number" step="0.01" min="1" id="variantValueSale">
-                     <select id="modifyPriceSale">
-                        <option value="nf">Non modificare</option>
-                        <option value="p+">Percentuale +</option>
-                        <option value="p-">Percentuale -</option> 
-                    </select>
-                    
-                    <p>Inserisci l'importo con cui variare il prezzo</p>
-                    <input type="numberSale" step="0.01" min="1" id="variantValue">
+                    <input type="number" step="0.01" min="1" id="variantValue">
                 </div>
                 
-               
+                <div>
+                    <p>Utilizza cronjob</p>
+                    <input type="checkbox" id="useCron">
+                </div>
             `
         });
 
@@ -67,22 +64,20 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
-
+            let cron = $('#useCron').is(':checked') ? 'PrestashopHasProductManageWithCron' : 'PrestashopHasProductManage';
 
             const data = {
                 products: products,
                 marketplaceHasShopId: $('#selectMarketplace').val(),
                 modifyType: $('#modifyPrice').val(),
-                variantValue: $('#variantValue').val(),
-                modifyTypeSale: $('#modifyPriceSale').val(),
-                variantValueSale: $('#variantValueSale').val()
+                variantValue: $('#variantValue').val()
             };
 
             bsModal.writeBody(loaderHtml);
             bsModal.okButton.attr("disabled", "disabled");
             $.ajax({
                 method: 'post',
-                url: '/blueseal/xhr/PrestashopHasProductManage',
+                url: '/blueseal/xhr/' + cron,
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
@@ -256,41 +251,6 @@
             });
         });
     });
-    $(document).on('bs.update.presta.product.feature', function () {
-
-
-    products='';
-
-
-        let bsModal = new $.bsModal('Allineamento Dettagli', {
-            body: `Allineamento Dettaglio Prodotti da Pickyshop a Iwes`
-        });
-
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-
-            const data = {
-                products: products,
-            };
-
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/PrestashopManualAlignFeatureProduct',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
 
 
     $(document).on('bs.marketplace.remove.sale', function () {
@@ -365,205 +325,4 @@
             });
         });
     });
-    $(document).on('bs.prestashop.align.quantity', function () {
-
-        let bsModal = new $.bsModal('Allinea le quantità ', {
-            body: `
-                <div>
-                    <p>Allinea le quantità sugli shop</p>
-                    <select id="selectMarketplace"></select>
-                </div>
-            `
-        });
-
-        $.ajax({
-            url: '/blueseal/xhr/PrestashopHasProductManage',
-            method: 'GET',
-            dataType: 'json'
-        }).done(function (res) {
-            let select = $('#selectMarketplace');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'shop-marketplace',
-                options: res
-            });
-        });
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-
-            const data = {
-                marketplaceHasShopId: $('#selectMarketplace').val()
-            };
-
-            $.ajax({
-                method: 'POST',
-                url: '/blueseal/xhr/PrestashopAlignQuantityProductManage',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
-
-    //bs.ebay.align.product;
-
-    $(document).on('bs.ebay.align.product', function () {
-
-
-        products='';
-
-
-        let bsModal = new $.bsModal('Aggiornamento Massivo ', {
-            body: `Aggiornamento Prodotti su Ebay`
-        });
-
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
-
-            const data = {
-                products: products,
-            };
-
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/EbayReviseProductAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody(res);
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
-    $(document).on('bs.marketplace.prepare.product', function () {
-
-
-        products='';
-
-
-        let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al Marketplace ', {
-            body: `Emulatore Job popolamento tabella Prodotti per Marketplace `
-        });
-
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
-
-            const data = {
-                products: products,
-            };
-
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/PrepareProductForMarketplaceAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody(res);
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
-    $(document).on('bs.marketplaceaccountrule.publish.product', function () {
-
-
-        products='';
-
-
-        let bsModal = new $.bsModal('Pubblicazione prodotti in base a regole Marketplace ', {
-            body: `Emulatore Job popolamento tabella Prodotti per MarketplaceAccount  e gestione coda di pubblicazione e aggiornamento`
-        });
-
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
-
-            const data = {
-                products: products,
-            };
-
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/MarketplaceHasProductJobAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody(res);
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
-    $(document).on('bs.add.presta.product.all', function () {
-
-
-
-        let bsModal = new $.bsModal('Pubblica tutti i Prodotti con stato pubblicato sui Marketplace', {
-            body: `
-                <div>
-                    <p>Confermi?</p>
-                
-                </div>
-            `
-        });
-
-
-
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-
-            const data = {
-                products: 1
-
-            };
-
-            $.ajax({
-                method: 'POST',
-                url: '/blueseal/xhr/PrestashopBookingProductListAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
-                    $.refreshDataTable();
-                });
-                bsModal.showOkBtn();
-            });
-        });
-    });
-
 })(jQuery);

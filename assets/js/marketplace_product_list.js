@@ -187,3 +187,4 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 	bsModal.modal();
 });
+

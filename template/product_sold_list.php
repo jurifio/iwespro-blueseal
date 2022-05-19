@@ -3,7 +3,7 @@
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <title>99Monkeys - <?php echo $page->getTitle(); ?></title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 </head>
 <body class="fixed-header">

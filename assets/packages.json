@@ -17,7 +17,6 @@
                 "path": "scheme://code.jquery.com/ui/1.11.4/themes/flick/",
                 "options": ["screen"]
             }
-
         },
         "ui": {
             "jquery.scrollbar.css": {
@@ -74,7 +73,7 @@
             },
             "titatoggle-dist-min.css": {
                 "path": "https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/",
-                "options": ["screen,print"]
+                "options": ["screen"]
             }
         },
         "tables": {
@@ -97,10 +96,6 @@
                 "options": ["screen,print"]
             },
             "style.css": {
-                "path": "scheme://localdomain/assets/css/",
-                "options": ["screen,print"]
-            },
-            "fullcalendar.css": {
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
             }

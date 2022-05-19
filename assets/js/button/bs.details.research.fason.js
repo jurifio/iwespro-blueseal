@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-new-batch-product-add",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Aggiungi dettagli per riceca Operator",
+    title:"Aggiungi dettagli per riceca fason",
     placement:"bottom",
     toggle:"modal"
 };
@@ -14,7 +14,7 @@ window.buttonSetup = {
 $(document).on('bs-new-batch-product-add', function () {
 
 
-    let bsModal = new $.bsModal('Crea nuovi dettagli per la ricerca operator', {
+    let bsModal = new $.bsModal('Crea nuovi dettagli per la ricerca fason', {
         body: `
         <div>
             <div>

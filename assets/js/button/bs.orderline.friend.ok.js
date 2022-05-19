@@ -46,7 +46,6 @@ $(document).on('bs-orderline-friend-ok', function () {
             method: 'get',
             dataType: 'json'
         }).done(function (res) {
-            console.log(res);
             addressSelect.selectize({
                 valueField: 'id',
                 labelField: 'name',
@@ -183,11 +182,7 @@ $(document).on('bs-orderline-friend-ok', function () {
             res = JSON.parse(res);
             var x = '<p>' + res.message + '</p><br />' +
                 '<strong style="color:red">RICORDATI DI STAMPARE ED APPLICARE L\'ETICHETTA AL COLLO!</strong><br />';
-          if(carrierSelect.val()!=4) {
-              x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
-          }else{
-              x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/assets/shipment/' + res.shipmentId + '-' + res.orderId + '-dhl-label.pdf">Stampa Etichetta</a><br />';
-          }
+            x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
             modal.writeBody(x);
         }).fail(function (res) {
             modal.writeBody(res.responseText);

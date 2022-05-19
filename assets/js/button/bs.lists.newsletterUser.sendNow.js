@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-paper-plane",
-    permission: "allShops||worker",
+    permission: "/admin/product/edit&&allShops",
     event: "bs-newNewsletterUser-sendNow",
     class: "btn btn-default",
     rel: "tooltip",
@@ -13,19 +13,19 @@ window.buttonSetup = {
 $(document).on('bs-newNewsletterUser-sendNow', function () {
 
     let dataTable = $('.dataTable').DataTable();
-    let selectedRows = dataTable.rows('.selected').data();
-    if (selectedRows.length === 1) {
+        let selectedRows = dataTable.rows('.selected').data();
+        if (selectedRows.length === 1) {
 
 
-        var idNewsletterUser = selectedRows[0].DT_RowId;
+            var idNewsletterUser = selectedRows[0].id;
 
-        let bsModal = new $.bsModal('Invio', {
-            body: '<p>Invia La Newsletter selezionata</p>' +
+            let bsModal = new $.bsModal('Invio', {
+                body: '<p>Invia La Newsletter selezionata</p>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="deleteMacroGroup">Invio</label>' +
-                '<div id="messageGenereateHide" class="hide"><p>Premere ok per confermare l\'invio con id:' + idNewsletterUser + ' e attendere il messaggio di generazione completata</p>' +
+                '<div><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
                 '</div>'
-        });
+            });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
@@ -38,23 +38,20 @@ $(document).on('bs-newNewsletterUser-sendNow', function () {
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
-                bsModal.hideOkBtn();
             }).fail(function (res) {
                 bsModal.writeBody(res);
-                bsModal.hideOkBtn();
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     window.location.reload();
                     bsModal.hide();
                     // window.location.reload();
                 });
-
-                bsModal.hideOkBtn();
+                bsModal.showOkBtn();
             });
 
         });
 
-    } else if (selectedRows.length < 1) {
+    } else if (selectedRows.length < 1){
         new Alert({
             type: "warning",
             message: "Devi selezionare una riga"

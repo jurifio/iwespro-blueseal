@@ -24,7 +24,7 @@ $(document).on('bs-order-remote-pickup', function () {
         };
         $.ajax({
             method: 'POST',
-            url: "/blueseal/xhr/ImportExternalPickySiteOrder",
+            url: "/blueseal/xhr/ImportExternalOrder",
             data:data
         }).done(function (res) {
             bsModal.writeBody(res);

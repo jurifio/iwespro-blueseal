@@ -30,7 +30,7 @@ $(document).on('bs-manage-foison-image-photo', function () {
         if(selectedRows.length > 1 || selectedRows.length == 0){
             new Alert({
                 type: "warning",
-                message: "Seleziona solo un operator"
+                message: "Seleziona solo un foison"
             }).open();
             return false;
         }

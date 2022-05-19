@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="breadcrumb">
-                <li><p>BlueSeal</p></li>
+                <li><p>99Monkeys</p></li>
 
                 <?php
                 $find=$page->getTitle();

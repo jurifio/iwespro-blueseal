@@ -12,9 +12,9 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
  * Class CMarketplaceProductManageController
  * @package bamboo\blueseal\controllers\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes  International Web Ecommerce ServicesTeam <juri@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes International Web Ecommerce Services - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *

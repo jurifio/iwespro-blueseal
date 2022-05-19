@@ -558,10 +558,10 @@
             dataType: 'json'
         }).done(function (res) {
             if(res[0].isUnassigned == 1){
-                $('.operationType').html('Lotto tolto all\'operator  perchè scaduto. Verrà duplicato e reimmesso nel marketplace');
+                $('.operationType').html('Lotto tolto al fason perchè scaduto. Verrà duplicato e reimmesso nel marketplace');
                 $('.addDay').hide();
             } else {
-                $('.operationType').html('Gli errori verranno trasmessi all\'operator con relativo calcolo di rank.<br>Puoi scegliere di aggiungere dei giorni che verranno aggiunti per permette all\'utente di chiudere il lotto');
+                $('.operationType').html('Gli errori verranno trasmessi al fason con relativo calcolo di rank.<br>Puoi scegliere di aggiungere dei giorni che verranno aggiunti per permette all\'utente di chiudere il lotto');
             }
         });
 

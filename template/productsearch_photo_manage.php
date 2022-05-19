@@ -7,7 +7,7 @@
 <head>
     <?php include "parts/head.php"; ?>
     <?php echo $app->getAssets(['ui','forms'],$page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <title>99Monkeys - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>

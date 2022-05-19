@@ -7,9 +7,9 @@ use bamboo\core\application\AApplication;
  * Class AAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ * @author Iwes  International Web Ecommerce ServicesTeam <juri@iwes.it>, ${DATE}
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes International Web Ecommerce Services - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *

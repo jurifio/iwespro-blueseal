@@ -1,5 +1,5 @@
 /**
- * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 25/06/2015.
+ * Created by Fabrizio Marconi on 25/06/2015.
  */
 (function($) {
     $(document).on('keyup', ".master", function(){

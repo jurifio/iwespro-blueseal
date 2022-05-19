@@ -21,9 +21,6 @@
 .image-preview {
     overflow: hidden;
 }
-.checked{
-    color:orange;
-}
 
 /*
  * - Dashboard
@@ -59,7 +56,7 @@
 
 .dt-buttons {
     float: right;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .btn-group-label {
@@ -90,7 +87,7 @@ table.table {
  * - Generic layout
  */
 .jumbotron, .container-fluid.footer {
-    background: #22bdcf;
+    background: #e87441;
     color: #fff;
 }
 
@@ -126,7 +123,7 @@ table.table {
 }
 
 .footer a:hover, a:active {
-    color: #79d4d5;
+    color: #ffc3a9;
 }
 
 /*
@@ -156,11 +153,11 @@ table.table {
 
 .dataTables_wrapper .dataTables_paginate ul > li.active > a {
     font-weight: normal;
-    color: #fff;
+    color: #e87441;
 }
 
 .dataTables_paginate.paging_full_numbers {
-    margin-top: 20px !important;
+    margin-top: 10px !important;
 }
 
 .table thead tr th {
@@ -171,14 +168,19 @@ table.table {
     background: #fff;
     border-bottom: 1px solid rgba(230, 230, 230, 0.7);
     border-top: 0;
-    padding: 20px 5px;
+    /*padding: 20px 5px;*/
     font-size: 11.5px;
+    line-height: 1.2;
+}
+
+.pagination>li>a, .pagination>li>span{
+    border: transparent;
 }
 
 /* new sorting icons */
 
 .table thead tr th[class*='sorting_desc'], .table thead tr th[class*='sorting_asc'] {
-    color: #22bdcf;
+    color: #e87441;
 }
 
 table.dataTable thead .sorting:before {
@@ -194,13 +196,14 @@ table.dataTable thead .sorting:before {
 table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before {
     position: absolute;
     bottom: 13px;
-    left: -10px;
+    left: -4px;
     display: block;
     font-family: 'FontAwesome';
     opacity: 0.5;
 }
 
 table.dataTable thead .sorting_desc:before {
+    left: -9px;
     content: "\f161";
 }
 
@@ -296,8 +299,6 @@ table.dataTable thead .sorting_asc:after {
 
 .js-remove {
     color: red;
-    font-size: xx-large;
-    z-index:99;
 }
 
 table.dataTable tbody tr.selected, table.dataTable tbody th.selected, table.dataTable tbody td.selected {
@@ -337,18 +338,19 @@ select.btn {
     width: 100%;
     z-index: 10;
     padding: 0 0 0 100px;
-    background: #22bdcf;
+    background: #e87441;
     color: #fff;
 }
 
 .page-container .page-content-wrapper .content {
-    padding-top: 180px;
+    padding-top: 152px;
 }
 
 .sidebar-logo {
     transform: translate3d(195px, 0px, 0px);
     transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .sidebar-logo img:first-child {
     margin-right: 15px;
 }
@@ -375,12 +377,12 @@ body.sidebar-visible .sidebar-logo {
     float: right !important;
 }
 
-.bs-toolbar-rows input, .bs-toolbar-search select, .bs-toolbar-filter a {
+/*.bs-toolbar-rows input, .bs-toolbar-search select, .bs-toolbar-filter a {
     height: 35px !important;
-}
+}*/
 
 .bs-toolbar-filter a {
-    float:right !important;
+    float: right !important;
 }
 
 .other-actions {
@@ -415,11 +417,12 @@ body.sidebar-visible .sidebar-logo {
 
 .selectize-control {
     position: absolute;
-    left: 0 ;
+    left: 0;
 }
+
 .modal-body .selectize-control {
     position: relative;
-    left: 0 ;
+    left: 0;
 }
 
 .selectize-input {
@@ -439,6 +442,7 @@ body.sidebar-visible .sidebar-logo {
     background-color: #FFFFFF !important;
     z-index: 30;
 }
+
 .selectize-dropdown-content {
     background-color: #FFFFFF;
 }
@@ -595,13 +599,11 @@ body.sidebar-visible .sidebar-logo {
 .nested-table tbody tr td {
     padding: 5px 5px;
     border: solid #c0c0c0 1px;
-    font-size: 0.8em;
 }
 
 .nested-table thead tr th {
     padding: 5px 5px;
     border: solid #c0c0c0 1px;
-    font-size: 0.8em;
 }
 
 .summernote-wrapper .panel-heading {
@@ -687,10 +689,6 @@ body.sidebar-visible .sidebar-logo {
     color: #009900;
 }
 
-.text-blue {
-    color: #0000ff;
-}
-
 /* tabella fattura */
 
 .invoice-table td, .invoice-table th {
@@ -715,7 +713,7 @@ ul.roulette-importer-details li {
 }
 
 .dataTable .form-group-default {
-    padding-bottom:7px;
+    padding-bottom: 7px;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
@@ -730,7 +728,7 @@ ul.roulette-importer-details li {
 
 .bs-button-toggle {
     box-shadow: inset 1px 1px 1px #c0c0c0;
-    color:#009900;
+    color: #009900;
 }
 
 .btn-search {
@@ -764,10 +762,10 @@ ul.roulette-importer-details li {
 .search-col {
     width: 90%;
     display: none;
-    color:black;
+    color: black;
 }
 
-.selectize-streachable+.selectize-control {
+.selectize-streachable + .selectize-control {
     position: relative !important;
 }
 
@@ -796,23 +794,28 @@ ul.roulette-importer-details li {
 }
 
 /* Stili movimenti */
-#form-movement .alert{
+#form-movement .alert {
     margin-bottom: 5px;
 }
 
-#form-movement .search-item{
+#form-movement .search-item {
     width: 80%;
     float: left;
     clear: none !important;
 }
 
 .mag-searchBlock button {
-    margin-top: 20px; float: right;
+    margin-top: 20px;
+    float: right;
 }
 
 .mag-sizesTable {
-    margin-bottom: 30px; margin-left: auto; margin-right: auto; margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }
+
 .mag-sizesTable td {
     min-width: 35px;
 }
@@ -850,8 +853,8 @@ h5.product-title {
 }
 
 .fancytree-ext-childcounter span.fancytree-childcounter {
-    background: #22bdcf;
-    border: 1px solid #22bdcf;
+    background: #e87441;
+    border: 1px solid #e87441;
     line-height: 0.7;
     height: 12px;
     padding: 1px;
@@ -863,14 +866,19 @@ h5.product-title {
     height: 320px;
     vertical-align: bottom;
 }
+
 .product-selection-box p {
     line-height: 1;
-    margin:0;
+    margin: 0;
 }
+
 .product-selection-box.product-box-selected {
     background-color: gold;
 }
-#input:read-only {color: #666;}
+
+#input:read-only {
+    color: #666;
+}
 
 .shippingAddress {
     border-bottom: 1px solid grey;
@@ -879,44 +887,54 @@ h5.product-title {
 
 /**
 classi per colorare le righe delle tabelle da compilare in odd/even per il chiaroscuro
-
+ */
 .table.table-striped tbody tr:nth-child(2n+1).green td {
     background: palegreen;
 }
+
 .table.table-striped tbody tr.green td {
     background: darkseagreen;
 }
+
 .table.table-striped tbody tr:nth-child(2n+1).red td {
     background: indianred;
 }
+
 .table.table-striped tbody tr.red td {
     background: palevioletred;
 }
+
 .table.table-striped tbody tr:nth-child(2n+1).yellow td {
     background: lightgoldenrodyellow;
 }
+
 .table.table-striped tbody tr.yellow td {
     background: lightyellow;
 }
+
 .table.table-striped tbody tr:nth-child(2n+1).orange td {
     background: coral;
 }
+
 .table.table-striped tbody tr.orange td {
     background: lightcoral;
 }
+
 .table.table-striped tbody tr:nth-child(2n+1).purple td {
     background: mediumpurple;
 }
+
 .table.table-striped tbody tr.purple td {
     background: rebeccapurple;
 }
+
 .table.table-striped tbody tr:nth-child(2n+1).grey td {
     background: lightgrey;
 }
+
 .table.table-striped tbody tr.grey td {
     background: darkgrey;
 }
- */
 
 .portlet-refresh div {
     height: 15px;
@@ -943,840 +961,65 @@ table.mini-traffic-display {
 }
 
 table.mini-traffic-display th, table.mini-traffic-display td {
+    font-size: 10px;
     border: dotted thin;
     padding-right: 3px;
     padding-left: 3px;
 }
 
-
 .print-list a:visited {
     color: grey;
 }
 
-.table.size-table tbody tr td {
-    border: 1px solid rgba(230, 230, 230, 0.7);
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-
-.table.size-table thead tr th, .table.size-table tbody tr td, .table.size-table tfoot tr th {
-    text-align: center;
-}
-
-.table.size-table tbody tr td select, .table.size-table tbody tr td input {
-    width: 100%;
-}
-
-.table.size-table  thead tr th {
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 11px;
-}
-
-.table.table-striped tbody tr.green:nth-child(2n+1) td {
-    background-color: #dfffe8;
-}
-.table.table-striped tbody tr.green:nth-child(2n) td {
-    background-color: #def5e5;
-}
-.table.table-striped tbody tr.yellow:nth-child(2n+1) td {
-    background-color: #fbfcf3;
-}
-.table.table-striped tbody tr.yellow:nth-child(2n) td {
-    background-color: #fdffee;
-}
-.table.table-striped tbody tr.red:nth-child(2n+1) td {
-    background-color: #fff1f1;
-}
-.table.table-striped tbody tr.red:nth-child(2n) td {
-    background-color: #ffe7e7;
-}
-.table.table-striped tbody tr.orange:nth-child(2n+1) td {
-    background-color: #f8f1ec;
-}
-.table.table-striped tbody tr.orange:nth-child(2n) td {
-    background-color: #ffede1;
-}
-.table.table-striped tbody tr.violet:nth-child(2n+1) td {
-    background-color: #fbf7ff;
-}
-.table.table-striped tbody tr.violet:nth-child(2n) td {
-    background-color: #f7efff;
-}
-.table.table-striped tbody tr.grey:nth-child(2n+1) td {
-    background-color: #f2f2f2;
-}
-.table.table-striped tbody tr.grey:nth-child(2n) td {
-    background-color: #eaeaea;
-}
-.table.table-striped tbody tr.brown:nth-child(2n+1) td {
-    background-color:#e7e2e1;
-}
-.table.table-striped tbody tr.brown:nth-child(2n) td {
-    background-color:#e4dad7;
-}
-
-.text-red{
-    color: red;
-}
-
-
-.legenda{
-    display: flex;
-    justify-content: space-around;
-    margin-top: 30px;
-}
-
-.colorLeg{
-    height: 15px;
-    width: 15px;
-    margin: 0 auto;
-    border-radius: 50%;
-}
-
-.error{
-    background-color: #c39494;
-}
-
-.inviata{
-    background-color: #b0dabc;
-}
-
-.inviataP{
-    background-color: #d8dac0;
-}
-
-.accepted{
-    background-color: #dadada;
-}
-
-.distinct-option{
-    background: #f3ecec;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 7px solid #fff;
-}
-
-/** flex utility */
-.align-center-column-direction{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.align-center-simple{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-/* blog */
-.blog .post h1, .blog .post h2, .blog .post h3 {
-    font-weight: 700;
-}
-
-.post {
-    border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 50px;
-    padding-bottom: 50px;
-}
-
-.post h3 {
-    margin: 0 0 10px;
-}
-
-.post .btn {
-    font-size: 1em;
-    font-weight: 400;
-    text-transform: none;
-}
-
-.post .btn:hover, .post .btn:focus {
-    background-color: #cbac59;
-    border-color: #cbac59;
-}
-
-.post blockquote {
-    border-left: none;
-    font-size: 2.145em;
-    line-height: 1.2;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-.post blockquote p {
-    background-color: #cbac59;
-    color: white;
-    font-weight: 700;
-    padding: 40px;
-}
-
-.post blockquote footer {
-    color: #666666;
-    font-family: Raleway, sans-serif;
-    font-size: .466em;
-    position: relative;
-}
-
-.post blockquote footer:after {
-    bottom: -5px;
-    height: 0;
-    border-top: 5px solid #cbac59;
-    border-left: 5px solid rgba(0, 0, 0, 0);
-    border-right: 5px solid rgba(0, 0, 0, 0);
-    content: "";
-    left: 50%;
-    margin-left: -5px;
-    position: absolute;
-    width: 0;
-    bottom: 35px;
-}
-
-.blog .sidebar .block + .block:after {
-    width: 100%;
-}
-
-.blog .post .post-meta {
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    position: relative;
-}
-
-.blog .post .post-meta:after {
-    border-bottom: 1px solid #f0f0f0;
-    content: '';
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    width: 100px;
-}
-
-.post-image .owl-carousel .item .item-caption {
-    background-color: rgba(0, 0, 0, 0.6);
-    bottom: 0;
-    height: 60px;
-    left: 0;
-    padding: 20px 20px 0;
-    right: 0;
-    text-align: left;
-    text-transform: none;
-}
-
-.post-image .owl-carousel .item .item-caption p {
-    margin: 0;
-}
-
-.post-image .owl-carousel .owl-controls {
-    bottom: 0;
-    padding: 15px 13px 15px 0;
-    text-align: right;
-}
-
-.post-image .owl-carousel .owl-controls .owl-buttons .owl-prev,
-.post-image .owl-carousel .owl-controls .owl-buttons .owl-next {
-    border-radius: 2px;
-    height: 30px;
-    line-height: 30px;
-    margin: 0 2px;
-    text-align: center;
-    width: 30px;
-}
-
-.simple-post-list {
-    margin: 0;
-    padding: 0;
-}
-
-.simple-post-list li {
-    overflow: hidden;
-}
-
-.simple-post-list li + li {
-    margin-top: 20px;
-}
-
-.simple-post-list .post-video,
-.simple-post-list .post-image {
-    float: left;
-    margin-bottom: 0;
-    margin-right: 15px;
-    width: 65px;
-}
-
-.simple-post-list .post-info {
-    line-height: 1.3;
-}
-
-.simple-post-list .post-meta {
-    padding-top: 5px;
-}
-
-.sidebar .tagclouds,
-.post-tags {
-    font-size: .928em;
-}
-
-.sidebar .tagclouds li,
-.post-tags li {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.sidebar .tagclouds a,
-.post-tags a {
-    background-color: #f0f0f0;
-    border-color: #f0f0f0;
-    color: #666666;
-}
-
-.post-tags {
-    margin: 50px 0;
-}
-
-.post-tags strong {
-    padding-right: 10px;
-    text-transform: uppercase;
-}
-
-.post-tags a {
-    display: inline-block;
-    margin: 0 2px 5px 0;
-    padding: 5px 10px;
-    text-transform: capitalize;
-}
-
-.list-thumb-gallery {
-    margin: 0 -3px;
-    padding: 0;
-}
-
-.list-thumb-gallery li {
-    display: inline-block;
-    margin: 0 3px 3px;
-}
-
-/* mini blog */
-.post-medium .post-image .owl-carousel .owl-controls {
-    bottom: 50%;
-    margin-bottom: -15px;
-    padding: 0;
-}
-
-.post-medium .post-image .owl-carousel .owl-controls .owl-buttons .owl-prev,
-.post-medium .post-image .owl-carousel .owl-controls .owl-buttons .owl-next {
-    margin: 0;
-}
-
-.post-medium .post-image .owl-carousel .owl-controls .owl-buttons .owl-prev {
-    float: left;
-    margin-left: 15px;
-}
-
-.post-medium .post-image .owl-carousel .owl-controls .owl-buttons .owl-next {
-    float: right;
-    margin-right: 15px;
-}
-
-/* single post */
-.blog-single-post {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.blog-single-post blockquote {
-    border-left: 5px solid #dddddd;
-    font-size: 1.285em;
-    line-height: 1.6;
-    margin: 0 0 30px;
-    padding: 0 0 0 20px;
-    text-align: left;
-}
-
-.blog-single-post blockquote p {
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
     background-color: transparent;
-    color: #666666;
-    font-weight: 400;
-    padding: 0;
+    border-color: transparent;
 }
 
-.post-action {
-    border-bottom: 1px solid #dddddd;
-    border-top: 1px solid #dddddd;
-    display: table;
-    margin: 0 0 40px;
-    padding: 0;
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    padding: 5px;
+    line-height: 1.42857143;
+    /*vertical-align: top;*/
+    border-top: 1px solid #ddd;
 }
 
-.post-action li {
-    display: table-cell;
-    padding-bottom: 30px;
-    padding-top: 30px;
-    width: 50%;
-    vertical-align: top;
+ul.pagination a {
+    padding: 0px 4px;
 }
 
-.post-action li.btn-pre {
-    padding-right: 30px;
+.ranges li.active {
+    background-color: #e87441;
+    border: 1px solid #e87441;
+    color: #fff;
 }
 
-.post-action li.btn-next {
-    border-left: 1px solid #dddddd;
-    padding-left: 30px;
-    text-align: right;
+.ranges li:hover {
+    background-color: #e87441;
+    border: 1px solid #e87441;
+    color: #fff;
 }
 
-/* related-posts */
-.related-posts h3,
-.post-block h3 {
-    font-size: 1em;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.related-posts h4 {
-    font-size: 1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    line-height: 1.4;
-    text-transform: none;
-}
-
-.related-posts .post {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.comments {
-    list-style: none;
-    padding: 0;
-}
-
-.comments li {
-    border-top: 1px solid #dddddd;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-left: 70px;
-    position: relative;
-}
-
-.comments .img-circle {
-    left: 0;
-    position: absolute;
-}
-
-.post-comments h3 {
-    margin-bottom: 0;
-}
-
-.post-comments p {
-    margin-bottom: 10px;
-}
-
-.post-comments > .comments > li:first-child {
-    margin-top: 20px;
-}
-
-.post-comments .comment-by {
-    display: block;
-}
-
-.post-comments .date {
-    color: #999999;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.post-comments a i {
-    color: #dddddd;
-}
-
-.post-leave-comment h3 {
-    border-top: 1px solid #dddddd;
-    margin-top: 20px;
-    padding-top: 20px;
-}
-
-.post-leave-comment input.form-control {
-    height: 40px;
-}
-
-/* blog mansory */
-.blog-masonry .post-mansory-item {
-    margin-bottom: 30px;
-}
-
-.blog-masonry .post {
-    border: 1px solid #dddddd;
-    margin-bottom: 0;
-    padding: 30px 30px 0;
-}
-
-.blog-masonry .post h3 {
-    font-size: 1.285em;
-    font-weight: 400;
-}
-
-.blog-masonry .post .post-image {
-    margin: -30px -30px 30px;
-}
-
-.blog-masonry .post .post-content > p {
-    margin-bottom: 30px;
-}
-
-.blog-masonry .post .post-meta-foot {
-    border-top: 1px solid #dddddd;
-    margin: 10px -30px 0;
-    overflow: hidden;
-    padding: 15px 30px;
-}
-
-.blog-masonry .post .post-meta-foot:after {
-    display: none;
-}
-
-.btn-loadmore {
-    padding: 50px 0;
-}
-
-#elaProgres {
-    color: black;
-    text-align: center;
-    margin-top: 2%;
-}
-
-#mainLoader {
-    display: none;
-}
-
-#loaderdiv{
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(229, 239, 241, 0.5);
-    flex-direction: column;
-}
-
-/* Marketplace lavoro */
-.styleAccept {
-    position: absolute;
-    bottom: 7%;
-}
-.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
+.ranges li {
+    font-size: 13px;
+    background-color: #f5f5f5;
+    border: 1px solid #f5f5f5;
+    border-radius: 4px;
+    color: #e87441;
+    padding: 3px 12px;
+    margin-bottom: 8px;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
 }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
+.daterangepicker .input-mini.active {
+    border: 1px solid #f5f5f5;
+    border-radius: 4px;
 }
 
-/* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: #e87441;
+    border-color: transparent;
+    color: #fff;
 }
-
-
-/* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-#myInput {
-  /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-#myShop {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-
-#myTable {
-    border-collapse: collapse; /* Collapse borders */
-    width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
-    font-size: 18px; /* Increase font-size */
-}
-
-#myTable th, #myTable td {
-    text-align: left; /* Left-align text */
-    padding: 12px; /* Add padding */
-}
-
-#myTable tr {
-    /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd;
-}
-
-#myTable tr.header1, #myTable tr:hover {
-    /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
-}
-#myInputLocation {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-#myShopLocation {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-
-#myTableLocation {
-    border-collapse: collapse; /* Collapse borders */
-    width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
-    font-size: 18px; /* Increase font-size */
-}
-
-#myTableLocation th, #myTableLocation td {
-    text-align: left; /* Left-align text */
-    padding: 12px; /* Add padding */
-}
-
-#myTableLocation tr {
-    /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd;
-}
-
-#myTableLocation tr.header2, #myTableLocation tr:hover {
-    /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
-}
-#myInputContact {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-#myShopContact {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-
-#myTableContact {
-    border-collapse: collapse; /* Collapse borders */
-    width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
-    font-size: 18px; /* Increase font-size */
-}
-
-#myTableContact th, #myTableContact td {
-    text-align: left; /* Left-align text */
-    padding: 12px; /* Add padding */
-}
-
-#myTableContact tr {
-    /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd;
-}
-
-#myTableContact tr.header3, #myTableContact tr:hover {
-    /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
-}
-#myInputContract {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-#myShopContract {
-    /* Add a search icon to input */
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 100%; /* Full-width */
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-}
-
-#myTableContract {
-    border-collapse: collapse; /* Collapse borders */
-    width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
-    font-size: 18px; /* Increase font-size */
-}
-
-#myTableContract th, #myTableContract td {
-    text-align: left; /* Left-align text */
-    padding: 12px; /* Add padding */
-}
-
-#myTableContract tr {
-    /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd;
-}
-
-#myTableContract tr.header4, #myTableContract tr:hover {
-    /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
-}
-
-/***********inserimento modifica  da common.css****/
-.row.product-grid-container:last-child {
-    margin-bottom: 30px;
-}
-
-@media (max-width: 4096px) {
-    .product-thumb-info-image {
-        display: table-cell;
-        height: 320px;
-        vertical-align: bottom;
-    }
-
-    .product-thumb-info-image-mini {
-        height: auto;
-    }
-
-    .product.product-display-box {
-        height: 497px;
-        margin-bottom: 5px;
-    }
-}
-
-@media (max-width: 4096px) {
-    .product-thumb-info-image {
-        display: table-cell;
-        height: 320px;
-        vertical-align: bottom;
-    }
-
-    .product-thumb-info-image-mini {
-        height: auto;
-    }
-
-    .product.product-display-box {
-        height: 497px;
-        margin-bottom: 5px;
-    }
-}
-.product-thumb-info-content .item-cat a:hover, .product-thumb-info-content .item-cat a:focus {
-    color: #505050;
-}
-.product-thumb-writing {
-    height: 115px;
-}
-.product-message {
-    color: black;
-    font-size: 12px;
-    display: inline-block;
-    border: black;
-    border-style: solid;
-    border-width: 1.2px;
-    padding: 0.1em;
-    margin-top: 0.5em;
-    padding-right: 4px;
-    padding-left: 4px;
-}
-.item-cat {
-    display: block;
-    font-size: 12px;
-    line-height: 20px;
-}
-.windows h4 {
-    font-size: 23px;
-    line-height: 32px;
-}
-.product-thumb-info-content h4 {
-    font-family: Raleway, sans-serif;
-    font-size: 0.85em;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-.saleprice {
-    color: #ff0000;
-    font-family: Raleway, sans-serif;
-    font-weight: 500;
-    display: block;
-    font-size: 11px;
-}
-.percentage {
-    font-weight: 600;
-    font-size: 11px;
-}
-.price {
-    color: #505050;
-    font-size: 11px;
-}
-.price {
-    color: #cbac59;
-    font-family: Raleway, sans-serif;
-    display: block;
-    font-size: 11px;
-}
-.product-thumb-info-image img {
-    max-height: 375px;
-}
-.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-.divGrey{
-    border-style: solid;
-    border-color: grey;
-}
-

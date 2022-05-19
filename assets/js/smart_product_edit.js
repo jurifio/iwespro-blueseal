@@ -798,7 +798,7 @@ function fillTheFields(product) {
     selectName.refreshOptions();
     selectName.setValue(escaped);
     $('#Product_note').html(product['note']);
-    $('#ProductDescription_1').code(product['productDescription']);
+    $('#summernote1').code(product['productDescription']);
 }
 
 // MOVIMENTI MAGAZZINO

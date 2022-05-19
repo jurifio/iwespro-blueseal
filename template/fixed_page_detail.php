@@ -11,7 +11,7 @@
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <title>99Monkeys - <?php echo $page->getTitle(); ?></title>
     <script type="application/javascript"
             src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>

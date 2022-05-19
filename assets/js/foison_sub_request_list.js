@@ -6,17 +6,17 @@
         if (selectedRows.length != 1) {
             new Alert({
                 type: "warning",
-                message: "Accetta le competenze di un Operator alla volta"
+                message: "Accetta le competenze di un Fason alla volta"
             }).open();
             return false;
         }
 
         let id = selectedRows[0].id;
 
-        let bsModal = new $.bsModal('Accetta Operator', {
+        let bsModal = new $.bsModal('Accetta fason', {
             body:
                 `
-                <p>Spunta le competenze a cui associare l'operator/p>
+                <p>Spunta le competenze a cui associare il Fason</p>
                 <div class="expertise"></div>
                 `
         });

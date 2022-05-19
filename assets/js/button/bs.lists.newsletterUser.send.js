@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-envelope",
-    permission: "allShops||worker",
+    permission: "/admin/product/edit&&allShops",
     event: "bs-newNewsletterUser-send",
     class: "btn btn-default",
     rel: "tooltip",
@@ -17,20 +17,18 @@ $(document).on('bs-newNewsletterUser-send', function () {
         if (selectedRows.length === 1) {
 
 
-            var idNewsletterUser = selectedRows[0].DT_RowId;
+            var idNewsletterUser = selectedRows[0].id;
 
             let bsModal = new $.bsModal('Invio', {
                 body: '<p>Invia La Newsletter selezionata</p>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="deleteMacroGroup">Invio</label>' +
-                '<div id="messageGenereateHide" class="hide"><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
+                '<div><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
                 '</div>'
             });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
-            $('#messageGenereateHide').removeClass('hide');
-            $('#messageGenereateHide').addClass('show');
             const data = {
                 idNewsletterUser: idNewsletterUser,
             };
@@ -40,18 +38,15 @@ $(document).on('bs-newNewsletterUser-send', function () {
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
-                bsModal.hideOkBtn();
             }).fail(function (res) {
                 bsModal.writeBody(res);
-                bsModal.hideOkBtn();
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
-                    bsModal.hideOkBtn();
                     window.location.reload();
                     bsModal.hide();
                     // window.location.reload();
                 });
-                bsModal.hideOkBtn();
+                bsModal.showOkBtn();
             });
 
         });

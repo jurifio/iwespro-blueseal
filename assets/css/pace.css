@@ -72,8 +72,8 @@ body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-do
     top: 150px;
     height: 7px;
     font-size: 12px;
-    background: #22bdcf;
-    color: #22bdcf;
+    background: #e87700;
+    color: #d2804a;
     line-height: 60px;
     font-weight: bold;
     font-family: Helvetica, Arial, "Lucida Grande", sans-serif;

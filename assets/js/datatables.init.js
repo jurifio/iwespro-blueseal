@@ -8,7 +8,7 @@
     var tableSetup = [];
 
     tableSetup.common = {
-        dom: "<'btn-toolbar'B><'row'<'col-sm-6'i><'col-sm-4'f><'col-sm-2'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12'p>>",
+        dom: "<'btn-toolbar'B><'row'<'col-sm-6'f><'col-sm-6'l>><'row'<'col-sm-6'i><'col-sm-6'p>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12'p>>",
         paginationType: "full_numbers",
         destroy: true,
         colReorder: true,
@@ -483,8 +483,8 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
     if('undefined' === typeof colName || colName === null) colName = 'DT_RowId';
     if('undefined' === typeof tableSelector || tableSelector === null) tableSelector = '.table';
 
-    let selectedRows = $(tableSelector).DataTable().rows('.selected').data();
-    let selectedRowsCount = selectedRows.length;
+    var selectedRows = $(tableSelector).DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
 
     if(typeof min !== 'undefined' && selectedRowsCount < min) {
         new Alert({
@@ -500,7 +500,7 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
         return false;
     }
 
-    let row = [];
+    var row = [];
     $.each(selectedRows, function (k, v) {
         if(colName === false) {
             row.push(v);
@@ -515,14 +515,13 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
 
 $.getDataTableSelectedRowData = function(tableSelector,colName) {
     "use strict";
-    let res = $.getDataTableSelectedRowsData(tableSelector,colName,1,1);
-    return res && res.length > 0 ? res[0] : false;
+    return $.getDataTableSelectedRowsData(tableSelector,colName,1,1)[0];
 };
 
 $.refreshDataTable = function(tableSelector) {
     "use strict";
     if('undefined' == typeof tableSelector) tableSelector = '.table';
-    let table = $(tableSelector);
+    var table = $(tableSelector);
     if(table.length > 0){
         table.DataTable().ajax.reload(null, false);
     }

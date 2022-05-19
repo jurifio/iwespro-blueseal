@@ -16,7 +16,7 @@ use bamboo\core\utils\slugify\CSlugify;
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes International Web Ecommerce Services - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *

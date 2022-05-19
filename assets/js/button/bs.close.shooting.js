@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-window-close",
-    permission:"/admin/product/edit&&allShops||shooting",
+    permission:"/admin/product/edit&&allShops",
     event:"bs-close-shooting",
     class:"btn btn-default",
     rel:"tooltip",
@@ -20,7 +20,7 @@ $(document).on('bs-close-shooting', function () {
         bookings.push(v.c_bookingId);
     });
 
-    let bsModal = new $.bsModal('Chiudi gli shooting', {
+    let bsModal = new $.bsModal('Cancella gli shooting', {
         body: '<p>Sei sicuro di voler chiudere gli shooting selezionati?</p>'
     });
 

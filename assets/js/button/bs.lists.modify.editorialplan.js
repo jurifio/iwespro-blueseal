@@ -36,7 +36,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '<div class="row">' +
         '<div class="col-xs-12">' +
 
-        '<label for="shopId">Seleziona lo Shop</label>'+
+        '<label for="shopId">Seleziona lo Shop </label>'+
         '<select id="shopId" name="shopId"'+
         'class="full-width selectpicker"'+
         'placeholder="Seleziona la Lista"'+
@@ -44,17 +44,6 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '</select>'+
         '</div>'+
         '</div>'+
-            '<div class="row">' +
-            '<div class="col-xs-12">' +
-
-            '<label for="contractId">Seleziona Il contratto</label>'+
-            '<select id="contractId" name="contractId"'+
-            'class="full-width selectpicker"'+
-            'placeholder="Seleziona la Lista"'+
-            'data-init-plugin="selectize" value="' +selectedRows[0].contractId+'">'+
-            '</select>'+
-            '</div>'+
-            '</div>'+
 
         '<div class="row">' +
         '<div class="col-xs-6>">' +
@@ -69,14 +58,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '<input autocomplete="off" type="datetime-local" id="endDate"' +
         'class="form-control" name="endDate" value="' + selectedRows[0].endDate + '">' +
         '</div>' +
-        '</div>'+
-        '<div class=\"row\">' +
-                '<div class=\"col-xs-12>\">' +
-            '<label for="facebookMarketAccountId">Data di Fine Piano Editoriale</label>' +
-            '<input autocomplete="off" type="text" id="facebookMarketAccountId"' +
-            'class="form-control" name="facebookMarketAccountId" value="' + selectedRows[0].facebookMarketAccountId + '">' +
-            '</div>' +
-            '</div>'
+        '</div>'
     });
     $.ajax({
         method:'GET',
@@ -96,36 +78,15 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
             options: res2,
         });
     });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/SelectContractAjaxController',
-        data: {
-            table: 'Contracts'
-
-        },
-        dataType: 'json'
-    }).done(function (res3) {
-        var selectContract = $('#contractId');
-        if(typeof (selectContract[0].selectize) != 'undefined') selectContract[0].selectize.destroy();
-        selectContract.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res3,
-        });
-    });
 
 
     bsModal.setOkEvent(function () {
 
-        let id = selectedRows[0].row_id;
+        let id = selectedRows[0].id;
         let dateStartDate = $('#startDate').val();
         let dateEndDate = $('#endDate').val();
         let name = $('#editorialPlanName').val();
         let shopId = $('#shopId').val();
-        let contract =$('#contractId').val();
-        let facebookMarketAccountId=$('#facebookMarketAccountId').val();
-
 
         $.ajax({
             method: "put",
@@ -136,8 +97,6 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
                 dateEndDate: dateEndDate,
                 name: name,
                 shopId:shopId,
-                contract: contract,
-                facebookMarketAccountId:facebookMarketAccountId
             }
         }).done(function (res) {
             bsModal.writeBody(res);

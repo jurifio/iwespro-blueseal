@@ -292,8 +292,6 @@ $.initFormByGetData = function (params) {
         opt.fail(res);
     }).always(function (res) {
         opt.always(res);
-    }).success(function (res) {
-        opt.success(res);
     });
 };
 
@@ -394,13 +392,13 @@ let modalMock = '<div class="modal fade" id="bsModal" tabindex="-1" role="dialog
 /** FIXME questa cosa non è chiara, c'è già un costruttore della modale in bootstrap, un altro in prototype (mai chiamato) e questo */
 $.bsModal = function (header, params) {
     let self = this;
-    if ('undefined' !== typeof modal) {
+    if ('undefined' != typeof modal) {
         modal.hide();
         delete(modal);
     }
     //constructor
     self = this;
-    if ('undefined' === typeof header) {
+    if ('undefined' == typeof header) {
         console.error("the param 'header' is mandatory");
         return false;
     }
@@ -458,10 +456,6 @@ $.bsModal = function (header, params) {
 
     this.addClass = function(classe) {
         self.bsModal.addClass(classe);
-    };
-
-    this.removeClass = function (classe) {
-        self.bsModal.removeClass(classe)
     };
 
     this.writeHeader = function (header) {
@@ -555,197 +549,55 @@ $.bsModal = function (header, params) {
         type = (type) ? type : '';
         value = (value) ? value : '';
 
-        let ajaxCall = "GET";
-        if(type == 'models' || type == 'modifyModels') {
-            ajaxCall = "POST";
-
-            let sheetId = null;
-            let arrids = JSON.parse(value);
-            let results = [];
-
-            let total = arrids.length;
-
-
-            while (arrids.length) {
-                results.push(arrids.splice(0, 100));
+        $.ajax({
+            type: "GET",
+            url: "/blueseal/xhr/GetDataSheet",
+            data: {
+                value: value,
+                type: type,
+                code: opt.productCode
             }
+        }).done(function (content) {
+            $(self).html(content);
+            prototypeId = $(self).find(".detailContent").data('prototype-id');
+            let productDataSheet = $(self).find(".Product_dataSheet");
+            let selPDS = $(productDataSheet).selectize();
+            selPDS[0].selectize.setValue(prototypeId, true);
 
-            let elabor = 0;
-
-            $.each(results, function (k, v) {
-
-                let multPartial = JSON.stringify(v);
-
-                $.ajax({
-                    type: "POST",
-                    dataType: "JSON",
-                    url: '/blueseal/xhr/GetDataSheetLoading',
-                    data: {
-                        value: multPartial
-                    }
-                }).done(function (response) {
-                    if (response == 0) {
-                        $('#main-details').empty().append(`<p style="color: red">Schede prodotto non coerenti</p>`);
-                        return false;
-                    } else {
-                        elabor = elabor + response['count'];
-
-                        if (elabor == total) {
-                            sheetId = response['productSheetPrototype'];
-                            $.ajax({
-                                type: ajaxCall,
-                                url: "/blueseal/xhr/GetDataSheet",
-                                data: {
-                                    sheetId: sheetId,
-                                    type: type
-                                }
-                            }).done(function (content) {
-                                $(self).html(content);
-                                prototypeId = $(self).find(".detailContent").data('prototype-id');
-                                let productDataSheet = $(self).find(".Product_dataSheet");
-                                let selPDS = $(productDataSheet).selectize();
-                                selPDS[0].selectize.setValue(prototypeId, true);
-
-                                let checkMul = $('#pIDHidden');
-
-                                if(checkMul !== undefined) {
-                                    checkMul.val(prototypeId);
-                                    $.ajax({
-                                        method: 'GET',
-                                        url: '/blueseal/xhr/DetailGetLabelForFind',
-                                        data: {
-                                            pid: prototypeId
-                                        },
-                                        dataType: 'json'
-                                    }).done(function (res) {
-                                        let select = $('.findDetails');
-                                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                                        select.selectize({
-                                            valueField: 'id',
-                                            labelField: 'slug',
-                                            searchField: 'slug',
-                                            options: res,
-                                        });
-                                    });
-                                }
-
-
-                                productDataSheet.on("change", function () {
-                                    $(self).selectDetails($(this).find("option:selected").val(), 'change');
-                                });
-
-                                let detailsOptions = [];
-                                $.ajax({
-                                    url: '/blueseal/xhr/DetailGetAll',
-                                    method: 'GET'
-                                }).done(function (res) {
-                                    detailsOptions = JSON.parse(res);
-                                    $(self).find(".productDetails select").each(function () {
-                                        let sel = $(this).selectize({
-                                            valueField: 'id',
-                                            labelField: 'item',
-                                            searchField: ['item'],
-                                            options: detailsOptions
-                                        });
-                                        let initVal = $(this).data('init-selection');
-                                        if (initVal != 'undefined' && initVal.length != 0) {
-                                            sel[0].selectize.setValue(initVal, true);
-                                        } else {
-                                            sel[0].selectize.setValue(0, true);
-                                        }
-                                    });
-
-                                    let selectName = $('#ProductName_1_name').selectize();
-                                    let pName = $('.detailContent').data('productName');
-                                    selectName[0].selectize.addOption({name: pName});
-                                    selectName[0].selectize.addItem(pName);
-                                    selectName[0].selectize.refreshOptions();
-                                    selectName[0].selectize.setValue(pName, true);
-                                    opt.after(self);
-                                });
-                            });
-
-                        }
-                    }
-                });
+            productDataSheet.on("change", function () {
+                $(self).selectDetails($(this).find("option:selected").val(), 'change');
             });
-        } else {
+
+            let detailsOptions = [];
             $.ajax({
-                type: ajaxCall,
-                url: "/blueseal/xhr/GetDataSheet",
-                data: {
-                    value: value,
-                    type: type,
-                    code: opt.productCode
-                }
-            }).done(function (content) {
-                $(self).html(content);
-                prototypeId = $(self).find(".detailContent").data('prototype-id');
-                let productDataSheet = $(self).find(".Product_dataSheet");
-                let selPDS = $(productDataSheet).selectize();
-                selPDS[0].selectize.setValue(prototypeId, true);
-
-                let checkMul = $('#pIDHidden');
-
-                if(checkMul !== undefined) {
-                    checkMul.val(prototypeId);
-                    $.ajax({
-                        method: 'GET',
-                        url: '/blueseal/xhr/DetailGetLabelForFind',
-                        data: {
-                            pid: prototypeId
-                        },
-                        dataType: 'json'
-                    }).done(function (res) {
-                        let select = $('.findDetails');
-                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                        select.selectize({
-                            valueField: 'id',
-                            labelField: 'slug',
-                            searchField: 'slug',
-                            options: res,
-                        });
+                url: '/blueseal/xhr/DetailGetAll',
+                method: 'GET'
+            }).done(function (res) {
+                detailsOptions = JSON.parse(res);
+                $(self).find(".productDetails select").each(function () {
+                    let sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: detailsOptions
                     });
-                }
-
-
-                productDataSheet.on("change", function () {
-                    $(self).selectDetails($(this).find("option:selected").val(), 'change');
+                    let initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined' && initVal.length != 0) {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
                 });
 
-                let detailsOptions = [];
-                $.ajax({
-                    url: '/blueseal/xhr/DetailGetAll',
-                    method: 'GET'
-                }).done(function (res) {
-                    detailsOptions = JSON.parse(res);
-                    $(self).find(".productDetails select").each(function () {
-                        let sel = $(this).selectize({
-                            valueField: 'id',
-                            labelField: 'item',
-                            searchField: ['item'],
-                            options: detailsOptions
-                        });
-                        let initVal = $(this).data('init-selection');
-                        if (initVal != 'undefined' && initVal.length != 0) {
-                            sel[0].selectize.setValue(initVal, true);
-                        } else {
-                            sel[0].selectize.setValue(0, true);
-                        }
-                    });
-
-                    let selectName = $('#ProductName_1_name').selectize();
-                    let pName = $('.detailContent').data('productName');
-                    selectName[0].selectize.addOption({name: pName});
-                    selectName[0].selectize.addItem(pName);
-                    selectName[0].selectize.refreshOptions();
-                    selectName[0].selectize.setValue(pName, true);
-                    opt.after(self);
-                });
+                let selectName = $('#ProductName_1_name').selectize();
+                let pName = $('.detailContent').data('productName');
+                selectName[0].selectize.addOption({name: pName});
+                selectName[0].selectize.addItem(pName);
+                selectName[0].selectize.refreshOptions();
+                selectName[0].selectize.setValue(pName, true);
+                opt.after(self);
             });
-        }
-
-
+        });
     }
 })(jQuery);
 
@@ -786,11 +638,9 @@ $.bsModal = function (header, params) {
 
 
 (function ($) {
+
     $.fn.bsForm = function (method, params) {
-
         let self = this;
-
-        let valsMult = params.par;
 
         //impedisco la sovrapposizione di chiamate ajax
         if ('undefined' == typeof bsformSaving) bsformSaving = 0;
@@ -844,7 +694,7 @@ $.bsModal = function (header, params) {
                 let primaryField = $(self).data('primaryfield');
                 if ('undefined' != typeof primaryField) {
                     if ($(primaryField).length) {
-                        if ($(primaryField).val().length || $('#isMultiple').val() === 'mult') return 'PUT';
+                        if ($(primaryField).val().length) return 'PUT';
                     }
                 }
                 return 'POST';
@@ -941,7 +791,6 @@ $.bsModal = function (header, params) {
                         });
 
                         opt['data'] = data;
-                        opt['data']['modelIds'] = valsMult;
                         //opt['data'] = formDataObject;
 
                         $.ajax({
@@ -1349,7 +1198,7 @@ $.bsModal = function (header, params) {
             create: false,
             render: {
                 option: function (item, escape) {
-                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span><br /><span class="small">ExternalId: </span><strong>' + escape(item.externalId) + '</strong></span></div>';
+                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span></div>';
                 }
             },
             load: function (query, callback) {

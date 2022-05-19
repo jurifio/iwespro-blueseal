@@ -9,8 +9,8 @@ use bamboo\domain\repositories\CEmailRepo;
 /**
  * Class CDispatchPreorderToFriend
  * @package bamboo\blueseal\jobs
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @author Iwes  International Web Ecommerce ServicesTeam <juri@iwes.it>, ${DATE}
+ * @copyright (c) Iwes International Web Ecommerce Services - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
@@ -968,7 +968,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 <script  type="application/javascript" src="https://www.iwes.pro/assets/js/monkeyUtil.js"></script>
 <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/invoice_print.js"></script>
 <script defer async type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.common.js"></script>
-    <title>BlueSeal - Stampa fattura</title>
+    <title>99Monkeys - Stampa fattura</title>
     <style type="text/css">');
 
 

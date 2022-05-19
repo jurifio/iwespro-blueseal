@@ -5,60 +5,10 @@ $(document).on('bs.shop.save', function () {
     data.title = $('#shop_title').val();
     data.owner = $('#shop_owner').val();
     data.referrerEmails = $('#shop_referrerEmails').val();
-    data.eloyApiKey = $('#shop_eloyApiKey').val();
-    data.secret = $('#shop_secret').val();
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
     data.minReleasedProducts = $('#shop_minReleasedProducts').val();
-    data.ftpHost=$('#shop_ftpHost').val();
-    data.ftpUser=$('#shop_ftpUser').val();
-    data.ftpPassword=$('#shop_ftpPassword').val();
-    data.remotePath=$('#shop_remotePath').val();
-    data.dbHost=$('#shop_dbHost').val();
-    data.dbUsername=$('#shop_dbUsername').val();
-    data.dbPassword=$('#shop_dbPassword').val();
-    data.dbName=$('#shop_dbName').val();
-    data.logo=$('#shop_logo').val();
-    data.logoThankYou=$('#shop_logoThankYou').val();
-    data.paralellFee=$('#shop_paralellFee').val();
-    data.feeParallelOrder=$('#shop_feeParallelOrder').val();
-    data.billingParallelId=$('#shop_BillingParallelId').val();
-    data.hasMarketplace=$('#shop_hasMarketplace').val();
-    data.hasCoupon=$('#shop_hasCoupon').val();
-    data.hasCouponNewsletter=$('#shop_hasCouponNewsletter').val();
-    data.hasEcommerce=$('#shop_hasEcommerce').val();
-    data.receipt=$('#shop_receipt').val();
-    data.invoiceUe=$('#shop_invoiceUe').val();
-    data.invoiceExtraUe=$('#shop_invoiceExtraUe').val();
-    data.invoiceParalUe=$('#shop_invoiceParalUe').val();
-    data.invoiceParalExtraUe=$('#shop_invoiceParalExtraUe').val();
-    data.siteInvoiceChar=$('#shop_siteInvoiceChar').val();
-    data.urlSite=$('#shop_urlSite').val();
-    data.analyticsId=$('#analyticsId').val();
-    data.emailShop=$('#shop_emailShop').val();
-    data.amministrativeEmails=$('#shop_amministrativeEmails').val();
-    data.billingEmails=$('#shop_billingEmails').val();
-    data.billingContact=$('#shop_billingContact').val();
-    data.importer=$('#shop_importer').val();
-    data.instagramAccount=$('#shop_instagramAccount').val();
-    data.facebookAccount=$('#shop_facebookAccount').val();
-    data.twitterAccount=$('#shop_twitterAccount').val();
-    data.pinterestAccount=$('#shop_pinterestAccount').val();
-    data.appIdFacebook=$('#shop_appIdFacebook').val();
-    data.domainShop=$('#shop_domainShop').val();
-    data.emailSupporto=$('#shop_emailSupporto').val();
-    data.directoryUtente=$('#shop_directoryUtente').val();
-    data.nameApp=$('#shop_nameApp').val();
-    data.mobile=$('#shop_mobile').val();
-    data.phone=$('#shop_phone').val();
-    data.creditCardApi=$('#shop_creditCardApi').val();
-    data.creditCardSecret=$('#shop_creditCardSecret').val();
-    data.bic=$('#shop_bic').val();
-    data.banca=$('#shop_banca').val();
-    data.ibanBanca=$('#shop_ibanBanca').val();
-    data.emailPaypal=$('#shop_emailPaypal').val();
-    data.couponType=$('#shop_couponType').val();
     data.config = {};
     data.config.refusalRate = $('#shop_config_refusalRate').val();
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
@@ -73,7 +23,7 @@ $(document).on('bs.shop.save', function () {
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
     $.each($('#shippingAddresses .shippingAddress'), function (k, v) {
-        data.shippingAddresses.push(readShipmentNotIban(v));
+        data.shippingAddresses.push(readShipment(v));
     });
 
     if (data.id.length) {
@@ -101,59 +51,8 @@ $(document).on('bs.shop.save', function () {
         }).open();
     });
 });
-$(document).on('bs.shop.add.user', function () {
-    let url='/blueseal/utenti/'
-    window.open(url,'_blank');
-    /*let shopId = selectedRows[0].shopId;
-
-    var modal = new $.bsModal('Conferma Ordine', {
-        body: '<label for="userId">Seleziona l\'indirizzo di ritiro</label><br />' +
-            '<select id="userId" name="userId" class="full-width selectize"></select><br />'
-
-    });
-
-    let addressSelect = $('select[name=\"userId\"]');
-
-
-    Pace.ignore(function () {
-        $.ajax({
-            url: '/blueseal/xhr/SelectUserAjaxController',
-            method: 'get',
-            dataType: 'json'
-        }).done(function (res) {
-            console.log(res);
-            addressSelect.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.shopTitle) + '</span> - ' +
-                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.shopTitle) + '</span>  - ' +
-                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
-                            '</div>'
-                    }
-                }
-            });
-        });
-
-
-
-*/
-});
-
-
-
 
 (function ($) {
-var couponType=0;
     let params = $.decodeGetStringFromUrl(window.location.href);
     if (typeof params.id != 'undefined') {
         $.ajax({
@@ -167,10 +66,7 @@ var couponType=0;
             $('#shop_title').val(res.title);
             $('#shop_owner').val(res.owner);
             $('#shop_referrerEmails').val(res.referrerEmails);
-            $('#shop_eloyApiKey').val(res.eloyApiKey);
-            $('#shop_secret').val(res.secret);
             $('#shop_iban').val(res.iban);
-            $('#shopNameH4').append('Shop in Gestione '+res.title);
             $('#shop_currentSeasonMultiplier').val(res.currentSeasonMultiplier);
             $('#shop_pastSeasonMultiplier').val(res.pastSeasonMultiplier);
             $('#shop_saleMultiplier').val(res.saleMultiplier);
@@ -184,67 +80,6 @@ var couponType=0;
             $('#shop_config_photoCost').val(res.config.photoCost);
             $('#shop_config_shootingTransportCost').val(res.config.shootingTransportCost);
             $('#shop_config_orderTransportCost').val(res.config.orderTransportCost);
-            $('#shop_remotePath').val(res.remotePath);
-            $('#shop_ftpHost').val(res.ftpHost);
-            $('#shop_ftpUser').val(res.ftpUser);
-            $('#shop_ftpPassword').val(res.ftpPassword);
-            $('#shop_dbHost').val(res.dbHost);
-            $('#shop_dbUsername').val(res.dbUsername);
-            $('#shop_dbPassword').val(res.dbPassword);
-            $('#shop_dbName').val(res.dbName);
-            $('#shop_logo').val(res.logo);
-            $('#shop_logoThankYou').val(res.logoThankYou);
-            $('#shop_paralellFee').val(res.paralellFee);
-            $('#shop_parallelFeeOrder').val(res.feeParallelOrder);
-            $('#shop_billingParallelId').val(res.billingParallelId);
-            $('#shop_hasMarketplace').val(res.hasMarketplace);
-            $('#shop_hasEcommerce').val(res.hasEcommerce);
-            $('#shop_hasCoupon').val(res.hasCoupon);
-            $('#shop_hasCouponNewsletter').val(res.hasCouponNewsletter);
-            $('#shop_receipt').val(res.receipt);
-            $('#shop_invoiceUe').val(res.invoiceUe);
-            $('#shop_invoiceExtraUe').val(res.invoiceExtraUe);
-            $('#shop_invoiceParalUe').val(res.invoiceParalUe);
-            $('#shop_invoiceParalExtraUe').val(res.invoiceParalExtraUe);
-            $('#shop_siteInvoiceChar').val(res.siteInvoiceChar);
-            $('#shop_urlSite').val(res.urlSite);
-            $('#shop_analyticsId').val(res.analyticsId);
-            $('#shop_emailShop').val(res.emailShop);
-            $('#shop_amministrativeEmails').val(res.amministrativeEmails);
-            $('#shop_billingEmails').val(res.billingEmails);
-            $('#shop_billingContact').val(res.billingContact);
-            $('#shop_importer').val(res.importer);
-            $('#shop_couponType').val(res.couponType);
-            $('#shop_instagramAccount').val(res.instagramAccount);
-            $('#shop_facebookAccount').val(res.facebookAccount);
-            $('#shop_twitterAccount').val(res.twitterAccount);
-            $('#shop_pinterestAccount').val(res.pinterestAccount);
-            $('#shop_appIdFacebook').val(res.appIdFacebook);
-            $('#shop_domainShop').val(res.domainShop);
-            $('#shop_emailSupporto').val(res.emailSupporto);
-            $('#shop_directoryUtente').val(res.directoryUtente);
-            $('#shop_nameApp').val(res.nameApp);
-            $('#shop_mobile').val(res.mobile);
-            $('#shop_phone').val(res.phone);
-            $('#shop_creditCardApi').val(res.creditCardApi);
-            $('#shop_creditCardSecret').val(res.creditCardSecret);
-            $('#shop_bic').val(res.bic);
-            $('#shop_banca').val(res.banca);
-            $('#shop_ibanBanca').val(res.ibanBanca);
-            $('#shop_emailPaypal').val(res.emailPaypal);
-            if(res.couponType>0){
-                $('#divModifyCouponType').removeClass('hide');
-                $('#divModifyCouponType').addClass('show');
-
-            }else{
-                $('#divAddCouponType').removeClass('hide');
-                $('#divAddCouponType').addClass('show');
-
-            }
-            couponType=res.couponType;
-
-
-
 
             checkPermission('allShops')
                 .done(function () {
@@ -272,114 +107,13 @@ var couponType=0;
             createGraphs(res);
 
             appendShipment(res.billingAddressBook, '#billingAddress');
-            res.shippingAddressBooks.forEach(function (addressData) {
-                appendShipmentNotIban(addressData, '#shippingAddresses');
+            res.shippingAddressBook.forEach(function (addressData) {
+                appendShipment(addressData, '#shippingAddresses');
             });
-            appendShipmentNotIban({}, '#shippingAddresses');
-            $('#rowAggregator').empty();
-            var aggregator=res.aggregatorHasShop;
-            var bodyres;
-            var isActive;
-            bodyres = bodyres + '<table id="myTable"><tr><th style="width:20%;">id</th><th style="width:20%;">name</th><th style="width:20%;">immagine</th><th style="width:20%;">Stato</th><th style="width:20%;">Operazioni</th></tr>';
-            $.each(aggregator, function (k, v) {
-                if(v.isActive==1){
-                    isActive='si';
-                }else{
-                    isActive='no';
-                }
-                bodyres = bodyres + '<tr><td style="width:20%;">' + v.marketplaceAccountId +'-'+v.marketplaceId+ '</td><td style="width:20%;">' + v.name + '</td><td style="width:20%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:20%;">' + isActive + '</td><td><button class="success" id="modifyRowAggregatorButton' + v.marketplaceId +'-'+v.marketplaceAccountId+'" onclick="modifyRowAggregatorEdit(' + v.marketplaceId + ','+v.marketplaceAccountId+',\''+v.typeAggregator+'\')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyres = bodyres + '</table>';
-            $('#rowAggregator').append(bodyres);
-            $('#rowMarketplace').empty();
-            var marketplace=res.marketplaceHasShop;
-            var bodyresi;
-            let isActiveMarketplace;
-            bodyresi = bodyresi + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">Marketplace</th><th style="width:25%;">Stato</th><th style="width:25%;">Operazioni</th></tr>';
-            $.each(marketplace, function (m, n) {
-                if(n.isActive==1){
-                    isActiveMarketplace='si';
-                }else{
-                    isActiveMarketplace='no';
-                }
-                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.marketplaceAccountId +'-'+n.marketplaceId+ '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.marketplaceId+'-'+n.markeplaceAccountId + '" onclick="modifyRowMarketplaceEdit(' + n.marketplaceId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyresi = bodyresi + '</table>';
-            $('#rowMarketplace').append(bodyresi);
-            $('#rowCampaign').empty();
-            var campaign=res.campaign;
-            var bodyresic;
-            let isActiveCampaign;
-            bodyresic = bodyresic + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">Campagna</th><th style="width:25%;">Codice Monitoraggio</th><th style="width:25%;">Stato</th></tr>';
-            $.each(campaign, function (o, p) {
-                if(p.isActive==1){
-                    isActiveCampaign='si';
-                }else{
-                    isActiveCampaign='no';
-                }
-                bodyresic = bodyresic + '<tr><td style="width:25%;">' + p.id + '</td><td style="width:25%;">' + p.name + '</td><td style="width:25%;">' + p.code + '</td><td style="width:25%;">' + isActiveCampaign + '</td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyresic = bodyresic + '</table>';
-            $('#rowCampaign').append(bodyresic);
-            $('#rowCouponEvent').empty();
-            var couponEvent=res.couponEvent;
-            var bodyresicoupon;
-            bodyresicoupon = bodyresicoupon + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:10%;">Coupon</th><th style="width:15%;">Descrizione</th><th style="width:15%;">Validità</th><th style="width:15%;">tipo Coupon</th><th style="width:10%;">Stato Tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Attiva</th><th style="width:15%;">Operazioni</th></tr>';
-            $.each(couponEvent, function (r, s) {
-
-                bodyresicoupon = bodyresicoupon + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:10%;">' + s.name + '</td><td style="width:15%;">' + s.description + '</td><td style="width:15%;">valido da ' + s.startDate + ' a ' + s.endDate + '</td><td style="width:15%;"><a target="_blank" href="/blueseal/tipocoupon/modifica/'+s.couponTypeId+'">' + s.couponTypeName + '</a></td><td style="width:10%;">' + s.isActiveType + '</td><td style="width:15%;">' + s.campaignName + '</td><td style="width:15%;">' + s.isActive + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponEvenEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyresicoupon = bodyresicoupon + '</table>';
-            $('#rowCouponType').empty();
-            var couponType=res.couponType;
-            var bodyresicoupontype;
-            bodyresicoupontype = bodyresicoupontype + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:10%;">Coupon Tipo</th><th style="width:15%;">Validità</th><th style="width:15%;">Importo Carrello</th><th style="width:15%;"></th>Nome<th style="width:10%;">Stato Tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Operazioni</th></tr>';
-            $.each(couponType, function (r, s) {
-
-                bodyresicoupontype = bodyresicoupontype + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:10%;">' + s.name + '</td><td style="width:15%;">' + s.validity + '</td><td style="width:15%;">'+s.validForCartTotal+'</td><td style="width:15%;"><a target="_blank" href="/blueseal/tipocoupon/modifica/'+s.id+'">' + s.name + '</a></td><td style="width:10%;">' + s.isActive + '</td><td style="width:15%;">' + s.campaignName + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponTypeEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyresicoupontype = bodyresicoupontype + '</table>';
-
-            $('#rowBanner').empty();
-            var banner=res.banner;
-            var bodyresibanner;
-            bodyresibanner = bodyresibanner + '<table id="myTable"><tr><th style="width:10%;">id</th><th style="width:15%;">Banner</th><th style="width:15%;">link</th><th style="width:15%;">Position</th><th style="width:15%;">immagine</th><th style="width:15%;">Attiva</th><th style="width:15%;">Operazioni</th></tr>';
-            $.each(banner, function (y, z) {
-                if(z.isActive==1){
-                    isActiveBanner='si';
-                }else{
-                    isActiveBanner='no';
-                }
-                bodyresibanner = bodyresibanner + '<tr><td style="width:10%;">' + z.id + '</td><td style="width:15%;">' + z.name + '</td><td style="width:15%;">' + z.link + '</td><td style="width:15%;">' + z.position + '</td><td style="width:15%;"><img width="250px" src="' + z.textHtml + '"/></td><td style="width:15%;">' + z.isActiveBanner + '</td><td><button class="success" id="modifyRowBannerButton' + z.id + '" onclick="modifyRowBannerEdit(' + z.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
-                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-            });
-            bodyresibanner = bodyresibanner + '</table>';
-            $('#rowCouponEvent').append(bodyresicoupon);
-            $('#rowCouponType').append(bodyresicoupontype);
-            ('#rowBanner').append(bodyresibanner);
+            appendShipment({}, '#shippingAddresses');
         });
     }
 })(jQuery);
-
-
-/**
- * Generate new key and insert into input value
- */
-
-function addCoupon(){
-    let url='/blueseal/tipocoupon/aggiungi'
-    window.open(url,'_blank');
-}
-function modifyCoupon(){
-    let couponType=$('#shop_couponType').val();
-    let url='/blueseal/tipocoupon/modifica/'+couponType
-    window.open(url,'_blank');
-}
 
 function createGraphs(shop) {
     "use strict";
@@ -425,13 +159,13 @@ function createGraphs(shop) {
     let productChart = nv.models.lineChart();
 
     productChart
-        .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
-        .options({
-            duration: 300,
-            useInteractiveGuideline: true
-        })
-        .color(d3.scale.category10().range())
-    ;
+            .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
+            .options({
+                duration: 300,
+                useInteractiveGuideline: true
+            })
+            .color(d3.scale.category10().range())
+        ;
 
     productChart.xAxis   //Chart x-axis settings
         .showMaxMin(false)
@@ -511,11 +245,11 @@ function readShipment(containerSelector) {
     let data = {};
     let element = $(containerSelector);
     data.id = element.find('#id').val();
-    data.name = element.find('#name').val();
-    data.subject = element.find('#subject').val();
-    data.address = element.find('#address').val();
-    data.extra = element.find('#extra').val();
-    data.city = element.find('#city').val();
+    data.name = encodeURIComponent(element.find('#name').val());
+    data.subject = encodeURIComponent(element.find('#subject').val());
+    data.address = encodeURIComponent(element.find('#address').val());
+    data.extra = encodeURIComponent(element.find('#extra').val());
+    data.city = encodeURIComponent(element.find('#city').val());
     data.countryId = element.find('#country').val();
     data.postcode = element.find('#postcode').val();
     data.phone = element.find('#phone').val();
@@ -524,7 +258,6 @@ function readShipment(containerSelector) {
     data.iban = element.find('#iban').val();
     return data;
 }
-
 
 function appendShipment(data, containerSelector) {
     let container = $(containerSelector);
@@ -565,130 +298,4 @@ function appendShipment(data, containerSelector) {
         });
     });
 }
-function readShipmentNotIban(containerSelector) {
-    "use strict";
-    let data = {};
-    let element = $(containerSelector);
-    data.id = element.find('#id').val();
-    data.name = element.find('#name').val();
-    data.subject = element.find('#subject').val();
-    data.address = element.find('#address').val();
-    data.extra = element.find('#extra').val();
-    data.city = element.find('#city').val();
-    data.countryId = element.find('#country').val();
-    data.postcode = element.find('#postcode').val();
-    data.phone = element.find('#phone').val();
-    data.cellphone = element.find('#cellphone').val();
-    data.province = element.find('#province').val();
-    //  data.iban = element.find('#iban').val();
-    return data;
-}
-function appendShipmentNotIban(data, containerSelector) {
-    let container = $(containerSelector);
-    $.getTemplate('addressBookFormMock').done(function (res) {
-        let element = $(res);
-        Pace.ignore(function () {
-            $.get({
-                url: '/blueseal/xhr/GetTableContent',
-                data: {
-                    table: 'Country'
-                },
-                dataType: 'json'
-            }).done(function (res2) {
-                let select = element.find('#country');
-                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                select.selectize({
-                    valueField: 'id',
-                    labelField: 'name',
-                    searchField: ['name'],
-                    options: res2,
-                });
-                if (data != null && Object.keys(data).length > 0) {
-                    element.find('#id').val(data.id);
-                    element.find('#name').val(data.name);
-                    element.find('#subject').val(data.subject);
-                    element.find('#address').val(data.address);
-                    element.find('#extra').val(data.extra);
-                    element.find('#city').val(data.city);
-                    select[0].selectize.setValue(data.countryId);
-                    element.find('#postcode').val(data.postcode);
-                    element.find('#phone').val(data.phone);
-                    element.find('#cellphone').val(data.cellphone);
-                    element.find('#province').val(data.province);
-                }
-                container.append(element);
-            });
-        });
-    });
-}
 
-$(document).on('click', '#keygen', function(e){
-    e.preventDefault();
-    let k = generateUUID();
-    $( '#shop_eloyApiKey' ).val(k);
-});
-
-function generateUUID()
-{
-    let d = new Date().getTime();
-
-    if( window.performance && typeof window.performance.now === "function" )
-    {
-        d += performance.now();
-    }
-
-    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c)
-    {
-        let r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-
-    return uuid;
-}
-
-document.getElementById('modifyClient').style.display = "block";
-
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-function modifyRowAggregatorEdit(marketplaceId,marketplaceAccountId,aggregatorType){
-    let url='';
-    if(aggregatorType=='cpc') {
-         url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
-    }else{
-         url = '/blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
-    }
-    window.open(url,'_blank');
-
-}
-function modifyRowMarketplaceEdit(marketplaceId){
-    let url='/blueseal/marketplace/marketplace-shop/modifica/'+marketplaceId;
-    window.open(url,'_blank');
-
-}
-function modifyRowCouponEvenEdit(couponEventId){
-    let url='/blueseal/eventocoupon/modifica/'+couponEventId
-    window.open(url,'_blank');
-
-}
-function modifyRowCouponTypeEdit(couponTypeId){
-    let url='/blueseal/tipocoupon/modifica/'+couponTypeId
-    window.open(url,'_blank');
-
-}
-function modifyRowBannerEdit(bannerId){
-    let url='/blueseal/marketing/banner-modifica/'+bannerId
-    window.open(url,'_blank');
-
-}

@@ -12,8 +12,8 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
 /**
  * Class CProductPhotoAjaxManage
  * @package bamboo\blueseal\controllers\ajax
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @author Iwes  International Web Ecommerce ServicesTeam <juri@iwes.it>, ${DATE}
+ * @copyright (c) Iwes International Web Ecommerce Services - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
