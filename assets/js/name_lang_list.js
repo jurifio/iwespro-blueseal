@@ -100,3 +100,47 @@ $(document).on('bs.filterByTranslation', function(e){
         if (val == marksValue) $(this).prop('checked', true);
     });
 });
+
+
+$(document).on('bs.end.work.product.name.translation', function () {
+
+    let selectedProductNames = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    //id-variantId in array
+    $.each(selectedRows, function (k, v) {
+        selectedProductNames.push(v.name);
+    });
+
+    let bsModal = new $.bsModal('Conferma Traduzione Nomi', {
+        body: '<p>Confermi la fine della procedura di traduzione per i nomi selezionati?</p>'
+    });
+
+    let lang = window.location.href.split('?')[0].substring(window.location.href.lastIndexOf('/') + 1);
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+        const data = {
+            names: selectedProductNames,
+            lang: lang
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/ProductNameTranslationBatchManage',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                $.refreshDataTable();
+                //window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+});

@@ -1,5 +1,5 @@
 /**
- * Created by Fabrizio Marconi on 12/10/2015.
+ * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 12/10/2015.
  */
 var el = document.getElementById("selectable");
 var photoOrderList = Sortable.create(el, {
@@ -28,6 +28,7 @@ $(document).on('bs.load.photo',function(){
     })
 });
 
+
 $(document).on('bs.add.photo', function (e){
     var bsModal = $('#bsModal');
 
@@ -44,7 +45,7 @@ $(document).on('bs.add.photo', function (e){
         okButton.off();
     });
     cancelButton.remove();
-    var bodyContent =
+    let bodyContent =
         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
         '<div class="fallback">'+
         '<input name="file" type="file" multiple />' +
@@ -52,13 +53,13 @@ $(document).on('bs.add.photo', function (e){
         '</form>';
 
     body.html(bodyContent);
-    var dropzone = new Dropzone("#dropzoneModal",{
+    let  dropzone = new Dropzone("#dropzoneModal",{
         url: "/blueseal/xhr/ProductPhotoAjaxManage",
         maxFilesize: 4,
         maxFiles: 10,
         parallelUploads: 10,
-        acceptedFiles: "image/jpeg",
-        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+        acceptedFiles: "image/*",
+        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui (consigliato MAX 200KB)",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {
             formData.append("id", $.QueryString["id"]);

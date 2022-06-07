@@ -1,16 +1,17 @@
 (function ($) {
 
+
     Pace.ignore(function () {
         $.ajax({
-            method:'GET',
+            method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'Shop'
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#shopId');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            let select = $('#shopId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
@@ -19,13 +20,18 @@
             });
         });
 
+
+
     })
+
+
 })(jQuery);
+
 
 $(document).on('bs.newEditorialPlan.save', function () {
     let bsModal = new $.bsModal('Salva Piano Editoriale', {
         body: '<div><p>Premere ok per Salvare il Piano Editoriale' +
-        '</div>'
+            '</div>'
     });
 
     bsModal.showCancelBtn();
@@ -35,7 +41,9 @@ $(document).on('bs.newEditorialPlan.save', function () {
             name: $('#name').val(),
             startDate: $('#startDate').val(),
             endDate: $('#endDate').val(),
-            shopId:  $('#shopId').val(),
+            shopId: $('#shopId').val(),
+            contract:$('#contract').val(),
+            facebookMarketAccountId:$('#facebookMarketAccountId').val()
 
         };
         $.ajax({
@@ -56,6 +64,8 @@ $(document).on('bs.newEditorialPlan.save', function () {
         });
     });
 });
+
+
 
 
 

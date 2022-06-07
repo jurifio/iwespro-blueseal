@@ -34,8 +34,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'trackRequest' => 'https://onlinetools.ups.com/rest/Track',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
-        'username' => 'iwes123',
-        'password' => 'Spedizioni123'
+        'username' => 'Iwes123',
+        'password' => 'Spedizioni123!'
     ];
 
     protected $testConfig = [
@@ -47,8 +47,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'trackRequest' => 'https://wwwcie.ups.com/rest/Track',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
-        'username' => 'iwes123',
-        'password' => 'Spedizioni123'
+        'username' => 'Iwes123',
+        'password' => 'Spedizioni123!'
     ];
 
     /**

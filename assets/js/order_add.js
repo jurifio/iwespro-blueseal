@@ -52,6 +52,24 @@
                 options: res2,
             });
         });
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Shop',
+                condition :{hasEcommerce:1}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#shopId');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2,
+            });
+        });
     });
 })(jQuery);
 
@@ -291,6 +309,7 @@ $(document).on('bs.newOrder.save',function() {
         okButton.hide();
         body.html('<img src="/assets/img/ajax-loader.gif">');
         var data = {};
+        data.shopId = $('#shopId').val();
         data.user = $('#user').val();
         data.coupon = $('#coupon').val();
         data.note = $('#note').val();

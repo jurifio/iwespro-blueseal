@@ -98,3 +98,61 @@ $(document).on('bs.coupon.del', function() {
 $(document).on('bs.tipocoupon', function() {
     window.location = '/blueseal/tipocoupon';
 });
+
+$(document).ready(function() {
+    //set initial state.
+    $('#ischkActive').val(this.checked);
+
+    $('#ischkActive').change(function() {
+        if(this.checked) {
+            var $t = $('table[data-datatable-name]');
+            $t.data('isActive', 'Attivo');
+            var dt = $t.DataTable();
+            dt.draw();
+            $(this).prop("checked");
+        }
+
+    });
+    $('#isChkUser').val(this.checked);
+
+    $('#isChkUser').change(function() {
+        if(this.checked) {
+            var $t = $('table[data-datatable-name]');
+            $t.data('isUser', 'Attivo');
+            var dt = $t.DataTable();
+            dt.draw();
+            $(this).prop("checked");
+        }
+
+    });
+});
+
+$(document).on('bs.align.newsletteruser', function() {
+    let bsModal = new $.bsModal('Importazione Utenti Newsletter  con coupon Assegani', {
+        body: '<p>Procedi all \'importazione ?</p>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        const data = {
+            ids: '1'
+
+        };
+        $.ajax({
+            method: 'get',
+            url: '/blueseal/xhr/ImportCouponNewsletterHasNewsletterUser',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                $.refreshDataTable();
+                //window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});

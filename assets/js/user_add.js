@@ -46,7 +46,7 @@ $(document).on('bs.user.save',function() {
 			$('#user_fiscal_code').val(res.userDetails.fiscalCode);
 			$('#user_lang').val(res.langId);
             var checked = "checked";
-            if(res.newsletter && res.newsletter.isActive == 1) {
+            if(res.newsletterUser && res.newsletterUser.isActive == 1) {
                 $('#user_newsletter').prop('checked', true);
             } else {
                 $('#user_newsletter').prop('checked', false);

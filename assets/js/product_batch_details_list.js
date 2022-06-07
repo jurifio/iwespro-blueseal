@@ -597,6 +597,10 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal"' +
+                '<div class="text-modal" style="margin-bottom: 90px">' +
+                '<label style="display: block" for="textSearch">Cosa Vuoi Cercare(utilizza solo una parola):</label>' +
+                '<input type="text" value="" id="textSearch" name="textSearch" />'+
+                '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
@@ -645,6 +649,11 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
+                '</div>' +
+                '<div class="text-modal" style="margin-bottom: 90px">' +
+                '<label style="display: block" for="textSearch">Cosa Vuoi Cercare(utilizza solo una parola):</label>' +
+                '<input type="text" value="" id="textSearch" name="textSearch"/>'+
+                '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
@@ -704,6 +713,7 @@
             pVariantId = selectedRows[0].DT_RowId.split('-')[1];
         }
 
+
         $.ajax({
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -731,6 +741,7 @@
         $.ajax({
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
+            cache: true,
             data: {
                 table: 'ProductSheetModelPrototypeGender'
             },
@@ -757,12 +768,14 @@
             $('.mat').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
             const dataG = {
                 genderId: $('.gender').val(),
-                step: 1
+                step: 1,
+                textSearch:$('#textSearch').val(),
             };
             $.ajax({
                 method: 'get',
                 url: '/blueseal/xhr/DetailModelGetDetailsFason',
                 data: dataG,
+                cache: true,
                 dataType: 'json'
             }).done(function (res1) {
 
@@ -827,6 +840,7 @@
             const dataC = {
                 genderId: $('.gender').val(),
                 macroCategId: $('.categ').val(),
+                textSearch:$('#textSearch').val(),
                 step: 2
             };
             $.ajax({
@@ -952,7 +966,13 @@
                 '</div><div class="form-group">' +
                 '<label for="productCategories">Categorie</label>' +
                 '<select id="productCategories" name="productCategories" class="form-control required"></select>' +
-                '</div>'
+                '</div>'+
+                '<div class="form-group">' +
+                    '<label for="textAddDetail">Aggiungi Dettaglio Mancante</label>' +
+                    '<input type="text" id="textAddDetail" name="textAddDetail" class="form-control required"/>' +
+                    '</div><div class="form-group">' +
+                '<button class="success" id="btnAddDetail"  onclick="addDetail()" type="button"><span class="fa fa-plus">Aggiungi</span></button></div>' +
+                '<div id="resultInsert"></div>'
             );
 
             $("#ProductName_1_name").selectize({
@@ -1068,3 +1088,32 @@
         });
     });
 })();
+function addDetail(){
+    var field = $('#textAddDetail');
+
+    if ('' === field.val()) {
+        $('.modal-alert').css('display', 'block');
+    } else {
+        $.ajax({
+                type: "POST",
+                async: false,
+                url: "/blueseal/xhr/ProductNameAdd",
+                data: {
+                    name: field.val()
+                }
+            }
+        ).done(function (res) {
+            if ('ok' == res) {
+                $('#resultInsert').empty();
+                $('#resultInsert').append('Il Nuovo Dettaglio '+ field.val() +' è stato inserito ');
+                field.val(null);
+            } else {
+                $('#resultInsert').empty();
+                $('#resultInsert').append('Il Nuovo Dettaglio non  stato inserito '+res);
+            }
+
+        });
+    }
+
+
+}

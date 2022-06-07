@@ -1,0 +1,214 @@
+$(document).on('bs.product.exclusive.tag', function () {
+
+    var bsModal = $('#bsModal');
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+    header.html('Inserisci Prodotti nelle Sezioni Esclusive');
+
+    var getVarsArray = [];
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (selectedRowsCount < 1) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare uno o più Prodotti per poterli inserire in una sezione"
+        }).open();
+        return false;
+    }
+
+    $.each(selectedRows, function (k, v) {
+        var rowId = v.DT_RowId.split('__');
+        getVarsArray.push(rowId[1] + '-' + rowId[2]);
+    });
+
+
+    body.html('<img src="/assets/img/ajax-loader.gif" />');
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/ProductTagExclusive',
+            type: "get",
+            data: {
+                rows: getVarsArray
+            }
+        }).done(function (response) {
+            body.html(response);
+            okButton.html('Ok').off().on('click', function () {
+                okButton.on('click', function () {
+                    bsModal.modal('hide')
+                });
+                var action;
+                var message;
+                switch ($('.tab-pane.active').eq(0).attr('id')) {
+                    case 'add':
+                        action = 'post';
+                        message = 'Sezioni Esclusive Applicate';
+                        break;
+                    case 'delete':
+                        action = 'put';
+                        message = 'Sezioni Esclusive Rimosse';
+                        break;
+                }
+
+                var getTagsArray = [];
+                $.each($('.tree-selected'), function () {
+                    getTagsArray.push($(this).attr('id'));
+                });
+                body.html('<img src="/assets/img/ajax-loader.gif" />');
+                $.ajax({
+                    url: '/blueseal/xhr/ProductTagExclusive',
+                    type: action,
+                    data: {
+                        rows: getVarsArray,
+                        tags: getTagsArray
+                    }
+                }).done(function (response) {
+                    body.html('<p>' + message + '</p>');
+                    okButton.on('click', function () {
+                        bsModal.modal('hide');
+                        $('.table').DataTable().ajax.reload();
+                    });
+                }).fail(function (response) {
+                    body.html('<p>Errore</p>');
+                });
+            });
+
+        });
+    });
+
+    bsModal.modal();
+});
+
+$(document).on('bs.priority.edit', function () {
+
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
+
+	header.html('Assegna Priorità Prodotti');
+
+	var getVarsArray = [];
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selectedRowsCount = selectedRows.length;
+
+	if (selectedRowsCount < 1) {
+		new Alert({
+			type: "warning",
+			message: "Devi selezionare uno o più Prodotti per poterli modificare"
+		}).open();
+		return false;
+	}
+
+	$.each(selectedRows, function (k, v) {
+		var rowId = v.DT_RowId.split('__');
+		getVarsArray.push(rowId[1] + '-' + rowId[2]);
+	});
+	body.html('<img src="/assets/img/ajax-loader.gif" />');
+
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/ProductPriority',
+			type: "get",
+			data: {
+				rows: getVarsArray
+			}
+		}).done(function (response) {
+			var priorities = JSON.parse(response);
+			var html = '<div style="height: 200px" class="form-group form-group-default selectize-enabled full-width">';
+			html += '<select class="full-width" placeholder="Seleziona la priorità" data-init-plugin="selectize" title="" name="priorityId" id="priorityId" required>';
+			html += '</select>';
+			html += '</div>';
+
+			body.html(html);
+			$('#priorityId').selectize({
+				valueField: 'id',
+				labelField: 'priority',
+				searchField: ['priority'],
+				options: priorities
+			});
+            $(".tag-list > li").off().on('click', function (a, b, c) {
+                if ($(this).hasClass('tree-selected')) {
+                    $(this).removeClass('tree-selected');
+                } else {
+                    $(this).addClass('tree-selected');
+                }
+            });
+			okButton.html('Ok').off().on('click', function () {
+				var priority = $('#priorityId').eq(0).val();
+				if('undefined' == priority) return;
+				okButton.on('click', function () {
+					bsModal.modal('hide')
+				});
+
+				body.html('<img src="/assets/img/ajax-loader.gif" />');
+				$.ajax({
+					url: '/blueseal/xhr/ProductPriority',
+					type: "PUT",
+					data: {
+						rows: getVarsArray,
+						priority: priority
+					}
+				}).done(function (response) {
+					body.html('<p>Prodotti aggiornati: ' +  response + '</p>');
+					okButton.on('click', function () {
+						bsModal.modal('hide');
+						$('.table').DataTable().ajax.reload();
+					});
+				}).fail(function (response) {
+					body.html('<p>Errore</p>');
+				});
+			});
+
+		});
+	});
+
+	bsModal.modal();
+});
+
+$(document).on('click', ".tag-list > li", function (a, b, c) {
+    if ($(this).hasClass('tree-selected')) {
+        $(this).removeClass('tree-selected');
+    } else {
+        $(this).addClass('tree-selected');
+    }
+});
+
+$(document).on('bs.exclusivetag.all', function () {
+    let bsModal = new $.bsModal('Genera Sezione Esclusiva All per tutti i prodotti', {
+        body: '<div><p>Premere ok per Generarla' +
+            '</div>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+        const data = {
+            id:1
+
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/TagAllExclusiveManage',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});
+
+

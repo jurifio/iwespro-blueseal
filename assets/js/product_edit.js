@@ -7,17 +7,66 @@ var alertHtml = "" +
 var tagList = "";
 
 $(document).on('bs.dummy.edit', function (e, element, button) {
-    var input = document.getElementById("dummyFile");
-    input.click();
-});
 
-$("#dummyFile").on('change', function () {
-    if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#dummyPicture').attr('src', e.target.result);
-        };
-        reader.readAsDataURL(this.files[0]);
+    let bsModal = $('#bsModal');
+
+    let header = bsModal.find('.modal-header h4');
+    let body = bsModal.find('.modal-body');
+    let cancelButton = bsModal.find('.modal-footer .btn-default');
+    let okButton = bsModal.find('.modal-footer .btn-success');
+
+    bsModal.modal();
+
+    header.html('Carica Foto');
+    okButton.html('Fatto').off().on('click', function () {
+        bsModal.modal('hide');
+        okButton.off();
+    });
+    cancelButton.remove();
+    let bodyContent =
+        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">' +
+        '<div class="fallback">' +
+        '<input name="file" type="file" multiple />' +
+        '</div>' +
+        '</form>';
+
+    body.html(bodyContent);
+    let dropzone = new Dropzone("#dropzoneModal", {
+        url: "/blueseal/xhr/UploadDummyImageAjaxController",
+        maxFilesize: 5,
+        maxFiles: 100,
+        parallelUploads: 10,
+        acceptedFiles: "image/*",
+        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+        uploadMultiple: true,
+        sending: function (file, xhr, formData) {
+        },
+        success: function (res) {
+            $('#returnFileLogo').append('<img src="https://iwes.s3.amazonaws.com/iwes-aggregator/' + res['name'] + '">');
+            $('#dummyPicture').attr('src', '/media/dummyPictures/'+res['name'] );
+            $('#dummyFile').val('/media/dummyPictures/' + res['name']);
+        }
+    });
+
+    dropzone.on('addedfile', function () {
+        okButton.attr("disabled", "disabled");
+    });
+    dropzone.on('queuecomplete', function () {
+        okButton.removeAttr("disabled");
+        $(document).trigger('bs.load.photo');
+    });
+});
+$(document).on('bs.price.edit', function(){
+    var id = $('#Product_id').val();
+    var productVariantId = $('#Product_productVariantId').val();
+    if (('' !== id) && ('' !== productVariantId)) {
+        var url = '/blueseal/prodotti/gestione-prezzi/?code=' + id + '-' + productVariantId;
+        window.open(url,'_blank');
+    } else {
+        modal = new $.bsModal(
+            "Gestione Prezzi",
+            { body: 'Per utilizzare questa funzionalità devi prima salvare un prodotto o crearne uno nuovo' }
+        );
     }
 });
 

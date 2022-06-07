@@ -1,43 +1,64 @@
 ;(function () {
 
+
     $(document).on('bs-contract-add', function () {
 
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Foison'
-            },
-            dataType: 'json'
-        }).done(function (res) {
-            var select = $('#foisonSelect');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                options: res
+
+        let bsModal = new $.bsModal('Crea contratto', {
+            body: `<div><p>Inserisci un nuovo contratto</p>
+                <p>Con questa operazione si definisce l\'arco temporale in cui è valido il contratto. All\'interno di esso verranno in seguito definiti tutti i dettagli.</p>
+                </div>
+                <div class="form-group form-group-default required">
+                <label for="contractName">Titolo contratto</label>
+                <input autocomplete="off" type="text" id="contractName" 
+                placeholder="Titolo del Contratto" class="form-control" name="contractName" required="required">
+                </div>
+                <div class="form-group form-group-default required">
+                <label for="contractDescription">Descrizione contratto</label>
+                <textarea id="contractDescription"></textarea>
+                </div>
+                <div class="form-group form-group-default selectize-enabled">
+                <label for="foisonSelect">Seleziona Operator</label>
+                <select id="foisonSelect" name="foisonSelect"
+                class="full-width selectpicker"
+                placeholder="Seleziona la Lista"
+                data-init-plugin="selectize">
+                </select>
+                </div>`
+        });
+        Pace.ignore(function () {
+            var foisonSelect = $('select[name=\"foisonSelect\"]');
+            $.ajax({
+                url: '/blueseal/xhr/SelectAllFoisonAjaxController',
+                method: 'get',
+                dataType: 'json'
+            }).done(function (res) {
+                console.log(res);
+                foisonSelect.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.id) + '</span> - ' +
+                                '<span class="caption">' + escape(item.name) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.id) + '</span>  - ' +
+                                '<span class="caption">' + escape(item.name) + '</span>' +
+                                '</div>'
+                        }
+                    }
+                });
             });
         });
 
-        let bsModal = new $.bsModal('Crea contratto', {
-            body: '<p>Inserisci un nuovo contratto</p>' +
-            '<p>Con questa operazione si definisce l\'arco temporale in cui è valido il contratto. All\'interno di esso verranno in seguito definiti tutti i dettagli.</p>' +
-            '<div class="form-group form-group-default required">' +
-                '<select class="full-width selectpicker"\n id="foisonSelect"' +
-                'placeholder="Seleziona il Foison" tabindex="-1"\n' +
-                'title="foisonSelect" name="foisonSelect" id="foisonSelect">\n' +
-                '</select>' +
-            '</div>'+
-            '<div class="form-group form-group-default required">' +
-                '<label for="contractName">Titolo contratto</label>' +
-                '<input autocomplete="off" type="text" id="contractName" ' +
-            'placeholder="Titolo del Contratto" class="form-control" name="contractName" required="required">' +
-            '</div>'+
-            '<div class="form-group form-group-default required">' +
-                '<label for="contractDescription">Descrizione contratto</label>' +
-                '<textarea id="contractDescription"></textarea>' +
-            '</div>'
-        });
+
+
 
 
         bsModal.showCancelBtn();
@@ -47,22 +68,22 @@
                 nContract: $('input#contractName').val(),
                 dContract: $('#contractDescription').val()
             };
-                $.ajax({
-                    method: 'post',
-                    url: '/blueseal/xhr/ContractsManage',
-                    data: data
-                }).done(function (res) {
-                    bsModal.writeBody(res);
-                }).fail(function (res) {
-                    bsModal.writeBody('Errore grave');
-                }).always(function (res) {
-                    bsModal.setOkEvent(function () {
-                        $.refreshDataTable();
-                        bsModal.hide();
-                        //window.location.reload();
-                    });
-                    bsModal.showOkBtn();
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/ContractsManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                    //window.location.reload();
                 });
+                bsModal.showOkBtn();
+            });
         });
     });
 
@@ -73,7 +94,7 @@
 
 
         $.ajax({
-            method:'GET',
+            method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'WorkCategory'
@@ -81,7 +102,7 @@
             dataType: 'json'
         }).done(function (cat) {
             var select = $('#workCategory');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
                 labelField: ['name'],
@@ -126,12 +147,12 @@
             });
 
         $(document)
-            .on('click','#removeDetail',function() {
-                let id =  $(this).attr('data-id');
+            .on('click', '#removeDetail', function () {
+                let id = $(this).attr('data-id');
                 $(`#formDetail-${id}`).remove();
 
                 let z = index.indexOf(parseInt(id));
-                if(z !== -1) {
+                if (z !== -1) {
                     index.splice(z, 1);
                 }
             });
@@ -241,10 +262,10 @@
             method: 'GET',
             url: '/blueseal/xhr/SingleContractManage',
             data: {
-               idC: id
+                idC: id
             }
         }).done(function (res) {
-            $('#textC').append('<p>'+res+'</p>')
+            $('#textC').append('<p>' + res + '</p>')
         });
 
         bsModal.addClass('modal-wide');
@@ -279,3 +300,6 @@
         });
     });
 })();
+
+
+

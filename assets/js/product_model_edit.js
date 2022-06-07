@@ -6,41 +6,238 @@ var alertHtml = "" +
 
 var tagList = "";
 
+var defMult = '';
+
 $(document).on('bs.product.edit', function (e, element, button) {
-    $('#form-model').bsForm('save', {
-            url:'/blueseal/xhr/DetailModelSave',
-            onDone: function(res, method) {
+
+    let err = false;
+    $.each($('.obb'), function () {
+       if($(this).val() == ''){
+           new Alert({
+               type: "danger",
+               message: "Hai lasciato vuoto qualche dettaglio"
+           }).open();
+           err = true;
+       }
+    });
+
+    if(err) return false;
+
+    $('#mainLoader').show();
+    let saveAll = function (isMult) {
+        $('#form-model').bsForm('save', {
+            url: '/blueseal/xhr/DetailModelSave',
+            onDone: function (res, method) {
+
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
                     body = 'OOPS! Modello non aggiornato!<br />' + res['message'];
                 } else {
                     if ('POST' == method) {
-                        body = 'Nuovo modello inserito.';
-                        location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
+                        if (!isMult) {
+                            body = 'Nuovo modello inserito.';
+                            location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
+                        } else {
+                            if ('new' == res['status']) {
+                                body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
+                                location = '/blueseal/prodotti/modelli/support';
+                            }
+                        }
                     }
                     if ('PUT' == method) {
                         body = 'Modello aggiornato.';
-                        location = window.location.href;
+                        if (!isMult) {
+                            location = window.location.href;
+                        } else {
+                            if ('updated' == res['status']) {
+                                body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
+                                location = '/blueseal/prodotti/modelli/support';
+                            }
+                        }
                     }
                 }
                 modal = new $.bsModal('Salvataggio del modello', {
                     body: body,
-                    okButtonEvent: function(){
+                    okButtonEvent: function () {
                         modal.hide();
                         if (false != location) window.location.replace(location);
                     }
                 });
             },
-            onFail: function(res, method) {
+            onFail: function (res, method) {
                 modal = new $.bsModal('Salvataggio del modello', {
                     body: res['message'],
-                    okButtonEvent: function(){
+                    okButtonEvent: function () {
                         modal.hide();
                     }
                 });
+            },
+            par: defMult
+        });
+    };
+
+
+    function saveAllData(val) {
+        defMult = val;
+    }
+
+    //---------
+    var mult = [];
+    if ($_GET.all) {
+        if ('modelIds' in $_GET.all) {
+
+            let multPar = $('#ids').val();
+
+            let arrids = JSON.parse(multPar);
+            let results = [];
+
+            while (arrids.length) {
+                results.push(arrids.splice(0, 100));
             }
-    });
+
+            let elabor = 0;
+            let worked = null;
+
+            $.each(results, function (k, v) {
+
+                let multPartial = JSON.stringify(v);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/blueseal/xhr/DetailModel',
+                    data: {
+                        multiple: multPartial
+                    }
+                }).done(function (response) {
+                    mult = [];
+                    mult.push({
+                        response
+                    });
+
+                    let data = {};
+                    //let formDataObject = new FormData();
+
+                    $('#form-model').find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                        if ('undefined' != typeof $(this).attr('name')) {
+
+                            if ("" != $(this).val()) {
+                                data[$(this).attr('name')] = $(this).val();
+                                //formDataObject.append($(this).attr('name'), $(this).val());
+                            }
+                        }
+                    });
+
+                    $('#form-model').find('input[type=checkbox]:checked').each(function () {
+                        if (typeof $(this).attr('name') == 'undefined') return;
+                        data[$(this).attr('name')] = $(this).val();
+                        //formDataObject.append($(this).attr('name'), $(this).val());
+                    });
+
+                    data['modelIds'] = mult;
+
+                    $.ajax({
+                        type: "post",
+                        url: '/blueseal/xhr/DetailModelSave',
+                        dataType: 'JSON',
+                        data: data
+                    }).done(function (response) {
+                        elabor = elabor + response['count'];
+                        worked = Math.trunc(elabor * 100 / parseInt($('#totalProduct').val()));
+                        $('#modifiedRows').empty().append(
+                            worked + '%'
+                        );
+                        $('#mexage').append(`<div>${response['message']}</div>`);
+
+                        if(worked == 100) $('#mainLoader').hide();
+                    });
+
+                }).fail(function (response) {
+                }).success(function (res) {
+                });
+            });
+
+        } else if ('modifyModelIds' in $_GET.all) {
+            let multPar = $('#ids').val();
+
+            let arrids = JSON.parse(multPar);
+            let results = [];
+
+            while (arrids.length) {
+                results.push(arrids.splice(0, 100));
+            }
+
+            let elabor = 0;
+            let worked = null;
+
+            $.each(results, function (k, v) {
+
+                let multPartial = JSON.stringify(v);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/blueseal/xhr/DetailModel',
+                    data: {
+                        multiple: multPartial
+                    }
+                }).done(function (response) {
+                    mult = [];
+                    mult.push({
+                        response
+                    });
+
+                    let data = {};
+                    //let formDataObject = new FormData();
+
+                    $('#form-model').find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                        if ('undefined' != typeof $(this).attr('name')) {
+
+                            if ("" != $(this).val()) {
+                                data[$(this).attr('name')] = $(this).val();
+                                //formDataObject.append($(this).attr('name'), $(this).val());
+                            }
+                        }
+                    });
+
+                    $('#form-model').find('input[type=checkbox]:checked').each(function () {
+                        if (typeof $(this).attr('name') == 'undefined') return;
+                        data[$(this).attr('name')] = $(this).val();
+                        //formDataObject.append($(this).attr('name'), $(this).val());
+                    });
+
+
+                    data['modelIds'] = mult;
+
+                    $.ajax({
+                        type: "put",
+                        url: '/blueseal/xhr/DetailModelSave',
+                        dataType: 'JSON',
+                        data: data
+                    }).done(function (response) {
+                        elabor = elabor + response['count'];
+                        worked = Math.trunc(elabor * 100 / parseInt($('#totalProduct').val()));
+                        $('#modifiedRows').empty().append(
+                            worked + '%'
+                        );
+                        $('#mexage').append(`<div>${response['message']}</div>`);
+
+                        if(worked == 100) $('#mainLoader').hide();
+                    });
+
+                }).fail(function (response) {
+                }).success(function (res) {
+                });
+            });
+
+
+        } else {
+            saveAll(false)
+        }
+    } else {
+        saveAll(false)
+    }
+
+    //--------
 });
 
 $(document).ready(function () {
@@ -65,7 +262,6 @@ $(document).ready(function () {
     }
 
     changeProductDataSheet = true;
-
 
 
     var tagNames = $("#Tag_names");
@@ -189,17 +385,119 @@ $(document).ready(function () {
     });
 
 
+    $("#genders").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: JSON.parse($('.JSON-gend').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+    if ('string' == typeof $_GET.all.id) {
+        $("#prodCats").selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            maxItems: 1,
+            options: JSON.parse($('.JSON-pcats').html()),
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        escape(item.name) +
+                        '</div>';
+                }
+            }
+        });
+    } else {
+        $(document).on('keyup', '#prodCat', function (e) {
+            elem = $(e.target);
+            if (13 == e.charCode) {
+                e.preventDefault();
+            }
+            let val = elem.val();
+            if (3 < val.length) {
+                let query = elem.val();
+                $.ajax({
+                    url: '/blueseal/xhr/GetProductCatsByAnyString',
+                    type: 'GET',
+                    data: {
+                        search: query,
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $('#prodCats').empty();
+                    $.each(res, function (k, v) {
+                        $('#prodCats').append(
+                            `<option value="${k}">${v}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#prodCats').empty();
+            }
+        });
+
+    }
+
+
+    $("#materials").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: JSON.parse($('.JSON-mat').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+
     //init page
-    if (Object.keys($_GET.all).length) {
+    mainIf: if (Object.keys($_GET.all).length) {
         if ('string' == typeof $_GET.all.id) {
             var data = {id: $_GET.all.id};
             var action = 'edit';
         } else if ('string' == typeof $_GET.all.modelId) {
             var data = {id: $_GET.all.modelId};
             var action = 'byModel';
+        } else if ('string' == typeof $_GET.all.modelIds) {
+            //se copia multipla
+            var data = {id: $('#ids').val()};
+            var action = 'byModels';
+        } else if ('string' == typeof $_GET.all.modifyModelIds) {
+            var data = {id: $('#ids').val()};
+            var action = 'byModifyModels';
         }
 
         if ('undefined' != typeof data) {
+
+            if ('byModels' == action) {
+                //prendo tutti i dettagli
+                $('#main-details').selectDetails(data.id, 'models');
+                break mainIf;
+            }
+
+            if ('byModifyModels' == action) {
+                //prendo tutti i dettagli
+                $('#main-details').selectDetails(data.id, 'modifyModels');
+                $('#isMultiple').attr('value', 'mult');
+                break mainIf;
+            }
+
             $.initFormByGetData({
                 data: data,
                 ajaxUrl: '/blueseal/xhr/DetailModel',
@@ -267,6 +565,7 @@ $(document).ready(function () {
                 var productCategory = detailContentElem.data('category');
                 $('#categories').humanized('addItems', productCategory);
 
+
                 if ('undefined' != typeof $_GET.all.name) $('input[name="name"]').val(decodeURI($_GET.all.name));
                 if ('undefined' != typeof $_GET.all.codeName) $('input[name="code"]').val(decodeURI($_GET.all.codeName));
             });
@@ -274,4 +573,126 @@ $(document).ready(function () {
     } else {
         $('#main-details').selectDetails();
     }
+});
+
+
+$(document).on('click', '#hide-det', function () {
+    $('#allDets').toggle();
+});
+
+
+$(document).on('click', '#add-change-details', function () {
+
+    let num = parseInt($('.finding').last().attr('data-number')) + 1;
+
+    if (isNaN(num)) num = 0;
+
+    $('.new-c-det').append(`
+    <div class="row finding distinct-option" id="finding-${num}" data-number="${num}">
+        <div class="col-md-3">
+            <div class="form-group form-group-default">
+                <label for="find_detail-${num}">Seleziona etichetta</label>
+                <select class="form-control findDetails" name="find-detail-${num}"
+                        id="find-detail-${num}">
+                </select>
+            </div>
+            <div>
+            <p id="sectedDetailsList-${num}"></p>
+            </div>
+        </div>
+        <div class="form-group form-group-default col-md-3">
+            <label for="find-detail-value-${num}">Trova (Dettaglio)</label>
+            <input autocomplete="off" type="text" id="find-detail-value-${num}"
+                   class="form-control" name="find-detail-value-${num}"
+                   value="">
+        </div>
+        <div class="form-group form-group-default col-md-3">
+            <label for="sub-detail-value-${num}">Sostituisci (Dettaglio)</label>
+            <input autocomplete="off" type="text" id="sub-detail-value-${num}"
+                   class="form-control" name="sub-detail-value-${num}"
+                   value="">
+        </div>
+        <div class="text-center col-md-3">
+        <p class="btn-success remove-change-detail" style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px" id="remove-${num}">ELIMINA DETTAGLIO</p>
+        <div style="display: block">
+             <label for="delDetail-${num}">Cancella il dettaglio nel clone</label>
+             <input id="delDetail-${num}" name="delDetail-${num}" class="delDetail" data-labelid="" type="checkbox">
+        </div>
+        </div>
+    </div>
+    `);
+
+
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/DetailGetLabelForFind',
+        data: {
+            pid: $('#pIDHidden').val()
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        let select = $(`#find-detail-${num}`);
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'slug',
+            searchField: 'slug',
+            options: res,
+        });
+    });
+});
+
+$(document).on('click', '.delDetail', function () {
+    if ($(this).is(':checked')) {
+        $('#find-detail-value-' + $(this).attr('id').split('-')[1]).val('Elimina').prop('disabled', true);
+        $('#sub-detail-value-' + $(this).attr('id').split('-')[1]).val('Elimina').prop('disabled', true);
+    } else {
+        $('#find-detail-value-' + $(this).attr('id').split('-')[1]).val('').prop('disabled', false);
+        $('#sub-detail-value-' + $(this).attr('id').split('-')[1]).val('').prop('disabled', false);
+    }
+});
+
+$(document).on('click', '.remove-change-detail', function () {
+    let sectionToRemove = $(this).attr('id').split('-')[1];
+    $(`#finding-${sectionToRemove}`).remove();
+});
+
+
+$(document).on('change', '.findDetails', function () {
+
+    let label = $(this).val();
+    let url = new URL(window.location.href);
+    let psmp = url.searchParams.get("modelIds");
+    let position = $(this).attr('id').split('-')[2];
+
+    if (psmp == null) psmp = url.searchParams.get("modifyModelIds");
+
+    let num = $(this).attr('id').split('-')[2];
+    $.ajax({
+        method: 'post',
+        url: '/blueseal/xhr/DetailGetLabelDetailForFind',
+        data: {
+            psmp: $('#ids').val(),
+            label: label
+        }
+    }).done(function (res) {
+        $(`#sectedDetailsList-${num}`).empty().append(res);
+        $(`#delDetail-${position}`).attr('name', 'delDetail-' + label);
+        $(`#find-detail-value-${position}`).addClass('obb');
+        $(`#sub-detail-value-${position}`).addClass('obb');
+    });
+});
+
+
+$(document).on('change', '#copypast', function () {
+    if ($('#copypast').is(':checked')) {
+        $('#allDets').css({
+            "pointer-events": "none"
+        })
+    } else {
+        $('#allDets').css({
+            "pointer-events": "auto"
+        })
+    }
+
 });

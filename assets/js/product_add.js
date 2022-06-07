@@ -7,18 +7,53 @@ var alertHtml = "" +
 var tagList = "";
 
 $(document).on('bs.dummy.add', function (e,element,button) {
-    var input = document.getElementById("dummyFile");
-    input.click();
-});
+    let bsModal = $('#bsModal');
 
-$("#dummyFile").on('change', function(){
-    if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#dummyPicture').attr('src', e.target.result);
-        };
-        reader.readAsDataURL(this.files[0]);
-    }
+    let header = bsModal.find('.modal-header h4');
+    let body = bsModal.find('.modal-body');
+    let cancelButton = bsModal.find('.modal-footer .btn-default');
+    let okButton = bsModal.find('.modal-footer .btn-success');
+
+    bsModal.modal();
+
+    header.html('Carica Foto');
+    okButton.html('Fatto').off().on('click', function () {
+        bsModal.modal('hide');
+        okButton.off();
+    });
+    cancelButton.remove();
+    let bodyContent =
+        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">' +
+        '<div class="fallback">' +
+        '<input name="file" type="file" multiple />' +
+        '</div>' +
+        '</form>';
+
+    body.html(bodyContent);
+    let dropzone = new Dropzone("#dropzoneModal", {
+        url: "/blueseal/xhr/UploadDummyImageAjaxController",
+        maxFilesize: 5,
+        maxFiles: 100,
+        parallelUploads: 10,
+        acceptedFiles: "image/*",
+        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+        uploadMultiple: true,
+        sending: function (file, xhr, formData) {
+        },
+        success: function (res) {
+            $('#returnFileLogo').append('<img src="https://iwes.s3.amazonaws.com/iwes-aggregator/' + res['name'] + '">');
+            $('#dummyPicture').attr('src', '/media/dummyPictures/'+res['name'] );
+            $('#dummyFile').val('/media/dummyPictures/' + res['name']);
+        }
+    });
+
+    dropzone.on('addedfile', function () {
+        okButton.attr("disabled", "disabled");
+    });
+    dropzone.on('queuecomplete', function () {
+        okButton.removeAttr("disabled");
+        $(document).trigger('bs.load.photo');
+    });
 });
 
 $(document).on('bs.product.add', function() {
@@ -44,7 +79,7 @@ $(document).on('bs.product.add', function() {
         body.html("Salvataggio riuscito");
         bsModal.modal();
         var ids = $.parseJSON(content);
-        window.location.replace("/blueseal/prodotti/modifica?id="+ids.id+"&productVariantId="+ids.productVariantId);
+        window.location.replace("/blueseal/prodotti/modifica?id="+ids['code'].id+"&productVariantId="+ids['code'].productVariantId);
     }).fail(function (){
         body.html("Errore grave");
         bsModal.modal();
@@ -181,9 +216,9 @@ $(document).ready(function() {
                     options: window.detailsStorage
                 });
                 var initVal = $(this).data('init-selection');
-                if(initVal != 'undefined' && initVal.lenght != 0) {
+               // if(initVal != 'undefined' && initVal.lenght != 0) {
                     sel[0].selectize.setValue(initVal);
-                }
+               // }
             });
         });
     });
