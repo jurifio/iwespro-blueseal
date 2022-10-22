@@ -94,7 +94,7 @@ class CPrepareProductForAggregatorJob extends ACronJob
                 }
             }
         } catch (\Throwable $e) {
-            $this->report('CPrepareProductForAggregatorJob','Error',$e->getMessage().'-'.$e->getLine());
+            $this->report('CPrepareProductForAggregatorJob','Error',$e->getMessage().'-'.$e->getCode());
         }
 
 
