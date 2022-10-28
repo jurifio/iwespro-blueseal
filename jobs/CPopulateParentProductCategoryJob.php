@@ -53,7 +53,7 @@ class CPopulateParentProductCategoryJob extends ACronJob
         $res = "";
         try {
             $phpcRepo=\Monkey::app()->repoFactory->create('ProductHasProductCategory');
-            $sql='SELECT php.productId as productId, php.productVariantId as productVariantId,php.productCategoryId as productCategoryId, pc.depth as depth from ProductHasProductCategory php 
+            $sql='SELECT php.productId as productId, php.productVariantId as productVariantId,php.productCategoryId as productCategoryId, pc.depth as depth, pc.slug as slug from ProductHasProductCategory php 
 join Product p on p.id = php.productId and p.productVariantId = php.productVariantId join ShopHasProduct shp on php.productId=shp.productId and php.productVariantId =shp.productVariantId
 join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and p.productStatusId in (6,11)';
             $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
@@ -62,8 +62,9 @@ join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and p.
                 $productVariantId=$row['productVariantId'];
                 $productCategoryId=$row['productCategoryId'];
                 $depth=$row['depth'];
+                $slug=$row['slug'];
                 $parentDepth=0;
-                $sqlParent='SELECT parent.id as parentCategoryId, parent.depth as parentDepth  FROM
+                $sqlParent='SELECT parent.id as parentCategoryId, parent.depth as parentDepth, node.slug as slugNode  FROM
         ProductCategory node,
         ProductCategory parent
         WHERE (
@@ -75,6 +76,7 @@ join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and p.
                 foreach ($resParent as $rowParent){
                     if($rowParent['parentDepth']>0){
                         $parentDepth = $rowParent['parentDepth'];
+                        $slugNode =$rowParent['slugNode'];
                         $parentCategoryId=$rowParent['parentCategoryId'];
                         $findPhpc=\Monkey::app()->dbAdapter->selectCount('ProductHasProductCategory',['productCategoryId' =>$parentCategoryId,'productId'=>$productId,'productVariantId'=>$productVariantId]);
                         if($findPhpc > 0) {
@@ -85,6 +87,7 @@ join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and p.
                             $phpc->productId = $productId;
                             $phpc->productVariantId = $productVariantId;
                             $phpc->insert();
+                            $this->report('CPopulateParentProductCategoryJob','insert product'.$productId.'-'.$productVariantId.' in  '.$slug.'/'.$slugNode);
                         }
                     }
 
