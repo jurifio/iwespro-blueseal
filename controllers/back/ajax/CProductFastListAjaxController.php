@@ -195,7 +195,7 @@ class CProductFastListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' ' . $sqlFilterShooting;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 and p.productSeasonId > 31 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' ' . $sqlFilterShooting;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
