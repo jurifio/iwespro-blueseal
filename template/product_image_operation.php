@@ -23,7 +23,7 @@
                 <div class="container-fluid padding-25 sm-padding-10">
                     <div class="row">
                         <div class="col-lg-12">
-                            <?php if($app->user()->hasPermission('allShops')): ?>
+                            <?php if($app->user()->hasPermission('allShops') || $app->user()->hasPermission('shooting')): ?>
                                 <img style="width: 100%" src="/assets/img/rocketImage.png">
                             <?php else: ?>
 
