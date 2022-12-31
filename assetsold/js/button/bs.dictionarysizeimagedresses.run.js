@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-fighter-jet",
-    permission: "/admin/product/edit&&allShops",
+    permission: "/admin/product/list&&allShops",
     event: "bs-dictionarysizeimagedresses-run",
     class: "btn btn-default",
     rel: "tooltip",

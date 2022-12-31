@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-rocket",
-    permission: "/admin/product/edit&&allShops",
+    permission: "/admin/product/list&&allShops",
     event: "bs-dictionarysizeimage-run",
     class: "btn btn-default",
     rel: "tooltip",
