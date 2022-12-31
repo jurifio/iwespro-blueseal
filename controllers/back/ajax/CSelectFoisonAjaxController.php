@@ -43,13 +43,13 @@ class CSelectFoisonAjaxController extends AAjaxController
                 $foisonHasInterest=$foisonHasInterestRepo->findOneBy(['foisonId'=>$foison->id,'workCategoryId'=>$workCategoryId]);
                 if ($foisonHasInterest!=null) {
                     if($foisonHasInterest->foisonStatusId<4) {
-                        array_push($collectFoison,['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank]);
+                        $collectFoison[] = ['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank];
                     }
                 }
             }
             if(count($collectFoison)==0){
                 foreach ($foisons as $foison) {
-                            array_push($collectFoison,['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank]);
+                            $collectFoison[] = ['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank];
                         }
                     }
 

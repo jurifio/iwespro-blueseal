@@ -37,7 +37,7 @@ class CProductHasProductLookManageAjaxController extends AAjaxController
             } else {
                 $image = '';
             }
-            array_push($look,['id' => $collect->id,'name' => $collect->name,'img' => $image,'shopId'=>$shop->id,'shopName'=>$shop->name]);
+            $look[] = ['id' => $collect->id,'name' => $collect->name,'img' => $image,'shopId' => $shop->id,'shopName' => $shop->name];
         }
 
         return json_encode($look);

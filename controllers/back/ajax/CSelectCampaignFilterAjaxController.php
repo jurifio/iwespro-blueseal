@@ -40,7 +40,7 @@ class CSelectCampaignFilterAjaxController extends AAjaxController
                 }else{
                     $isActive='Non Attiva';
                 }
-                array_push($collectCampaigns,['id'=>$campaign->id,'campaignName'=>$campaign->name,'shop'=>$campaign->remoteShopId,'isActive'=>$isActive]);
+                $collectCampaigns[] = ['id' => $campaign->id,'campaignName' => $campaign->name,'shop' => $campaign->remoteShopId,'isActive' => $isActive];
             }
 
         return json_encode($collectCampaigns);

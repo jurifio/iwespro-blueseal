@@ -74,20 +74,19 @@ class CSelectAggregatorStatisticRenderAjaxController extends AMarketplaceAccount
         $sql=self::SQL_SELECT_CAMPAING_PRODUCT_STATISTIC_MARKETPLACE_ACCOUNT;
         $res = $this -> app -> dbAdapter -> query($sql, []) -> fetchAll();
         foreach($res as $result){
-            array_push($resultjson,
-                                        ['productCount'=>$result['productCount'],
-                                        'visits'=>$result['visits'],
-                                        'totalVisits'=>$result['totalVisits'],
-                                         'cost'=>$result['cost'],
-                                         'orderTotal'=>$result['orderTotal'],
-                                         'costCustomer'=>$result['costCustomer'],
-                                         'date'=>$result['timestamp'],
-                                            'totCampaignVisit'=>$result['totCampaignVisit'],
-                                            'totCampaignCost'=>$result['totCampaignCost'],
-                                            'totCampaignCostCustomer'=>$result['totCampaignCostCustomer'],
-                                            'conversionRateQty'=>$result['conversionRateQty'],
-                                            'conversionRateOrderTot'=>$result['conversionRateOrderTot'],
-                                            'conversionRateCustomerOrderTot'=>$result['conversionRateCustomerOrderTot']]);
+            $resultjson[] = ['productCount' => $result['productCount'],
+                'visits' => $result['visits'],
+                'totalVisits' => $result['totalVisits'],
+                'cost' => $result['cost'],
+                'orderTotal' => $result['orderTotal'],
+                'costCustomer' => $result['costCustomer'],
+                'date' => $result['timestamp'],
+                'totCampaignVisit' => $result['totCampaignVisit'],
+                'totCampaignCost' => $result['totCampaignCost'],
+                'totCampaignCostCustomer' => $result['totCampaignCostCustomer'],
+                'conversionRateQty' => $result['conversionRateQty'],
+                'conversionRateOrderTot' => $result['conversionRateOrderTot'],
+                'conversionRateCustomerOrderTot' => $result['conversionRateCustomerOrderTot']];
     }
 
         return json_encode($resultjson);

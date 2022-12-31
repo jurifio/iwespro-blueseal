@@ -35,10 +35,10 @@ class CChangeOrderPaymentMethodAjaxController extends AAjaxController
         $orderPaymentMethods = \Monkey ::app() -> repoFactory -> create('OrderPaymentMethod') -> findAll();
 
         foreach ($orderPaymentMethods as $orderPaymentMethod) {
-            array_push($paymentMethod, [
-                'id' => $orderPaymentMethod -> id,
-                'name' => $orderPaymentMethod -> name
-            ]);
+            $paymentMethod[] = [
+                'id' => $orderPaymentMethod->id,
+                'name' => $orderPaymentMethod->name
+            ];
         }
 
         return json_encode($paymentMethod);

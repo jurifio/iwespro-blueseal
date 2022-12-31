@@ -94,21 +94,21 @@ class CGetTrackingDeliveryAjaxController extends AAjaxController
         foreach ($track->TrackResponse->Shipment->Package->Activity as $activities) {
             if (!empty($activities->ActivityLocation->Address->City)) {
                 if (!empty($activities->ActivityLocation->Address->CountryCode)) {
-                    array_push($trackLine,[
+                    $trackLine[] = [
                         'orderId' => $orderId,
                         'carrier' => $carrierName,
                         'customer' => $userShipping->name . ' ' . $userShipping->surname . '<br>' . $userShipping->address . '<br>' . $userShipping->postcode . ' ' . $userShipping->city . ' ' . $userShipping->province,
                         'bookingNumber' => $shipment->bookingNumber,
                         'trackingNumber' => $shipment->trackingNumber,
                         'creationDate' => $shipment->creationDate,
-                        'DateTime' => date('d/m/y H:i:s',strtotime($activities->Date.$activities->Time)),
+                        'DateTime' => date('d/m/y H:i:s',strtotime($activities->Date . $activities->Time)),
                         'Description' => $activities->Status->Description,
                         'City' => $activities->ActivityLocation->Address->City,
                         'CountryCode' => $activities->ActivityLocation->Address->CountryCode,
                         'shipmentDate' => $shipment->shipmentDate,
                         'predictedDeliveryDate' => $shipment->predictedDeliveryDate,
                         'deliveryDate' => $shipment->deliveryDate
-                    ]);
+                    ];
                 }
             }
 

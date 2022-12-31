@@ -51,7 +51,7 @@ class CGainPlanSelect extends AAjaxController
                     $invoices=$gainPlan->invoiceExternal;
                     $customerName=$gainPlan->customerName;
                 }
-               array_push($collects,['id'=>$id,'invoices'=>$invoices,'customerName'=>$customerName]);
+               $collects[] = ['id' => $id,'invoices' => $invoices,'customerName' => $customerName];
 
             }
 

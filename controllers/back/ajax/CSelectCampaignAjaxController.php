@@ -36,7 +36,7 @@ class CSelectCampaignAjaxController extends AAjaxController
         $campaigns=\Monkey::app()->repoFactory->create('Campaign')->findBy(['isActive'=>1]);
             foreach ($campaigns as $campaign) {
                 $shop=$shopRepo->findOneBy(['id'=>$campaign->remoteShopId]);
-                array_push($collectCampaigns,['id'=>$campaign->id,'name'=>$campaign->name,'shop'=>$shop->name,'isActive'=>$campaign->isActive]);
+                $collectCampaigns[] = ['id' => $campaign->id,'name' => $campaign->name,'shop' => $shop->name,'isActive' => $campaign->isActive];
             }
 
         return json_encode($collectCampaigns);

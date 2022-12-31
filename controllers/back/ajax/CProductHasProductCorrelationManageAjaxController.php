@@ -36,7 +36,7 @@ class CProductHasProductCorrelationManageAjaxController extends AAjaxController
             } else {
                 $image = '';
             }
-            array_push($correlation,['id' => $collect->id,'name' => $collect->name,'code' => $collect->code,'img' => $image,'shopId'=>$shop->id,'shopName'=>$shop->name]);
+            $correlation[] = ['id' => $collect->id,'name' => $collect->name,'code' => $collect->code,'img' => $image,'shopId' => $shop->id,'shopName' => $shop->name];
         }
 
         return json_encode($correlation);

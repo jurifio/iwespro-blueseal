@@ -38,7 +38,7 @@ class CSelectAllFoisonAjaxController extends AAjaxController
 
             if(count($collectFoison)==0){
                 foreach ($foisons as $foison) {
-                            array_push($collectFoison,['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank]);
+                            $collectFoison[] = ['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank];
                         }
                     }
 

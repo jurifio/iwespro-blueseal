@@ -159,7 +159,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                                     $feeMobile = 'nessun cpc Mobile';
                                 }
                                 $countProduct++;
-                                array_push($rows,[$productSku->productId . '-' . $product->productVariantId]);
+                                $rows[] = [$productSku->productId . '-' . $product->productVariantId];
                                 $bodyMail .= " <tr><td>" . $productSku->productId . '-' . $productSku->productVariantId . ' </td><td>' . $brandName . '</td><td>' . $product->getLocalizedProductCategories('/','/') . ' </td><td>' . $fee . ' </td><td>' . $feeMobile . '</td></tr>';
                             }
 
