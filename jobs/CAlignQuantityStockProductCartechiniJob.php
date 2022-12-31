@@ -29,10 +29,6 @@ use PDOException;
  * @date 30/08/2019
  * @since 1.0
  */
-
-
-
-
 class CAlignQuantityStockProductCartechiniJob extends ACronJob
 {
 
@@ -56,58 +52,62 @@ class CAlignQuantityStockProductCartechiniJob extends ACronJob
      */
     private function alignStockExternalProduct()
     {
-        $res="";
-
-            $this->report('Start Align Quantity  From Iwes  ', 'Shop To Update Cartechini');
-        $db_host = "5.189.152.89";
-        $db_name = "cartechininew";
-        $db_user = "root";
-        $db_pass = "F1fiI3EYv9JXl8Z";
-        $res = "";
         try {
+            $res = "";
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $res .= " connessione ok <br>";
-        } catch (PDOException $e) {
-            $res .= $e->getMessage();
-        }
-        //connessione a
+            $this->report('Start Align Quantity  From Iwes  ','Shop To Update Cartechini');
+            $db_host = "5.189.152.89";
+            $db_name = "cartechininew";
+            $db_user = "root";
+            $db_pass = "F1fiI3EYv9JXl8Z";
+            $res = "";
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res .= " connessione ok <br>";
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+            //connessione a
             $productPublicSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             $stmtProductPublicSku = $db_con->prepare("select * from ProductSku");
             $stmtProductPublicSku->execute();
-            $collectRealQty=[];
+            $collectRealQty = [];
             while ($rowProductPublicSku = $stmtProductPublicSku->fetch(PDO::FETCH_ASSOC)) {
                 $destStockQty = $rowProductPublicSku['stockQty'];
-                $productId=$rowProductPublicSku['productId'];
-                $productVariantId=$rowProductPublicSku['productVariantId'];
-                $productSizeId=$rowProductPublicSku['productSizeId'];
-                $shopDest=$rowProductPublicSku['shopId'];
-                $pps=$productPublicSkuRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'productSizeId'=>$productSizeId,'shopId'=>$shopDest]);
-                if($pps!=null) {
+                $productId = $rowProductPublicSku['productId'];
+                $productVariantId = $rowProductPublicSku['productVariantId'];
+                $productSizeId = $rowProductPublicSku['productSizeId'];
+                $shopDest = $rowProductPublicSku['shopId'];
+                $pps = $productPublicSkuRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $productSizeId,'shopId' => $shopDest]);
+                if ($pps != null) {
                     $origStockQty = $pps->stockQty;
-                    $origShop=$pps->shopId;
+                    $origShop = $pps->shopId;
                     $stockQty = $origStockQty - $destStockQty;
                     if ($stockQty != 0) {
-                        array_push($collectRealQty, ['productId' => $productId, 'productVariantId' => $productVariantId, 'productSizeId' => $productSizeId, 'stockQty' => $origStockQty,'shopId'=>$origShop]);
+                        $collectRealQty[] = ['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $productSizeId,'stockQty' => $origStockQty,'shopId' => $origShop];
                     }
-                }else{
+                } else {
                     continue;
                 }
 
             }
 
-            foreach ($collectRealQty as $row){
-                $stmtUpdateProductPublicSku=$db_con->prepare('UPDATE ProductSku 
-                                                                      SET stockQty='.$row['stockQty'].'
-                                                                      WHERE productId='.$row['productId'].'
-                                                                      AND productVariantId='.$row['productVariantId'].'
-                                                                      AND productSizeId='.$row['productSizeId'].'
-                                                                      AND shopId='.$row['shopId']);
+            foreach ($collectRealQty as $row) {
+                $stmtUpdateProductPublicSku = $db_con->prepare('UPDATE ProductSku 
+                                                                      SET stockQty=' . $row['stockQty'] . '
+                                                                      WHERE productId=' . $row['productId'] . '
+                                                                      AND productVariantId=' . $row['productVariantId'] . '
+                                                                      AND productSizeId=' . $row['productSizeId'] . '
+                                                                      AND shopId=' . $row['shopId']);
                 $stmtUpdateProductPublicSku->execute();
-                $this->report("Updating StockQty single Job Cartechini", "Skus updated: " . $row['productId'] .'-'.$row['productVariantId'].'-'.$row['productSizeId']. ' with quantity: ' . $row['stockQty']. 'for shop:Cartechini');
+                //$this->report("Updating StockQty single Job Cartechini", "Skus updated: " . $row['productId'] .'-'.$row['productVariantId'].'-'.$row['productSizeId']. ' with quantity: ' . $row['stockQty']. 'for shop:Cartechini');
             }
 
+        } catch (\Throwable $e) {
+            $this->report("CAlignQuantityStockProductCartechiniJob", "error",$e->getLine().'-'.$e->getMessage() );
         }
 
+    }
 }
