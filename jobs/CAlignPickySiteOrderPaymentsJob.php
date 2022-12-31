@@ -162,7 +162,7 @@ class CAlignPickySiteOrderPaymentsJob extends ACronJob
                         $updateOrder->paymentDate = $rowOrder['paymentDate'];
                         $updateOrder->lastUpdate = $rowOrder['lastUpdate'];
                         $updateOrder->update();
-                        $this->report('Update Payment CAlignPickySiteOrderPaymentsJob', 'update Order: H-' . $updatedOrderId . 'shop :' . $value->name);
+
 
 
                     } else {
