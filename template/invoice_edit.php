@@ -119,7 +119,7 @@
                                          echo '</div>';
                                          echo '<div class="col-md-4">';
                                          echo '<div align="center">';
-                                         echo money_format('%.2n', $orderLine->activePrice) . ' &euro;';
+                                         echo number_format( $orderLine->activePrice,2,'.') . ' &euro;';
                                          echo '</div>';
                                          echo '</div>';
                                      }

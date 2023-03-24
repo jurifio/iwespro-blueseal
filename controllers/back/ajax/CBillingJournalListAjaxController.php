@@ -44,15 +44,15 @@ class CBillingJournalListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
             $date = new \DateTime($row['date']);
             $row['date'] = $date->format('d-m-Y');
-            $row['totalUeNetReceipt']=money_format('%.2n',  $row['totalUeNetReceipt']) . ' &euro;';
-            $row['totalUeVatReceipt']=money_format('%.2n',  $row['totalUeVatReceipt']) . ' &euro;';
-            $row['totalUeReceipt']=money_format('%.2n',  $row['totalUeReceipt']) . ' &euro;';
-            $row['totalUeNetInvoice']=money_format('%.2n',  $row['totalUeNetInvoice']) . ' &euro;';
-            $row['totalUeVatInvoice']=money_format('%.2n',  $row['totalUeVatInvoice']) . ' &euro;';
-            $row['totalUeInvoice']=money_format('%.2n',  $row['totalUeInvoice']) . ' &euro;';
-            $row['totalXUeNetInvoice']=money_format('%.2n',  $row['totalXUeNetInvoice']) . ' &euro;';
-            $row['totalXUeVatInvoice']=money_format('%.2n',  $row['totalXUeVatInvoice']) . ' &euro;';
-            $row['totalXUeInvoice']=money_format('%.2n',  $row['totalXUeInvoice']) . ' &euro;';
+            $row['totalUeNetReceipt']=number_format(  $row['totalUeNetReceipt']) . ' &euro;';
+            $row['totalUeVatReceipt']=number_format(  $row['totalUeVatReceipt']) . ' &euro;';
+            $row['totalUeReceipt']=number_format(  $row['totalUeReceipt']) . ' &euro;';
+            $row['totalUeNetInvoice']=number_format(  $row['totalUeNetInvoice']) . ' &euro;';
+            $row['totalUeVatInvoice']=number_format(  $row['totalUeVatInvoice']) . ' &euro;';
+            $row['totalUeInvoice']=number_format(  $row['totalUeInvoice']) . ' &euro;';
+            $row['totalXUeNetInvoice']=number_format(  $row['totalXUeNetInvoice']) . ' &euro;';
+            $row['totalXUeVatInvoice']=number_format(  $row['totalXUeVatInvoice']) . ' &euro;';
+            $row['totalXUeInvoice']=number_format(  $row['totalXUeInvoice']) . ' &euro;';
 
             if(is_null($row['datePrint'])){
                 $row['datePrint']='Da Stampare';

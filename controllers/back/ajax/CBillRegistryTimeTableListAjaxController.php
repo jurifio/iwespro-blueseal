@@ -83,7 +83,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                     
             }
 
-            $row['amountPayment']=money_format('%.2n',$billRegistryTimeTable->amountPayment).' &euro;';
+            $row['amountPayment']=number_format($billRegistryTimeTable->amountPayment).' &euro;';
             $row['description']=$billRegistryTimeTable->description;
             $billRegistryInvoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistryInvoiceId]);
             if($billRegistryTimeTable->billRegistryActivePaymentSlipId!=null) {

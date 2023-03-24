@@ -53,15 +53,15 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
         $dateJournal = new \DateTime($billingJournal->date);
         $date = $dateJournal->format('d-m-Y');
         $dateFilter=$dateJournal->format('Y-m-d');
-        $totalUeNetReceipt=money_format('%.2n',  $billingJournal->totalUeNetReceipt) . ' &euro;';
-        $totalUeVatReceipt=money_format('%.2n',  $billingJournal->totalUeVatReceipt) . ' &euro;';
-        $totalUeReceipt=money_format('%.2n',  $billingJournal->totalUeReceipt) . ' &euro;';
-        $totalUeNetInvoice=money_format('%.2n',  $billingJournal->totalUeNetInvoice) . ' &euro;';
-        $totalUeVatInvoice=money_format('%.2n',  $billingJournal->totalUeVatInvoice) . ' &euro;';
-        $totalUeInvoice=money_format('%.2n',  $billingJournal->totalUeInvoice) . ' &euro;';
-        $totalXUeNetInvoice=money_format('%.2n',  $billingJournal->totalXUeNetInvoice) . ' &euro;';
-        $totalXUeVatInvoice=money_format('%.2n',  $billingJournal->totalXUeVatInvoice) . ' &euro;';
-        $totalXUeInvoice=money_format('%.2n',  $billingJournal->totalXUeInvoice) . ' &euro;';
+        $totalUeNetReceipt=number_format(  $billingJournal->totalUeNetReceipt,2,'.') . ' &euro;';
+        $totalUeVatReceipt=number_format(  $billingJournal->totalUeVatReceipt,2,'.') . ' &euro;';
+        $totalUeReceipt=number_format(  $billingJournal->totalUeReceipt,2,'.') . ' &euro;';
+        $totalUeNetInvoice=number_format(  $billingJournal->totalUeNetInvoice,2,'.') . ' &euro;';
+        $totalUeVatInvoice=number_format(  $billingJournal->totalUeVatInvoice,2,'.') . ' &euro;';
+        $totalUeInvoice=number_format(  $billingJournal->totalUeInvoice,2,'.') . ' &euro;';
+        $totalXUeNetInvoice=number_format(  $billingJournal->totalXUeNetInvoice,2,'.') . ' &euro;';
+        $totalXUeVatInvoice=number_format(  $billingJournal->totalXUeVatInvoice,2,'.') . ' &euro;';
+        $totalXUeInvoice=number_format(  $billingJournal->totalXUeInvoice,2,'.') . ' &euro;';
         $groupUeTextReceipt=$billingJournal->groupUeTextReceipt;
         $groupUeTextInvoice=$billingJournal->groupUeTextInvoice;
         $groupXUeTextInvoice=$billingJournal->groupXUeTextInvoice;
@@ -112,7 +112,7 @@ $numeropezzi=0;
 
 
             }
-            $testolineadimarmo =$testolineadimarmo.'<tr><td class="text-center small">'.$resultTextInvoices['numberInvoice'].'</td><td class="text-center small">'.$orderId.'</td><td class="text-center small">'.$customerName.'</td><td class="text-center small">'.$numeropezzi.'</td><td class="text-center small">'. money_format('%.2n', $order->netTotal) . '&euro;'.'</td></tr>';
+            $testolineadimarmo =$testolineadimarmo.'<tr><td class="text-center small">'.$resultTextInvoices['numberInvoice'].'</td><td class="text-center small">'.$orderId.'</td><td class="text-center small">'.$customerName.'</td><td class="text-center small">'.$numeropezzi.'</td><td class="text-center small">'. number_format($order->netTotal,2,'.') . '&euro;'.'</td></tr>';
 
         }
         $orderImpTot= $orderTot - $orderVatTot;

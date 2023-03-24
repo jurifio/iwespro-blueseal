@@ -428,7 +428,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             </td>
                             <td class="text-center"><?php
                                 $tot += $orderLine->activePrice;
-                                echo money_format('%.2n', $orderLine->activePrice) . ' &euro;'; ?></td>
+                                echo number_format($orderLine->activePrice,2,'.') . ' &euro;'; ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -445,7 +445,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                 }
                                 ?></strong></td>
                         <td style="border: 0px"
-                            class="text-center"><?php echo money_format('%.2n', $tot) . ' &euro;'; ?></td>
+                            class="text-center"><?php echo number_format( $tot,2,'.') . ' &euro;'; ?></td>
                     </tr>
                     <?php $discount = $order->couponDiscount + $order->userDiscount;
                     ($changelanguage != 1) ? $transdiscount = 'Sconto' : $transdiscount = 'Discount';
@@ -455,16 +455,16 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td>
                             <td style="border: 0px">' . $transdiscount . '<strong></strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $discount) . ' &euro; </td></tr>' : null; ?>
+                            <td style="border: 0px" class="text-center">' . number_format( $discount,2,'.') . ' &euro; </td></tr>' : null; ?>
                     <?php echo ((!is_null($order->paymentModifier)) && ($order->paymentModifier != 0)) ? '<tr class="text-left font-montserrat small">
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td><td style="border: 0px"><strong>' . $transmethodpayment . '</strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $order->paymentModifier) . ' &euro; </td></tr>' : null; ?>
+                            <td style="border: 0px" class="text-center">' . number_format($order->paymentModifier,2,'.') . ' &euro; </td></tr>' : null; ?>
                     <tr class="text-left font-montserrat small">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td class="separate"><strong><?php echo $transdeliveryprice; ?></strong></td>
-                        <td class="separate text-center"><?php echo money_format('%.2n', $order->shippingPrice) . ' &euro;'; ?></td>
+                        <td class="separate text-center"><?php echo number_format($order->shippingPrice,2,'.') . ' &euro;'; ?></td>
                     </tr>
                     <tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td class="text-left" width="30%"><?php
@@ -475,7 +475,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                     echo 'Net Amount<br>';
                                 }
                                 $imp = ($order->netTotal * 100) / 122;
-                                echo money_format('%.2n', $imp) . ' &euro;';
+                                echo number_format( $imp,2,'.') . ' &euro;';
                             } elseif ($invoiceType == "X") {
 
                                 $imp = ($order->netTotal * 100) / 122;
@@ -495,7 +495,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                     echo 'VAT 22%<br>';
                                 }
                                 $iva = $order->vat;
-                                echo money_format('%.2n', $iva) . ' &euro;';
+                                echo number_format($iva,2,'.') . ' &euro;';
                             } elseif ($invoiceTypeVat == "NewX") {
                                 echo "non imponibile ex art 8/A  D.P.R. n. 633/72";
                                 $iva = "0,00";
@@ -509,7 +509,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                         </td>
                         <td class="semi-bold"><h4><?php echo $invoiceTotalDocumentText; ?></h4></td>
                         <td class="semi-bold text-center">
-                            <h2><?php echo money_format('%.2n', $order->netTotal) . ' &euro;'; ?></h2></td>
+                            <h2><?php echo number_format($order->netTotal,2,'.') . ' &euro;'; ?></h2></td>
                     </tr>
 
                 </table>

@@ -96,7 +96,7 @@
                             $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
                             $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($resultTotalPayment as $sumPayment) {
-                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . number_format($sumPayment['amountPayment']) . ' &euro;</div>';
                             }
                         }
                         ?>

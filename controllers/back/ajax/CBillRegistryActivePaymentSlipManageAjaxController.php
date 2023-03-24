@@ -76,9 +76,9 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountInvoice = 0;
                 $amountPayment=$amountActive;
                 if($paAmountPaid==0) {
-                    $p->amountPaid = number_format($paAmount - $amountActive,2);
+                    $p->amountPaid = number_format($paAmount - $amountActive,2,'.');
                 }else{
-                    $p->amountPaid=number_format($paymentRest-$amountActive,2);
+                    $p->amountPaid=number_format($paymentRest-$amountActive,2,'.');
                 }
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
@@ -101,7 +101,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                     }
                     $date = new \DateTime();
                     $datePayment = $date->format('Y-m-d H:i:s');
-                    $ratePayment = number_format($payment->amountPayment,2);
+                    $ratePayment = number_format($payment->amountPayment,2,'.');
                     if ($ratePayment <= $amountPayment) {
                         $payment->amountPaid = $ratePayment;
                         $payment->datePayment = $datePayment;
@@ -126,7 +126,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
 
                         }
                     } elseif ($ratePayment > $amountPayment) {
-                        $payment->amountPaid = number_format($amountPayment,2);
+                        $payment->amountPaid = number_format($amountPayment,2,'.');
                         $amountPayment -= $amountPayment;
                         $amountInvoice -= $amountPayment;
                         $payment->update();
@@ -161,7 +161,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
-                $brpas->amountRest=number_format($paymentRest,2);
+                $brpas->amountRest=number_format($paymentRest,2,'.');
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
@@ -253,7 +253,7 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
 
                 $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
-                $braps->amount = number_format($result['amountPayment'],2);
+                $braps->amount = number_format($result['amountPayment'],2,'.');
                 $braps->numberSlip = $numberDocument;
                 $braps->creationDate = $creationDate;
                 $braps->paymentDate = $result['paymentDate'];

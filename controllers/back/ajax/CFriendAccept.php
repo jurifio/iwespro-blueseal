@@ -745,7 +745,7 @@ class CFriendAccept extends AAjaxController
                     $rowRemoteOrderLineSeller = $stmtRemoteOrderLineSeller -> fetch(PDO::FETCH_ASSOC);
 
                     $tot += $rowRemoteOrderLineSeller['activePrice'];
-                    $invoiceText .= money_format('%.2n', $rowRemoteOrderLineSeller['activePrice']) . ' &euro;' . '</td></tr>';
+                    $invoiceText .= number_format($rowRemoteOrderLineSeller['activePrice'],2,'.') . ' &euro;' . '</td></tr>';
 
 
                     $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
@@ -770,16 +770,16 @@ class CFriendAccept extends AAjaxController
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td>
                             <td style="border: 0px">' . $transdiscount . '<strong></strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $discount) . ' &euro; </td></tr>' : null;
+                            <td style="border: 0px" class="text-center">' . number_format($discount,2,'.') . ' &euro; </td></tr>' : null;
                     $invoiceText .= ((!is_null($rowFindUserAddress['paymentModifier'])) && ($rowFindUserAddress['paymentModifier'] != 0)) ? '<tr class="text-left font-montserrat small">
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td><td style="border: 0px"><strong>' . $transmethodpayment . '</strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $rowFindUserAddress['paymentModifier']) . ' &euro; </td></tr>' : null;
+                            <td style="border: 0px" class="text-center">' . number_format( $rowFindUserAddress['paymentModifier'],2,'.') . ' &euro; </td></tr>' : null;
                     $invoiceText .= '<tr class="text-left font-montserrat small">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td class="separate"><strong>' . $transdeliveryprice . '</strong></td>
-                        <td class="separate text-center">' . money_format('%.2n', $rowRemoteOrderLineSeller['shippingCharge']) . ' &euro;</td>
+                        <td class="separate text-center">' . number_format($rowRemoteOrderLineSeller['shippingCharge'],2,'.') . ' &euro;</td>
                     </tr>
                     <tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td class="text-left" width="30%">';
@@ -791,7 +791,7 @@ class CFriendAccept extends AAjaxController
                             $invoiceText .= 'Net Amount<br>';
                         }
                         $imp = ($rowRemoteOrderLineSeller['netPrice'] * 100) / 122;
-                        $invoiceText .= money_format('%.2n', $imp) . ' &euro;';
+                        $invoiceText .= number_format( $imp,2,'.') . ' &euro;';
                     } elseif (substr($invoiceType, -1) == "X") {
 
                         $imp = ($rowRemoteOrderLineSeller['netPrice'] * 100) / 122;
@@ -812,7 +812,7 @@ class CFriendAccept extends AAjaxController
                             $invoiceText .= 'VAT 22%<br>';
                         }
                         $iva = $rowRemoteOrderLineSeller['vat'];
-                        $invoiceText .= money_format('%.2n', $iva) . ' &euro;';
+                        $invoiceText .= number_format($iva,2,'.') . ' &euro;';
                     } elseif ($invoiceTypeVat == "NewX") {
                         $invoiceText .= 'non imponibile ex art 8/A  D.P.R. n. 633/72';
                         $iva = "0,00";
@@ -826,7 +826,7 @@ class CFriendAccept extends AAjaxController
                     $invoiceText .= '<br></td>';
                     $invoiceText .= '<td class="semi-bold"><h4>' . $invoiceTotalDocumentText . '</h4></td>';
                     $invoiceText .= '<td class="semi-bold text-center">
-                            <h2>' . money_format('%.2n', $rowRemoteOrderLineSeller['shippingCharge']) . ' &euro; </h2></td>
+                            <h2>' . number_format($rowRemoteOrderLineSeller['shippingCharge'],2,'.') . ' &euro; </h2></td>
                     </tr>
 
                 </table>

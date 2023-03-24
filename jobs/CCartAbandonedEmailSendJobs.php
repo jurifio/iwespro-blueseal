@@ -348,9 +348,9 @@ GROUP BY C.id";
                                     $amount = $couponTypeFind->amount;
                                     $hasFreeShipping = $couponTypeFind->hasFreeShipping;
                                     if ($hasFreeShipping == "1") {
-                                        $cartTotalAmount = number_format($cartAmount,2) . " + SPEDIZIONE GRATUITA";
+                                        $cartTotalAmount = number_format($cartAmount,2,'.','') . " + SPEDIZIONE GRATUITA";
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                        $cartTotalAmount = number_format($cartAmount,2,'.','') . "+ SPESE SPEDIZIONE";
                                     }
                                     if ($idCoupon != null) {
                                         $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $idCoupon]);
@@ -362,17 +362,17 @@ GROUP BY C.id";
                                         }
                                         $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                         $couponFirstRow = '';
                                         $couponLastRow = '';
                                         $code = '';
                                     }
                                 }else{
-                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount,2);
+                                    $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2,'.');
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';
@@ -545,9 +545,9 @@ GROUP BY C.id";
                                     $amount = $couponTypeFind -> amount;
                                     $hasFreeShipping = $couponTypeFind -> hasFreeShipping;
                                     if ($hasFreeShipping == "1") {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . " + SPEDIZIONE GRATUITA";
+                                        $cartTotalAmount = number_format($cartAmount, 2,'.') . " + SPEDIZIONE GRATUITA";
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                        $cartTotalAmount = number_format($cartAmount, 2,'.') . "+ SPESE SPEDIZIONE";
                                     }
 
                                     if ($idCoupon != null) {
@@ -560,17 +560,17 @@ GROUP BY C.id";
                                         }
                                         $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                         $couponFirstRow = '';
                                         $couponLastRow = '';
                                         $code = '';
                                     }
                                 }else{
-                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount,2);
+                                    $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2,'.');
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';
@@ -742,9 +742,9 @@ GROUP BY C.id";
                                     $amount = $couponTypeFind -> amount;
                                     $hasFreeShipping = $couponTypeFind -> hasFreeShipping;
                                     if ($hasFreeShipping == "1") {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . " + SPEDIZIONE GRATUITA";
+                                        $cartTotalAmount = number_format($cartAmount, 2,'.') . " + SPEDIZIONE GRATUITA";
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                        $cartTotalAmount = number_format($cartAmount, 2,'.') . "+ SPESE SPEDIZIONE";
                                     }
                                     if ($idCoupon != null) {
                                         $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $idCoupon]);
@@ -756,17 +756,17 @@ GROUP BY C.id";
                                         }
                                         $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                        $cartAmount = number_format($cartAmount,2);
+                                        $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2,'.');
                                         $couponFirstRow = '';
                                         $couponLastRow = '';
                                         $code = '';
                                     }
                                 }else{
-                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount,2);
+                                    $cartTotalAmount = number_format($cartAmount,2,'.') . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2,'.','.');
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';

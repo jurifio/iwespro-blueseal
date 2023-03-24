@@ -77,9 +77,9 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                 $impFat = $result['total'];
                 $totalShipment=$result['totalShipment'];
             }
-            $row['impFat']=money_format('%.2n',$impFat) . ' &euro;';
-            $row['iva']=money_format('%.2n', $impFat/100*22) . ' &euro;';
-            $row['totFat']=money_format('%.2n',$impFat+($impFat/100*22)) . ' &euro;';
+            $row['impFat']=number_format($impFat) . ' &euro;';
+            $row['iva']=number_format( $impFat/100*22) . ' &euro;';
+            $row['totFat']=number_format($impFat+($impFat/100*22)) . ' &euro;';
             $row['totalShipment']=$totalShipment;
 
             $datatable->setResponseDataSetRow($key,$row);

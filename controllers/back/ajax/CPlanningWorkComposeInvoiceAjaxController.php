@@ -234,7 +234,7 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
                      $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
 
                  }
-                 $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
+                 $billRegistryTimeTable->description = number_format($amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
                  $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
                  $billRegistryTimeTable->amountPayment = number_format($amountRate,2,'.','');
                  $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;

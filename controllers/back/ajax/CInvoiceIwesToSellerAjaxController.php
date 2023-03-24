@@ -612,11 +612,11 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                             $tot+=$discount;
                             $shippingCharge += $ol->shippingCharge;
                             $tot+=$shippingCharge;
-                            $invoiceText .= money_format('%.2n', $ol->activePrice+$ol->couponCharge+$ol->shippingCharge) . ' &euro;' . '</td></tr>';
+                            $invoiceText .= number_format(($ol->activePrice+$ol->couponCharge+$ol->shippingCharge),2,'.') . ' &euro;' . '</td></tr>';
 
                             $feeSeller = ($ol->activePrice+$ol->couponCharge+$ol->shippingCharge) / 100 * $fee;
                             $tot -= $feeSeller;
-                            $invoiceText .= '<tr><td colspan="2" class="text-center">Commissione di Vendita</td><td class="text-center">-' . money_format('%.2n', $feeSeller) . ' &euro;' . '</td></tr>';
+                            $invoiceText .= '<tr><td colspan="2" class="text-center">Commissione di Vendita</td><td class="text-center">-' . number_format($feeSeller,2,'.') . ' &euro;' . '</td></tr>';
                         }
                     }
 
@@ -632,7 +632,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                     }
                     $invoiceText .= '</strong></td>
                         <td style="border: 0px"
-                            class="text-center">' . money_format('%.2n', $tot) . ' &euro;' . '</td>
+                            class="text-center">' . number_format($tot,2,'.') . ' &euro;' . '</td>
                     </tr>';
 
                     ($changelanguage != 1) ? $transdiscount = 'Sconto' : $transdiscount = 'Discount';
@@ -642,11 +642,11 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td>
                             <td style="border: 0px">' . $transdiscount . '<strong></strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $discount) . ' &euro; </td></tr>' : null;
+                            <td style="border: 0px" class="text-center">' . number_format($discount,2,'.') . ' &euro; </td></tr>' : null;
                     $invoiceText .= ((!is_null($order->paymentModifier)) && ($order->paymentModifier != 0)) ? '<tr class="text-left font-montserrat small">
                             <td style="border: 0px"></td>
                             <td style="border: 0px"></td><td style="border: 0px"><strong>' . $transmethodpayment . '</strong></td>
-                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $order->paymentModifier) . ' &euro; </td></tr>' : null;
+                            <td style="border: 0px" class="text-center">' . number_format($order->paymentModifier,2,'.','') . ' &euro; </td></tr>' : null;
                     $invoiceText .= '<tr class="text-left font-montserrat small">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
@@ -660,7 +660,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 $invoiceText .= 'Imponibile<br>';
 
                 $imp = ($tot * 100) / 122;
-                $invoiceText .= money_format('%.2n', $imp) . ' &euro;';
+                $invoiceText .= number_format($imp,2,'.','') . ' &euro;';
 
                 $invoiceText .= '<br>';
 
@@ -672,7 +672,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 $invoiceText .= 'IVA 22%<br>';
 
                 $iva = ($imp / 100) * 22;
-                $invoiceText .= money_format('%.2n', $iva) . ' &euro;';
+                $invoiceText .= number_format($iva,2,'.','') . ' &euro;';
 
                 $invoiceText .= '<br>';
 
@@ -680,7 +680,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 $invoiceText .= '<br></td>';
                 $invoiceText .= '<td class="semi-bold"><h4>Totale Fattura</h4></td>';
                 $invoiceText .= '<td class="semi-bold text-center">
-                            <h2>' . money_format('%.2n', $tot) . ' &euro; </h2></td>
+                            <h2>' . number_format($tot,2,'.') . ' &euro; </h2></td>
                     </tr>
                 </table>
             </div>

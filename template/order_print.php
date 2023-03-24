@@ -73,12 +73,12 @@
                         </div>
                         <div><br>
                             <div class="pull-left font-montserrat small"><strong>Dovuto :</strong>
-                                <?php echo '  '. money_format('%.2n', $order->netTotal) . ' &euro;'; ?></div>
+                                <?php echo '  '. number_format($order->netTotal,2,'.','') . ' &euro;'; ?></div>
 
                         </div>
                         <div><br>
                             <div class="pull-left font-montserrat small"><strong>Pagato :</strong>
-                                <?php echo '  '. (!is_null($order->paidAmount)) ? money_format('%.2n', $order->paidAmount) .' &euro;': '0.00 &euro;'; ?></div>
+                                <?php echo '  '. (!is_null($order->paidAmount)) ? number_format($order->paidAmount,2,'.') .' &euro;': '0.00 &euro;'; ?></div>
 
                         </div>
                         <div><br>
@@ -87,19 +87,19 @@
 
                        <br>
                         <div class="pull-left font-montserrat small"><strong>Sconto Coupon :</strong>
-                            <?php echo ' ' . money_format('%.2n', $order->couponDiscount) . ' &euro;'; ?>
+                            <?php echo ' ' . number_format($order->couponDiscount,2,'.') . ' &euro;'; ?>
 
                         </div><br>
                         <div class="pull-left font-montserrat small"><strong>Sconto Utente :</strong>
-                            <?php echo ' ' . money_format('%.2n', $order->userDiscount) . ' &euro;'; ?>
+                            <?php echo ' ' . number_foramt($order->userDiscount,2,'.') . ' &euro;'; ?>
 
                         </div><br>
                         <div class="pull-left font-montserrat small"><strong>Modifica Pagamento :</strong>
-                            <?php echo ' ' . money_format('%.2n', $order->paymentModifier) . ' &euro;'; ?>
+                            <?php echo ' ' . number_format($order->paymentModifier,2,'.') . ' &euro;'; ?>
 
                         </div><br>
                         <div class="pull-left font-montserrat small"><strong>Spese di spedizione :</strong>
-                            <?php echo ' ' . money_format('%.2n', $order->shippingPrice) . ' &euro;'; ?>
+                            <?php echo ' ' . number_format( $order->shippingPrice) . ' &euro;'; ?>
                         </div>
                     </div>
                     </div>
@@ -180,7 +180,7 @@
                             <td class="text-center"><?php echo $productSku->product->productVariant->name; ?></td>
                             <td class="text-center"><?php
                                 $tot += $orderLine->activePrice;
-                                echo money_format('%.2n', $orderLine->activePrice) . ' &euro;'; ?></td>
+                                echo number_format( $orderLine->activePrice) . ' &euro;'; ?></td>
                         </tr>
                         <?php
                         } ?>

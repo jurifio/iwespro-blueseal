@@ -41,9 +41,9 @@ class CShipmentInvoiceDetailAjaxController extends AAjaxController
             $total=$result['total'];
 $shop=$shopRepo->findOneBy(['id'=>$result['remoteShopShipmentId']]);
 $shopName=$shop->name;
-            $imp=money_format('%.2n',$total) . ' &euro;';
-            $iva=money_format('%.2n', $total/100*22) . ' &euro;';
-            $totFat=money_format('%.2n',$total+($total/100*22)) . ' &euro;';
+            $imp=number_format($total) . ' &euro;';
+            $iva=number_format( $total/100*22) . ' &euro;';
+            $totFat=number_format($total+($total/100*22)) . ' &euro;';
             $shipmentDetail[] = [
                 'imp' =>  $imp,
                 'iva' => $iva,

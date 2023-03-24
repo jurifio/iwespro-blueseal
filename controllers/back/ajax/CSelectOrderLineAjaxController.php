@@ -43,7 +43,7 @@ $shopName=$shop->name;
                 'productId' =>  $result->productId,
                 'productVariantId' => $result->productVariantId,
                 'productSizeId' => $result->productSizeId,
-                'netPrice' => money_format('%.2n',$result->netPrice),
+                'netPrice' => number_format($result->netPrice),
                 'shopName'=>$shopName
                 ];
         }

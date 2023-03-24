@@ -319,9 +319,9 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td  colspan="2" class="text-center small"><?php echo money_format('%.2n', $orderImpTot) . '&euro;';?></td>
-                        <td  colspan="2" class="text-center small"><?php echo money_format('%.2n', $orderVatTot) . '&euro;';?></td>
-                        <td colspan="1" class="text-right small"><?php echo money_format('%.2n', $orderTot) . '&euro;';?></td>
+                        <td  colspan="2" class="text-center small"><?php echo number_format($orderImpTot,2,'.') . '&euro;';?></td>
+                        <td  colspan="2" class="text-center small"><?php echo number_format($orderVatTot,2,'.') . '&euro;';?></td>
+                        <td colspan="1" class="text-right small"><?php echo number_format($orderTot,2,'.') . '&euro;';?></td>
                     </tr>
 
                     </tbody>

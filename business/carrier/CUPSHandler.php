@@ -273,7 +273,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $shipmentServiceOptions=[
                 'COD'=>[
                     'CODAmount'=>[
-                        'MonetaryValue'=>money_format('%.2n', $valuePrice),
+                        'MonetaryValue'=>number_format($valuePrice,2,'.',''),
                         'CurrencyCode'=> 'EUR'
                     ],
                     'CODFundsCode ' => '1',

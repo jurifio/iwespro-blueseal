@@ -567,11 +567,11 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             if ($rowInvoiceDetail != null) {
                 foreach ($rowInvoiceDetail as $rowInvoice) {
                     $invoiceText .= '<tr><td class="text-center">' . $rowInvoice->description . '</td>';
-                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->priceRow) . ' &euro;' . '</td>';
-                    $invoiceText .= '<td class="text-center">' . $rowInvoice->percentDiscount . '%: ' . money_format('%.2n',$rowInvoice->discountRow) . ' &euro;' . '</td>';
+                    $invoiceText .= '<td class="text-center">' . number_format($rowInvoice->priceRow) . ' &euro;' . '</td>';
+                    $invoiceText .= '<td class="text-center">' . $rowInvoice->percentDiscount . '%: ' . number_format($rowInvoice->discountRow) . ' &euro;' . '</td>';
                     $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice->billRegistryTypeTaxesId]);
-                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice->vatRow) . ' &euro;' . '</td>';
-                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->grossTotalRow) . ' &euro;' . '</td></tr>';
+                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . number_format($rowInvoice->vatRow) . ' &euro;' . '</td>';
+                    $invoiceText .= '<td class="text-center">' . number_format($rowInvoice->grossTotalRow) . ' &euro;' . '</td></tr>';
                 }
 
             }
@@ -587,7 +587,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
             $invoiceText .= '</strong></td>
                     <td  colspan="3" style="border: 0px"
-                        class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
+                        class="text-center">' . number_format($netTotal) . ' &euro;' . '</td>
                 </tr>';
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td  colspan="1" style="border: 0px"></td>
@@ -601,9 +601,9 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
             $invoiceText .= '</strong></td>';
             if ($isExtraUe != 1) {
-                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$vatTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . number_format($vatTotal) . ' &euro;' . '</td></tr>';
             } else {
-                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . number_format(0) . ' &euro;' . '</td></tr>';
             }
 
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
@@ -618,9 +618,9 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
             $invoiceText .= '</strong></td>';
             if ($isExtraUe != "1") {
-                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . number_format($grossTotal) . ' &euro;' . '</td></tr>';
             } else {
-                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . number_format($netTotal) . ' &euro;' . '</td></tr>';
             }
             $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';

@@ -162,7 +162,7 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
         $numberOfPieces = 1;
         $weight = 0;
         $orderTotal = 0;
-        $sample->Dutiable->DeclaredValue = money_format('%.2n', $orderTotal);
+        $sample->Dutiable->DeclaredValue = number_format($orderTotal,2,'.','');
         $sample->Dutiable->DeclaredCurrency = 'EUR';
         $sample->ShipmentDetails->NumberOfPieces = 1;
 

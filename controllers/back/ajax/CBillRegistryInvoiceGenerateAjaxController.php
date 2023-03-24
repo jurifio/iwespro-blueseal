@@ -883,7 +883,7 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
 
                                     }
 
-                                    $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrispondere entro il ' . $estimatedPayment;
+                                    $billRegistryTimeTable->description = number_format($amountRate,2,'.') . '  &euro; da corrispondere entro il ' . $estimatedPayment;
                                     $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
                                     $billRegistryTimeTable->amountPayment = $amountRate;
                                     $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
@@ -1419,10 +1419,10 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                         $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
                                         $rowInvoiceInsert->insert();
                                         $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
+                                        $invoiceText .= '<td class="text-center">' . number_format($rowInvoice['priceRow'],2,'') . ' &euro;' . '</td>';
                                         $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
-                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
+                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . number_format($rowInvoice['vatRow'],2,'.','') . ' &euro;' . '</td>';
+                                        $invoiceText .= '<td class="text-center">' . number_format($rowInvoice['grossTotalRow'],2,'.') . ' &euro;' . '</td></tr>';
                                     }
                                 }
                                 if ($rowInvoiceDetail != null) {
@@ -1473,10 +1473,10 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                         $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
                                         $rowInvoiceInsert->insert();
                                         $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
+                                        $invoiceText .= '<td class="text-center">' . number_format($rowInvoice['priceRow'],2,'.') . ' &euro;' . '</td>';
                                         $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
-                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
+                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . number_format($rowInvoice['vatRow'],2,'.') . ' &euro;' . '</td>';
+                                        $invoiceText .= '<td class="text-center">' . number_format($rowInvoice['grossTotalRow'],2,'.') . ' &euro;' . '</td></tr>';
                                     }
 
                                 }
@@ -1492,7 +1492,7 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                 }
                                 $invoiceText .= '</strong></td>
                         <td style="border: 0px"
-                            class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
+                            class="text-center">' . number_format($netTotal,2,'.') . ' &euro;' . '</td>
                     </tr>';
 
                                 $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
@@ -1507,9 +1507,9 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                 }
                                 $invoiceText .= '</strong></td>';
                                 if ($isExtraUe != 1) {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$vat) . ' &euro;' . '</td></tr>';
+                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format($vat,2,'.') . ' &euro;' . '</td></tr>';
                                 } else {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
+                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format(0) . ' &euro;' . '</td></tr>';
                                 }
 
                                 $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
@@ -1524,9 +1524,9 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                 }
                                 $invoiceText .= '</strong></td>';
                                 if ($isExtraUe != "1") {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
+                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format($grossTotal,2,'.') . ' &euro;' . '</td></tr>';
                                 } else {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
+                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format($netTotal,2,'.') . ' &euro;' . '</td></tr>';
                                 }
                                 $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';
