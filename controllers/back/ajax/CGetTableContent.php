@@ -58,8 +58,8 @@ class CGetTableContent extends AAjaxController
             !$this->app->getUser()->hasPermission('allShops'))
             throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');*/
 
-        if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
-        if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
+        //f (!$table) throw new \Exception('la variabile "table" è obbligatoria');
+        //if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
 
         if ($condition) $objectCollection = \Monkey::app()->repoFactory->create($table)->findBy($condition,"",$orderBy);
         else $objectCollection = \Monkey::app()->repoFactory->create($table)->findAll("",$orderBy);
