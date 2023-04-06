@@ -29,6 +29,6 @@ class CProductSizeTable extends AAjaxController
         /** @var CProduct $product */
         $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productId);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        return json_encode($product->getStockSituationTable($shopIds));
+        return json_encode($product->getStockSituationTable($shopIds,$productId));
     }
 }
