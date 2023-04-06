@@ -341,15 +341,13 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
                             if (i === '0') {
                                 row += '<td>' + rowD[i] + '</td>';
                             } else if (i === '1') {
-                                row += '<td>' + rowD[i]  + '</td>';
-                            } else if (i === '2') {
-                                row += '<td>' + rowD[i]  + '</td>';
+                                row += '<td>' + rowD[i].substring(0, 6) + ".." + '</td>';
                             } else if (typeof rowD[i] === 'undefined') {
                                 row += '<td>0</td>';
                             } else {
                                 td = rowD[i];
-                                padding = 0;
-                                row += '<td class="' + (padding !== 0 ? 'colorRed' : '' ) + '">' + Number(td.qty)  + '</td>';
+                                padding = Number(td.padding);
+                                row += '<td class="' + (padding !== 0 ? 'colorRed' : '' ) + '">' + (Number(td.qty) - padding) + '</td>';
                             }
                         }
                         row += '</tr>';
