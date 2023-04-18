@@ -56,7 +56,7 @@ class CMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxContr
                 $row['ordersIds'] = $val['ordersIds'];
                 $row['cost'] = $val['cost'];
                 $row['orderTotal'] = $val['orderTotal'];
-                $response['data'][] = $row;
+                $response['data'] = $row;
             }else{
                 continue;
             }
