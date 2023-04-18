@@ -88,7 +88,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
                 <option value="0">Seleziona:</option>
                 <?php
                 foreach($line->skus as $sku): ?>
-                    <option <?php if($sku->shopId == $line->shopId) echo 'selected="selected"'; ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).') '.$sku->productSize->name; ?></option>
+                    <option <?php if($sku->shopId == $line->shopId) echo 'selected="selected"'; ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2,'.','').') '.$sku->productSize->name; ?></option>
                 <?php endforeach; ?>
             </select>
             <button id="changeShop" class="btn btn-success" type="submit"><i class="fa fa-random"></i></button>
@@ -100,12 +100,12 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
     echo $productSize->name . ' / '. $productSize->name;?></td>
 <td class="center"><?php
         if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
-        else echo number_format($line->fullPrice, 2,'.');
+        else echo number_format($line->fullPrice, 2,'.','');
     ?></td>
 <td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
-    else echo number_format($line->activePrice, 2,'.'); ?></td>
+    else echo number_format($line->activePrice, 2,'.',''); ?></td>
 <td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
-    else echo number_format($line->netPrice, 2,'.');?></td>
+    else echo number_format($line->netPrice, 2,'.','');?></td>
 <td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)){
     echo "Seleziona il Friend";
     }else{ ?>
