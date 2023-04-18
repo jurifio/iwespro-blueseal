@@ -114,7 +114,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
           enctype="multipart/form-data" role="form"  name="changeLineCostShop" method="PUT">
         <input type="hidden" name="orderId" value="<?php echo $line->orderId ?>" />
         <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
-        <input type="text" name="change_cost" value="<?php echo isset($line->cost) && $line->cost > 1 ? number_format($line->cost,2,'.') : number_format($line->cost,2,'.') ?>" />
+        <input type="text" name="change_cost" value="<?php echo isset($line->cost) && $line->cost > 1 ? number_format($line->cost,2,'.','') : number_format($line->cost,2,'.','') ?>" />
         <button id="changeCost" class="btn btn-success" type="submit"><i class="fa fa-sliders"></i></button>
     </form>
     <?php } ?></td>
