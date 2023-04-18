@@ -33,13 +33,13 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
                         group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
                         count(DISTINCT cv.id)                           AS visits,
                         count(DISTINCT o.id)                            AS conversions,
-                        #conversioni totali di questa visita
+                       
                         round(sum(cv.cost), 2)                          AS visitsCost,
                         count(CASE WHEN
                           ol.productId = cvhp.productId AND
                           ol.productVariantId = cvhp.productVariantId
                           THEN o.id
-                              ELSE NULL END)                            AS pConversions #conversioni totali di questa visita per questo prodotto
+                              ELSE NULL END)                            AS pConversions 
                       FROM
                         Campaign c
                         JOIN CampaignVisit cv ON cv.campaignId = c.id
