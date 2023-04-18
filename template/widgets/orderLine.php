@@ -149,7 +149,7 @@ $orderLineFind=\Monkey::app()->repoFactory->create('OrderLine')->findBy([
                                   enctype="multipart/form-data" role="form"  name="changeLineShop" method="PUT">
                                 <input type="hidden" name="orderId" value="<?php echo $line->orderId ?>" />
                                 <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
-                                <input type="text" name="change_revenue" value="<?php echo isset($line->friendRevenue) && $line->friendRevenue > 1 ? number_format($line->friendRevenue,2) : number_format($lastGoodPrice,2) ?>" />
+                                <input type="text" name="change_revenue" value="<?php echo isset($line->friendRevenue) && $line->friendRevenue > 1 ? number_format($line->friendRevenue,2,'.','') : number_format($lastGoodPrice,2,'.','') ?>" />
                                 <button id="changeRevenue" class="btn btn-success" type="submit"><i class="fa fa-sliders"></i></button>
                             </form>
                    <?php } ?>
