@@ -7,6 +7,9 @@
  */
 namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CShop;
+use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\entities\repositories\CShopRepo;
 
 
 /**
@@ -28,6 +31,7 @@ class CProductSizeTable extends AAjaxController
         $productId = trim(\Monkey::app()->router->request()->getRequestData('productId'));
         /** @var CProduct $product */
         $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productId);
+        /** @var  CShop $shopIds */
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         return json_encode($product->getStockSituationTable($shopIds));
     }
