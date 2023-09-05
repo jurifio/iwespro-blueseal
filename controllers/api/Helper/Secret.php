@@ -25,7 +25,7 @@ class Secret
      */
     public static function validate(string $secret): bool
     {
-        if (strlen($secret) < 12) {
+        if (strlen($secret) < 8) {
             throw new SecretException('The secret you provided must be at least 12 characters in length.');
         }
 

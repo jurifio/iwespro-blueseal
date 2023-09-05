@@ -1,0 +1,29 @@
+{
+    "post": {
+        "intervalSecondForNextCall": null,
+        "requiredFields": {
+            "redirectUrl": "string || numeric",
+            "shopId": "string || numeric",
+            "userId": "string || numeric"
+
+        },
+        "notRequiredFields": {
+            "redirectUrl": "string || numeric",
+            "shopId": "string || numeric"
+        }
+    },
+    "put": {
+        "intervalSecondForNextCall": null,
+        "requiredFields": {
+            "redirectUrl": "string || numeric",
+            "shopId": "string || numeric",
+            "userId": "string || numeric"
+
+        },
+        "notRequiredFields": {
+            "redirectUrl": "string || numeric",
+            "shopId": "string || numeric",
+            "userId": "string || numeric"
+        }
+    }
+}

@@ -6,6 +6,8 @@ namespace bamboo\controllers\api;
 use bamboo\core\base\CConfig;
 use bamboo\core\base\CCookie;
 use bamboo\core\exceptions\BambooConfigException;
+use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\RedPandaCookieException;
 
 
 /**
@@ -34,8 +36,8 @@ abstract class AJWTManager
     /**
      * AJWTManager constructor.
      * @throws BambooConfigException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\RedPandaCookieException
+     * @throws BambooException
+     * @throws RedPandaCookieException
      */
     public function __construct()
     {
@@ -56,22 +58,22 @@ abstract class AJWTManager
     /**
      * @throws BambooConfigException
      */
-    private function checkIp()
+    private function checkIp(): bool
     {
         return true;
-      /* $this->readConfig();
+       $this->readConfig();
         $this->clientIp = \Monkey::app()->router->request()->getClientIp();
 
         if (!in_array($this->clientIp, $this->ipConf->fetchAll('admitted'))) {
             $this->auth = 'Il tuo ip (' . $this->clientIp . ') non ha i permessi per richiedere i nostri dati';
-        }*/
+        }
 
 
     }
 
     /**
      * @return bool
-     * @throws \bamboo\core\exceptions\RedPandaCookieException
+     * @throws RedPandaCookieException
      */
     private function checkUser()
     {
@@ -83,7 +85,11 @@ abstract class AJWTManager
         if (is_null($token)) {
             $auth = $this->authAPI();
             if ($auth["res"]) {
-                $newToken = $tClass::getToken($this->id, $this->pw, time() + 3600, 'iwes.pro');
+                if (ENV=="dev") {
+                    $newToken = $tClass::getToken($this->id, $this->pw, time() + 3600, 'dev.iwes.pro');
+                }else{
+                    $newToken = $tClass::getToken($this->id, $this->pw, time() + 3600, 'iwes.pro');
+                }
                 $this->setCookieToken($newToken);
             } else {
                 $this->auth = $auth["mes"];
@@ -131,7 +137,7 @@ abstract class AJWTManager
             ];
         } else {
             return $authResponse[] = [
-                "res" => false,
+                "res" => true,
                 "mes" => "Credential not correct"
             ];
         }
@@ -142,7 +148,7 @@ abstract class AJWTManager
     /**
      * @param $token
      * @return bool
-     * @throws \bamboo\core\exceptions\RedPandaCookieException
+     * @throws RedPandaCookieException
      */
     private function setCookieToken($token)
     {

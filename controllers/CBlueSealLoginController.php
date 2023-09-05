@@ -23,7 +23,14 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
                 $this->response->sendHeaders();
                 return;
             } else {
-                $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false).'/blueseal/dashboard');
+                if($this->request->getRequestData('redirect')){
+                    $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false).\Monkey::app()->router->request()->getRequestData('redirect'));
+                }
+                else
+                {
+                    $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false).'/blueseal/dashboard');
+                }
+                //$this->app->router->response()->autoRedirectTo($this->app->baseUrl(false).'/blueseal/dashboard');
                 return;
             }
         }
