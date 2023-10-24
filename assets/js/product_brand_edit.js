@@ -40,6 +40,7 @@ $(document).on('bs.brand.edit', function() {
     });
 });
 $(document).on('bs.brand.translation', function() {
+    var responseOk="1";
     if($('#allShops').val()=='1'){
         let bsModal = new $.bsModal('Gestione Traduzioni', {
             body: `<p>Confermare?</p>
@@ -219,6 +220,7 @@ $(document).on('bs.brand.translation', function() {
 
 });
 $(document).on('bs.brandtranslation.add', function() {
+    var responseOk="1";
     if($('#allShops').val()=='1'){
         let bsModal = new $.bsModal('Gestione Traduzioni', {
             body: `<p>Confermare?</p>
@@ -264,7 +266,7 @@ $(document).on('bs.brandtranslation.add', function() {
             let rawProduct = res;
             let bodyres='<div class="row clearfix"><div class="col-md-2"><h4>id</h4></div><div class="col-md-2"><h4>lingua</h4></div><div class="col-md-8"><h4>testo</h4></div></div>';
             var u=0;
-            var responseOk='';
+             responseOk='';
             $.each(rawProduct, function (k, v) {
 
                     bodyres+='<div class="row clearfix"><div class="col-md-2"><input id="idTranslation_'+v.idTranslation+'" name="idTranslation_'+v.idTranslation+'" type="hidden" value="'+v.idTranslation+'"/>'+v.idTranslation+'</div>';
