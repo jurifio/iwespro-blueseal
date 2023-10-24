@@ -6,6 +6,7 @@ $(document).on('bs.brand.edit', function() {
 
     let minLength = 160;
     let maxLength = 2000;
+    var responseOk="1";
 
     if(descriptionLength < 160 || descriptionLength > 2000){
         new Alert({
@@ -65,9 +66,9 @@ $(document).on('bs.brand.translation', function() {
                 bodyres+='<div class="col-md-8"><textarea class="form-control" rows="20" cols="180" name="ProductBrandTranslation_'+v.idTranslation+'" id="ProductBrandTranslation_'+v.idTranslation+'">'+v.text+'</textarea></div>';
                 bodyres+='<div class="col-md-2"><input id="remoteShopId_'+v.idTranslation+'" name="remoteShopId_'+v.idTranslation+'" type="hidden" value="'+v.remoteShopId+'"/>'+v.remoteShopName+'</div></div>';
             u++;
-            responseOk=1;
+            responseOk="1";
             }else{
-                responseOk=2;
+                responseOk="2";
                 bodyres='non Ci sono Traduzioni';
             }
             });
