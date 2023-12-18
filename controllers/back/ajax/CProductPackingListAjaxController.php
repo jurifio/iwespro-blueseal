@@ -23,7 +23,8 @@ class CProductPackingListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT
+        try {
+            $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
                   p.productVariantId                                                                                AS productVariantId,
@@ -391,132 +392,136 @@ class CProductPackingListAjaxController extends AAjaxController
 '0020469'
 )";
 
-        $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
-        if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
-        $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
-        if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
+            $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
+            if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
+            $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
+            if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
 
 
-        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
-        $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $datatable->addCondition('shopId', $shopIds);
+            $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
+            $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+            $datatable->addCondition('shopId', $shopIds);
 
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99', '');
+            $em = $this->app->entityManagerFactory->create('ProductStatus');
+            $productStatuses = $em->findAll('limit 99', '');
 
-        $statuses = [];
-        foreach ($productStatuses as $status) {
-            $statuses[$status->code] = $status->name;
-        }
-
-        $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/modifica";
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-        $productRepo = \Monkey::app()->repoFactory->create('Product');
-
-        /** @var CDocumentRepo $docRepo */
-        $docRepo = \Monkey::app()->repoFactory->create('Document');
-        $datatable->doAllTheThings();
-
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
-            /** @var $val CProduct */
-            $val = $productRepo->findOneBy($row);
-
-            $row["DT_RowId"] = $val->printId();
-            $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
-            $val->productStatus->isReady == 1 ? 'arancione' : ""
-            );
-
-            $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
-            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
-
-            $row['details'] = "";
-            foreach ($val->productSheetActual as $k => $v) {
-                if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
-                    $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
-                }
+            $statuses = [];
+            foreach ($productStatuses as $status) {
+                $statuses[$status->code] = $status->name;
             }
 
-            $photo=$val->productPhoto->findOneBy(['size'=>'281','order'=>1]);
-            $row['photograph'] = '<img src="https://cdn.iwes.it/'.$val->productBrand->slug.'/'.$photo->name.'"/>'>
-            $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
-            $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
+            $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/modifica";
+            $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
 
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
-            $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
+            /** @var CDocumentRepo $docRepo */
+            $docRepo = \Monkey::app()->repoFactory->create('Document');
+            $datatable->doAllTheThings();
 
-            $row['cpf'] = $val->printCpf();
+            foreach ($datatable->getResponseSetData() as $key => $row) {
+                /** @var $val CProduct */
+                $val = $productRepo->findOneBy($row);
 
-            $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
-            $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>', '/') . '</span>';
-            $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
+                $row["DT_RowId"] = $val->printId();
+                $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
+                $val->productStatus->isReady == 1 ? 'arancione' : ""
+                );
 
-            $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
-            $row['status'] = $val->productStatus->name;
-            $row['productPriority'] = $val->sortingPriorityId;
+                $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
+                $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
+                $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
 
-            $qty = 0;
-            $shopz = [];
-            $mup = [];
-            $isOnSale = $val->isOnSale();
-            foreach ($val->productSku as $sku) {
-                $qty += $sku->stockQty;
-                $iShop = $sku->shop->name;
-                if (!in_array($iShop, $shopz)) {
-                    $shopz[] = $iShop;
-
-                    $price = $isOnSale ? $sku->salePrice : $sku->price;
-
-                    if ((float)$price) {
-                        $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
-                        $value = $sku->value;
-                        $friendRevenue = $value + $value * $multiplier / 100;
-                        $priceNoVat = $price / 1.22;
-                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
-                    } else {
-                        $mup[] = '-';
+                $row['details'] = "";
+                foreach ($val->productSheetActual as $k => $v) {
+                    if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
+                        $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
                     }
                 }
+
+                $photo = $val->productPhoto->findOneBy(['size' => '281', 'order' => 1]);
+                $row['photograph'] = '<img src="https://cdn.iwes.it/' . $val->productBrand->slug . '/' . $photo->name . '"/>' >
+                    $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
+                $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
+
+                $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
+                $row['externalId'] = '<span class="small">' . $val->getShopExtenalIds('<br />') . '</span>';
+
+                $row['cpf'] = $val->printCpf();
+
+                $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
+                $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
+                $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>', '/') . '</span>';
+                $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
+
+                $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
+                $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
+                $row['status'] = $val->productStatus->name;
+                $row['productPriority'] = $val->sortingPriorityId;
+
+                $qty = 0;
+                $shopz = [];
+                $mup = [];
+                $isOnSale = $val->isOnSale();
+                foreach ($val->productSku as $sku) {
+                    $qty += $sku->stockQty;
+                    $iShop = $sku->shop->name;
+                    if (!in_array($iShop, $shopz)) {
+                        $shopz[] = $iShop;
+
+                        $price = $isOnSale ? $sku->salePrice : $sku->price;
+
+                        if ((float)$price) {
+                            $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
+                            $value = $sku->value;
+                            $friendRevenue = $value + $value * $multiplier / 100;
+                            $priceNoVat = $price / 1.22;
+                            $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
+                        } else {
+                            $mup[] = '-';
+                        }
+                    }
+                }
+                $row['hasQty'] = $qty;
+                $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
+
+                //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
+                $row['marketplaces'] = "";
+                $row["row_shop"] = $val->getShops('|', true);
+                $row['shop'] = '<span class="small">' . $val->getShops('<br />', true) . '</span>';
+                $row['shops'] = $val->shopHasProduct->count();
+
+
+                //$row['mup'] = '<span class="small">';
+                //$row['mup'] .= implode('<br />', $mup);
+                //$row['mup'] .= '</span>';
+
+                $row['friendPrices'] = [];
+                $row['friendValues'] = [];
+                $row['friendSalePrices'] = [];
+                foreach ($val->shopHasProduct as $shp) {
+                    $row['friendPrices'][] = $shp->price;
+                    $row['friendValues'][] = $shp->value;
+                    $row['friendSalePrices'][] = $shp->salePrice;
+                }
+
+                $row['friendPrices'] = implode('<br />', $row['friendPrices']);
+                $row['friendValues'] = implode('<br />', $row['friendValues']);
+                $row['friendSalePrices'] = implode('<br />', $row['friendSalePrices']);
+
+                $row['colorNameManufacturer'] = $val->productVariant->description;
+
+                $row['isOnSale'] = $val->isOnSale();
+                $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
+                $row['processing'] = ($val->processing) ? $val->processing : '-';
+
+
+                $datatable->setResponseDataSetRow($key, $row);
             }
-            $row['hasQty'] = $qty;
-            $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
+            return $datatable->responseOut();
 
-            //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-            $row['marketplaces'] = "";
-            $row["row_shop"] = $val->getShops('|', true);
-            $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
-            $row['shops'] = $val->shopHasProduct->count();
-
-
-            //$row['mup'] = '<span class="small">';
-            //$row['mup'] .= implode('<br />', $mup);
-            //$row['mup'] .= '</span>';
-
-            $row['friendPrices'] = [];
-            $row['friendValues'] = [];
-            $row['friendSalePrices'] = [];
-            foreach ($val->shopHasProduct as $shp) {
-                $row['friendPrices'][] = $shp->price;
-                $row['friendValues'][] = $shp->value;
-                $row['friendSalePrices'][] = $shp->salePrice;
-            }
-
-            $row['friendPrices'] = implode('<br />',$row['friendPrices']);
-            $row['friendValues'] = implode('<br />',$row['friendValues']);
-            $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
-
-            $row['colorNameManufacturer'] = $val->productVariant->description;
-
-            $row['isOnSale'] = $val->isOnSale();
-            $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
-            $row['processing'] = ($val->processing) ? $val->processing : '-';
-
-
-
-            $datatable->setResponseDataSetRow($key,$row);
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CProductPackingListAjaxController','error','Lista Packing',$e->getLine().'-'.$e->getMessage(),$e->getTraceAsString());
         }
-        return $datatable->responseOut();
+
     }
 }
