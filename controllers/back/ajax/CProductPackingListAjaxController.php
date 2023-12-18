@@ -78,9 +78,6 @@ class CProductPackingListAjaxController extends AAjaxController
                      JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
                    WHERE mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
-                         
-                         
-                if(isnull(prHp.productId), 'no', 'si') inPrestashop,
                 CONCAT('https://cdn.iwes.it/',pb.slug,'/',`pp`.`name`) AS photograph
                 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
