@@ -7,18 +7,19 @@ use bamboo\domain\entities\CShooting;
 use bamboo\domain\repositories\CDocumentRepo;
 
 /**
- * Class CProductListAjaxController
- * @package bamboo\blueseal\controllers\ajax
+ * Class CProductPackingListAjaxController
+ * @package bamboo\controllers\back\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 18/12/2023
+ * @since 1.0
  */
-class CProductListAjaxController extends AAjaxController
+class CProductPackingListAjaxController extends AAjaxController
 {
     public function get()
     {
@@ -78,34 +79,320 @@ class CProductListAjaxController extends AAjaxController
                    WHERE mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
                          
-                if(isnull(prHp.productId), 'no', 'si') inPrestashop
+                         
+                if(isnull(prHp.productId), 'no', 'si') inPrestashop,
+                CONCAT('https://cdn.iwes.it/',pb.slug,'/',`pp`.`name`) AS photograph
                 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
+                    JOIN ProductHasProductPhoto php ON p.id=php.productId AND p.productVariantId=php.productVariantId
+                  join ProductPhoto pp ON php.productPhotoId=pp.id AND `pp`.`order`=1
                   LEFT JOIN PrestashopHasProduct prHp ON p.id = prHp.productId AND p.productVariantId = prHp.productVariantId
                   JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
                   JOIN Shop s ON s.id = sp.shopId
-                  LEFT JOIN (ProductSizeGroup psg
+                   JOIN (ProductSizeGroup psg
                               JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
                             ON p.productSizeGroupId = psg.id
-                  LEFT JOIN (ProductSku psk
+                   JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-                  LEFT JOIN (ProductHasProductCategory ppc
+                   JOIN (ProductHasProductCategory ppc
                               JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
                     ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
-                  LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
-                  LEFT JOIN (DirtyProduct dp
+                   JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
+                   JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-                    LEFT JOIN (
+                     JOIN (
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId  WHERE 1=1 and   pse.isActive=1";
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId  WHERE 1=1 and   pse.isActive=1
+                                 AND p.externalId IN ('0020600',
+'0020663',
+'210000267277',
+'0020807',
+'0021016',
+'0021016',
+'210000317904',
+'0020944',
+'0020619',
+'0020656',
+'0020053',
+'0020053',
+'0020656',
+'0020055',
+'0020055',
+'0020055',
+'0020209',
+'0020208',
+'0020044',
+'0020044',
+'0020047',
+'0020047',
+'0020590',
+'0020590',
+'0019990',
+'0019990',
+'0019990',
+'0019970',
+'0019970',
+'0019970',
+'0020839',
+'0020839',
+'0020181',
+'0020840',
+'0020840',
+'0020840',
+'0020168',
+'0020208',
+'0020578',
+'0020578',
+'0019969',
+'0019969',
+'0019968',
+'0019973',
+'0019707',
+'0019708',
+'0020923',
+'0020941',
+'0020037',
+'0020048',
+'0020947',
+'0020175',
+'0020173',
+'0020601',
+'0020595',
+'0021109',
+'0021018',
+'0020632',
+'0020229',
+'0020228',
+'0020919',
+'0020793',
+'0020793',
+'0020670',
+'0020750',
+'0020754',
+'0021017',
+'0020893',
+'0021016',
+'0020759',
+'0020810',
+'0021015',
+'0020950',
+'0020558',
+'0020763',
+'0020556',
+'0020546',
+'0020612',
+'0018191',
+'0019984',
+'0020402',
+'0019972',
+'0019979',
+'0019979',
+'0019981',
+'0020696',
+'0020659',
+'0020764',
+'0021024',
+'0020946',
+'0020049',
+'0020048',
+'0020054',
+'0020052',
+'0020819',
+'0020822',
+'0020822',
+'0020589',
+'0020586',
+'0019991',
+'0020038',
+'0021110',
+'0021108',
+'0021110',
+'0020979',
+'0020979',
+'0020971',
+'0020220',
+'0020891',
+'0020891',
+'0020698',
+'0020698',
+'0019992',
+'0019983',
+'0020978',
+'0020918',
+'0020918',
+'0019971',
+'0019331',
+'0020605',
+'0019989',
+'0020807',
+'0020938',
+'0020599',
+'0020995',
+'0020995',
+'0020177',
+'0020755',
+'0020616',
+'0019989',
+'0019974',
+'0020171',
+'0019968',
+'0020221',
+'0020791',
+'0020825',
+'0020795',
+'0020796',
+'0020796',
+'0020797',
+'0020802',
+'0020795',
+'0020215',
+'0020801',
+'0020588',
+'0020215',
+'0020792',
+'0020792',
+'0020792',
+'0020410',
+'0020405',
+'0020409',
+'0020940',
+'0020895',
+'0020657',
+'0020658',
+'0020917',
+'0020917',
+'0020917',
+'0020685',
+'0020894',
+'0020945',
+'0020598',
+'0020751',
+'0020662',
+'0020669',
+'0020657',
+'0020755',
+'0020748',
+'0020772',
+'0019865',
+'0020407',
+'0020411',
+'0020605',
+'0020612',
+'0020689',
+'0020694',
+'0021019',
+'0020591',
+'0020041',
+'0020227',
+'0020227',
+'0020002',
+'0020004',
+'0020003',
+'0020920',
+'0021107',
+'',
+'0019602',
+'0020599',
+'0020598',
+'0020607',
+'',
+'0020689',
+'0020695',
+'0020692',
+'0020798',
+'0020693',
+'0020688',
+'0020687',
+'0020943',
+'0020938',
+'0020561',
+'0020559',
+'0020555',
+'0020822',
+'0020668',
+'0020548',
+'0020542',
+'0020597',
+'0020952',
+'0020442',
+'0020441',
+'0020450',
+'0020440',
+'0020457',
+'0020473',
+'0020463',
+'0020472',
+'0020446',
+'0020446',
+'0020472',
+'0020458',
+'0020453',
+'0020463',
+'0020463',
+'0020462',
+'0020461',
+'0020445',
+'0020436',
+'0020466',
+'0020466',
+'0020445',
+'0020464',
+'0020464',
+'0020454',
+'0020441',
+'0020444',
+'0020444',
+'0020444',
+'0020463',
+'0020463',
+'0020470',
+'0020435',
+'0020434',
+'0020464',
+'0020464',
+'0020464',
+'0020464',
+'0020463',
+'0020439',
+'0020438',
+'0020469',
+'0020464',
+'0020450',
+'0020441',
+'0020442',
+'0020449',
+'0020449',
+'0020465',
+'0020468',
+'0020463',
+'0020472',
+'0020450',
+'0020471',
+'0020466',
+'0020469',
+'0020435',
+'0020437',
+'0020469',
+'0020469',
+'0020472',
+'0020455',
+'0020454',
+'0020450',
+'0020450',
+'0020450',
+'0020472',
+'0020470',
+'0020470',
+'0020469'
+)";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -153,7 +440,8 @@ class CProductListAjaxController extends AAjaxController
                 }
             }
 
-            $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
+            $photo=$val->productPhoto->findOneBy(['size'=>'281','order'=>1]);
+            $row['photograph'] = '<img src="https://cdn.iwes.it/'.$val->productBrand->slug.'/'.$photo->name.'"/>'>
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
