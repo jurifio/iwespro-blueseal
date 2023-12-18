@@ -439,7 +439,7 @@ class CProductPackingListAjaxController extends AAjaxController
                 $productHasProductPhoto=$papfRepo->findOneBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
                 if(!empty($productHasProductPhoto)){
                     $photo = $productPhotoRepo->findOneBy(['id'=>$productHasProductPhoto->productPhotoId,'size' => '281', 'order' => 1]);
-                    $photoImage='<img src="https://cdn.iwes.it/' . $val->productBrand->slug . '/' . $photo->name . '"/>';
+                    $photoImage='<img  size="50px" src="https://cdn.iwes.it/' . $val->productBrand->slug . '/' . $photo->name . '"/>';
                 }
 
                 $row['photograph'] = $photoImage;
