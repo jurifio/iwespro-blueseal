@@ -39,10 +39,12 @@
                                 </th>
                                 <th data-slug="shop"
                                     data-searchable="true"
+                                    data-isVisible="false"
                                     data-orderable="true" class="center">Shop
                                 </th>
                                 <th data-slug="colorGroup"
                                     data-searchable="true"
+                                    data-isVisible="false"
                                     data-orderable="true" class="center">Gruppo Colore
                                 </th>
                                 <th data-slug="colorNameManufacturer"
@@ -51,6 +53,7 @@
                                 </th>
                                 <th data-slug="season"
                                     data-searchable="true"
+                                    data-isVisible="false"
                                     data-orderable="true" class="center">Stagione
                                 </th>
                                 <th data-slug="externalId"
@@ -64,6 +67,7 @@
                                 <!--<th class="center">Gruppo Taglie</th>-->
                                 <th data-slug="details"
                                     data-searchable="false"
+                                    data-isVisible="false"
                                     data-orderable="false" class="center">Dettagli
                                 </th>
                                 <th data-slug="photograph"
@@ -76,6 +80,7 @@
                                 </th>
                                 <th data-slug="hasDetails"
                                     data-searchable="true"
+                                    data-isVisible="false"
                                     data-orderable="true" class="center">Ha Dett.
                                 </th>
                                 <th data-slug="brand"
