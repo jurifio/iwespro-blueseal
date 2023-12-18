@@ -400,6 +400,8 @@ class CProductPackingListAjaxController extends AAjaxController
 
             $em = $this->app->entityManagerFactory->create('ProductStatus');
             $productStatuses = $em->findAll('limit 99', '');
+            $papfRepo=\Monkey::app()->repoFactory->create('ProductHasProductPhoto');
+            $productPhotoRepo=\Monkey::app()->repoFactory->create('ProductPhoto');
 
             $statuses = [];
             foreach ($productStatuses as $status) {
@@ -433,9 +435,14 @@ class CProductPackingListAjaxController extends AAjaxController
                         $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
                     }
                 }
+                $photoImage='';
+                $productHasProductPhoto=$papfRepo->findOneBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+                if(!empty($productHasProductPhoto)){
+                    $photo = $productPhotoRepo->findOneBy(['productPhotoId'=>$productHasProductPhoto,'size' => '281', 'order' => 1]);
+                    $photoImage='<img src="https://cdn.iwes.it/' . $val->productBrand->slug . '/' . $photo->name . '"/>';
+                }
 
-                $photo = $val->productPhoto->findOneBy(['size' => '281', 'order' => 1]);
-                $row['photograph'] = '<img src="https://cdn.iwes.it/' . $val->productBrand->slug . '/' . $photo->name . '"/>' >
+                $row['photograph'] = $photoImage;
                     $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
                 $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
