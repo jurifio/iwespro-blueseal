@@ -42,8 +42,7 @@ class CProductPackingListAjaxController extends AAjaxController
                   p.sortingPriorityId                                                                               AS productPriority,
                   s.id                                                                                              AS shopId,
                   s.name                                                                                            AS row_shop,
-                  concat(phs.shootingId)                                                             AS shooting,
-                  concat(doc.number)                                                             AS doc_number,
+                
                   (SELECT count(*)
                    FROM ShopHasProduct
                    WHERE (ShopHasProduct.productId, ShopHasProduct.productVariantId) = (p.id, p.productVariantId))      AS shops,
