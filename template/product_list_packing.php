@@ -163,18 +163,6 @@
                                     data-searchable="true"
                                     data-orderable="false">Prodotto
                                 </th>
-                                <th data-slug="shooting"
-                                    data-searchable="true"
-                                    data-orderable="true">Shooting
-                                </th>
-                                <th data-slug="doc_number"
-                                    data-searchable="true"
-                                    data-orderable="true">N. DDT
-                                </th>
-                                <th data-slug="inPrestashop"
-                                    data-searchable="true"
-                                    data-orderable="true">Prestashop
-                                </th>
                             </tr>
                             </thead>
                             <tbody>

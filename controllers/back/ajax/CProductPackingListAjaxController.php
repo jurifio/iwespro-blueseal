@@ -89,7 +89,7 @@ class CProductPackingListAjaxController extends AAjaxController
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
                     JOIN ProductHasProductPhoto php ON p.id=php.productId AND p.productVariantId=php.productVariantId
                   join ProductPhoto pp ON php.productPhotoId=pp.id AND `pp`.`order`=1
-                  LEFT JOIN PrestashopHasProduct prHp ON p.id = prHp.productId AND p.productVariantId = prHp.productVariantId
+                 
                   JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
                   JOIN Shop s ON s.id = sp.shopId
@@ -106,11 +106,8 @@ class CProductPackingListAjaxController extends AAjaxController
                    JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-                     JOIN (
-                    ProductHasShooting phs 
-                      JOIN Shooting shoot ON phs.shootingId = shoot.id
-                        LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId  WHERE 1=1 and   pse.isActive=1
+                    
+                    WHERE 1=1 and   pse.isActive=1
                                  AND p.externalId IN ('0020600',
 '0020663',
 '210000267277',
@@ -516,16 +513,7 @@ class CProductPackingListAjaxController extends AAjaxController
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
             $row['processing'] = ($val->processing) ? $val->processing : '-';
 
-            $sids = "";
-            $ddtNumbers = "";
-            /** @var CShooting $singleShooting */
-            foreach ($val->shooting as $singleShooting){
-                $sids .= '<br />'.$singleShooting->id;
-                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
-            }
-            $row["shooting"] = $sids;
-            $row["doc_number"] = $ddtNumbers;
-            $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
+
 
             $datatable->setResponseDataSetRow($key,$row);
         }
