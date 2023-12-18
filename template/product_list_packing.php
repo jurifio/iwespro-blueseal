@@ -68,7 +68,7 @@
                                 </th>
                                 <th data-slug="photograph"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ha Foto
+                                    data-orderable="true" class="center">Foto
                                 </th>
                                 <th data-slug="productName"
                                     data-searchable="false"
