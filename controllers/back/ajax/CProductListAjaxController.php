@@ -79,7 +79,9 @@ class CProductListAjaxController extends AAjaxController
                          mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
                          
                 if(isnull(prHp.productId), 'no', 'si') inPrestashop
-                FROM Product p
+                ,
+                (SELECT COUNT(*) FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId=p.id AND phpp.productVariantId=p.productVariantId and phpo.size='1024') AS CountPhoto
+FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
@@ -159,7 +161,8 @@ class CProductListAjaxController extends AAjaxController
 
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
-
+            $countPhoto=\Monkey::app()->dbAdapter->query('SELECT COUNT(*) as countPhoto FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId='.$val->id.' AND phpp.productVariantId='.$val->productVariantId.' and phpo.size=\'1024\'',[]);
+            $row['countPhoto']=$countPhoto;
             $row['cpf'] = $val->printCpf();
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
