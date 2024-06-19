@@ -74,6 +74,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ha Foto
                                 </th>
+                                <th data-slug="countPhoto"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">N. Foto
+                                </th>
                                 <th data-slug="productName"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Nome
