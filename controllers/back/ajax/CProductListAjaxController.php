@@ -161,7 +161,7 @@ FROM Product p
 
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
-            $countPhoto=\Monkey::app()->dbAdapter->query('SELECT COUNT(*) as countPhoto FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId='.$val->id.' AND phpp.productVariantId='.$val->productVariantId.' and phpo.size=\'1024\'',[])->fetch();
+            $countPhoto=\Monkey::app()->dbAdapter->query('SELECT COUNT(*) as countPhoto FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId='.$val->id.' AND phpp.productVariantId='.$val->productVariantId.' and phpo.size=\'1024\'',[])->fetch()['countPhoto'];
             $row['countPhoto']=$countPhoto;
             $row['cpf'] = $val->printCpf();
 
