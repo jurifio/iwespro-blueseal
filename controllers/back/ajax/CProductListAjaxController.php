@@ -80,7 +80,7 @@ class CProductListAjaxController extends AAjaxController
                          
                 if(isnull(prHp.productId), 'no', 'si') inPrestashop
                 ,
-                (SELECT COUNT(*) FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId=p.id AND phpp.productVariantId=p.productVariantId and phpo.size='1024') AS CountPhoto
+                (SELECT COUNT(*) FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId=p.id AND phpp.productVariantId=p.productVariantId and phpo.size='1124') AS CountPhoto
 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
@@ -161,7 +161,7 @@ FROM Product p
 
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
-            $countPhoto=\Monkey::app()->dbAdapter->query('SELECT COUNT(*) as countPhoto FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId='.$val->id.' AND phpp.productVariantId='.$val->productVariantId.' and phpo.size=\'1024\'',[])->fetch()['countPhoto'];
+            $countPhoto=\Monkey::app()->dbAdapter->query('SELECT COUNT(*) as countPhoto FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId='.$val->id.' AND phpp.productVariantId='.$val->productVariantId.' and phpo.size=\'1124\'',[])->fetch()['countPhoto'];
             $row['countPhoto']=$countPhoto;
             $row['cpf'] = $val->printCpf();
 
