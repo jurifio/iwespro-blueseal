@@ -2017,7 +2017,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         /****sezione per lancio allineamento script su server prestashop*/
 
-        $url = 'https://iwes.shop/alignpresta.php';
+     /*   $url = 'https://iwes.shop/alignpresta.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -2039,9 +2039,10 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
 
 
-
+*/
 
         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
+      /*
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
@@ -2049,7 +2050,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
-        \Monkey::app()->dbAdapter->query($sql, []);
+        \Monkey::app()->dbAdapter->query($sql, []);*/
 
 
         $res="esportazione eseguita file ".$pharfile."  finita alle ore ".date('Y-m-d H:i:s');
