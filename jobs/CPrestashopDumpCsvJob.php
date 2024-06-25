@@ -19,6 +19,8 @@ use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProduct;
 use bamboo\core\events\AEventListener;
+use PDO;
+use PDO\Exception;
 
 
 /**
@@ -1171,6 +1173,7 @@ ORDER BY `p`.`id`";
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         //connessione db prestahop
+       /*
         $pConnection = new CReadExtDbTable(3);
 
         //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
@@ -1178,7 +1181,7 @@ ORDER BY `p`.`id`";
             ['psz6_product_attribute'],
             [],
             ["id_product_attribute" => "MAX"]
-        );
+        );*/
 
         foreach ($res_product as $value_product) {
 
@@ -1188,7 +1191,7 @@ ORDER BY `p`.`id`";
 
             $finalProductStatus = null;
 
-
+/*
             if ($value_product['status'] == 0) {
 
                 $findExtProdAttr = $pConnection->readTables(
@@ -1233,6 +1236,7 @@ ORDER BY `p`.`id`";
                     $finalProductStatus = 2;
                 }
             }
+*/
             $priceProduct=0;
 // popolamento array tabella prodotti
             if ($value_product['price']==0){
@@ -1555,15 +1559,8 @@ ORDER BY `p`.`id`";
                     $w = $w + 1;
 
                 } else {
+/*
 
-                    /**
-                     * select *
-                     * from psz6_product_attribute pa
-                     * join psz6_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
-                     * join psz6_attribute a ON a.id_attribute = pac.id_attribute
-                     * join psz6_attribute_lang al ON al.id_attribute = pac.id_attribute
-                     * where pa.id_product = 8827 && al.id_lang = 3
-                     */
                     $rightSku = $pConnection->readTables(
                         ['psz6_product_attribute',
                             'psz6_product_attribute_combination' => [
@@ -1592,7 +1589,7 @@ ORDER BY `p`.`id`";
                         []
                     );
 
-                    $w = $rightSku[0]["id_product_attribute"];
+                    $w = $rightSku[0]["id_product_attribute"];*/
                 }
 
                 $n = $n + 1;
