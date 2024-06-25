@@ -1991,9 +1991,9 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
 
         /*****  trasferimento ftp ******/
-        $ftp_server = "ftp.iwes.shop";
-        $ftp_user_name = "iwesshop";
-        $ftp_user_pass = "XtUWicJUrEXv";
+        $ftp_server = "ftp.cartechinishop.com";
+        $ftp_user_name = "root";
+        $ftp_user_pass = "Zora231074!";
         $remote_file = "/public_html/tmp/";
 
         $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $pharfile;
