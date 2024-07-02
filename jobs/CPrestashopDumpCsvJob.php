@@ -1898,7 +1898,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         $zipName = $save_to . $exportToPrestashopcsv;
         $pharfiletounlink = $save_to . $exportToPrestashopcsv . ".gz";
-      /*
+
         if (file_exists($pharfiletounlink)) {
             unlink($pharfiletounlink);
         }
@@ -1942,9 +1942,9 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $phar->addFile($save_to . 'ps_product_attribute_shop.csv', 'ps_product_attribute_shop.csv');
         $phar->addFile($save_to . 'ps_product_lang.csv', 'ps_product_lang.csv');
 
-        if ($phar->count() > 0) {*/
+        if ($phar->count() > 0) {
             /** @var \PharData $compressed */
-    /*        $compressed = $phar->compress(\Phar::GZ);
+            $compressed = $phar->compress(\Phar::GZ);
             if (file_exists($compressed->getPath())) {
                 unlink($save_to . 'ps_attribute.csv');
                 unlink($save_to . 'ps_stock_available.csv');
@@ -1986,20 +1986,20 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
             }
 
         }
-*/
+
 
         /*****  trasferimento ftp ******/
-     /*   $ftp_server = "84.247.137.139";
+        $ftp_server = "84.247.137.139";
         $ftp_user_name = "root";
         $ftp_user_pass = "Zora231074";
         $remote_file = "/home/cartechini/public_html/import/";
 
         $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $pharfile;
         $errorMsg = 'ftp fail connect';
-        $fileToSend = $save_to . $pharfile;*/
+        $fileToSend = $save_to . $pharfile;
 // ------- Upload file through FTP ---------------
 
-      /*  $ch = curl_init();
+        $ch = curl_init();
         $fp = fopen($fileToSend, "r");
         // we upload a TXT file
         curl_setopt($ch, CURLOPT_URL, $ftp_url);
@@ -2011,7 +2011,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $res = curl_exec($ch);
         $errorMsg = curl_error($ch);
         $errorNumber = curl_errno($ch);
-        curl_close($ch);*/
+        curl_close($ch);
 
         /****sezione per lancio allineamento script su server prestashop*/
 
