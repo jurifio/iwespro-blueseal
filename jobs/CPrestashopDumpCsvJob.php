@@ -1990,8 +1990,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         /*****  trasferimento ftp ******/
         $ftp_server = "84.247.137.139";
-        $ftp_user_name = "root";
-        $ftp_user_pass = "Zora231074";
+        $ftp_user_name = "cartechini";
+        $ftp_user_pass = "Scoponi2024!";
         $remote_file = "/home/cartechini/public_html/import/";
 
         $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $pharfile;
