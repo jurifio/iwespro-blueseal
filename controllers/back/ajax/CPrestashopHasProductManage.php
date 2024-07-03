@@ -82,10 +82,10 @@ class CPrestashopHasProductManage extends AAjaxController
 
 
 
-            $phs=$phsRepo->findOneBy(['productId'=>$productIds['productId'],'productVariantId'=>$productIds['productVariantId'],'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
+            $phs=$phsRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
             if($phs){
                 if($phs->productStatusMarketplaceId==4){
-                    $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
+                    $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
                     if($phphmhs){
                         $phphmhs->isPublished=3;
                         $phphmhs->update();
@@ -94,8 +94,8 @@ class CPrestashopHasProductManage extends AAjaxController
                 }
             }else{
                 $phs=$phsRepo->getEmptyEntity();
-                $phs->productId=$product['productId'];
-                $phs->productVariantId=$product['productVariantId'];
+                $phs->productId=$product->id;
+                $phs->productVariantId=$product->productVariantId;
                 $phs->marketplaceHasShopId=$this->data['marketplaceHasShopId'];
                 $php->productStatusMarketplaceId=3;
                 $php->status=2;
@@ -109,7 +109,7 @@ class CPrestashopHasProductManage extends AAjaxController
                 }
 
                 $phs->insert();
-              return 'insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id;
+              return 'insert ' . $product->id . '-' . $product->productVariantId . ' to marketplace' . $mhs->id;
 
             }
         }

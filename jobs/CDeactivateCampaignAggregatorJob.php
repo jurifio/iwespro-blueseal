@@ -32,8 +32,8 @@ class CDeactivateCampaignAggregatorJob extends ACronJob
 
         $res = "";
         /********marketplace********/
-        $db_host = "5.189.159.187";
-        $db_name = "iwesPrestaDB";
+        $db_host = "84.247.137.139";
+        $db_name = "cartechini_scodem";
         $db_user = "pickyshop4";
         $db_pass = "rrtYvg6W!";
         try {

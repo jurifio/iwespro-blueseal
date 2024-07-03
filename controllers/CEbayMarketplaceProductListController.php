@@ -27,7 +27,7 @@ class CEbayMarketplaceProductListController extends ARestrictedAccessRootControl
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/ebay_marketplace_product.php');
-        $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findBy(['marketplaceId'=>3,'isActive'=>1]);
+        $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findBy(['isActive'=>1]);
         if(isset($_GET['accountid'])){
             $accountid=$_GET['accountid'];
         } else{

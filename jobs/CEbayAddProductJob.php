@@ -42,19 +42,19 @@ class CEbayAddProductJob extends ACronJob
     {
 /*
  $db_host = '5.189.159.187';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'iwesprestashop';
-            $db_pass = 'X+]l&LEa]zSI';
+            $db_name = 'cartechini_scodem';
+            $db_user = 'cartechininew';
+            $db_pass = 'Scoponi2024!';
  */
 
         if (ENV === 'prod') {
             $db_host = 'localhost';
-            $db_name = 'iwesPrestaDB';
+            $db_name = 'cartechini_scodem';
             $db_user = 'pickyshop4';
             $db_pass = 'rrtYvg6W!';
         } else {
             $db_host = 'localhost';
-            $db_name = 'iwesPrestaDB';
+            $db_name = 'cartechini_scodem';
             $db_user = 'root';
             $db_pass = 'geh44fed';
         }

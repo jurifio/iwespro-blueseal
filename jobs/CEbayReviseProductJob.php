@@ -42,15 +42,15 @@ class CEbayReviseProductJob extends ACronJob
     {
         $xml = '';
         if (ENV === 'prod') {
-            $db_host = '5.189.159.187';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'iwesprestashop';
-            $db_pass = 'X+]l&LEa]zSI';
+            $db_host = '84.247.137.139';
+            $db_name = 'cartechini_scodem';
+            $db_user = 'cartechininew';
+            $db_pass = 'Scoponi2024!';
         } else {
-            $db_host = 'localhost';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'root';
-            $db_pass = 'geh44fed';
+           $db_host = '84.247.137.139';
+            $db_name = 'cartechini_scodem';
+            $db_user = 'cartechininew';
+            $db_pass = 'Scoponi2024!';
         }
         $res = "";
         try {

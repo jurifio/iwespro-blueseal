@@ -464,13 +464,13 @@ class CPrestashopProduct extends APrestashopMarketplace
         } else {
             $productBrand = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $productBrand->id]);
             $db_host = "5.189.159.187";
-            $db_name = "iwesPrestaDB";
-            $db_user = "iwesprestashop";
-            $db_pass = "X+]l&LEa]zSI";
+            $db_name = "cartechini_scodem";
+            $db_user = "cartechininew";
+            $db_pass = "Scoponi2024!";
             /*define("HOST", "5.189.159.187");
-            define("USERNAME", "iwesprestashop");
-            define("PASSWORD", "X+]l&LEa]zSI");
-            define("DATABASE", "iwesPrestaDB");*/
+            define("USERNAME", "cartechininew");
+            define("PASSWORD", "Scoponi2024!");
+            define("DATABASE", "cartechini_scodem");*/
             $res = "";
 
             try {
@@ -1043,13 +1043,13 @@ class CPrestashopProduct extends APrestashopMarketplace
     public function updateProductImage($prestashopProductId,$productId,$productVariantId,$shop): bool
     {
         $db_host = "5.189.159.187";
-        $db_name = "iwesPrestaDB";
-        $db_user = "iwesprestashop";
-        $db_pass = "X+]l&LEa]zSI";
+        $db_name = "cartechini_scodem";
+        $db_user = "cartechininew";
+        $db_pass = "Scoponi2024!";
         /*define("HOST", "5.189.159.187");
-        define("USERNAME", "iwesprestashop");
-        define("PASSWORD", "X+]l&LEa]zSI");
-        define("DATABASE", "iwesPrestaDB");*/
+        define("USERNAME", "cartechininew");
+        define("PASSWORD", "Scoponi2024!");
+        define("DATABASE", "cartechini_scodem");*/
         $res = "";
         $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
         if (!is_dir(rtrim($destDir,"/"))) mkdir($destDir,0777,true);

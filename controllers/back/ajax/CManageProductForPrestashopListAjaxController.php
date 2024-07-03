@@ -49,6 +49,7 @@ class CManageProductForPrestashopListAjaxController extends AAjaxController
                 $prestashopHasProduct = $prestashopHasProductRepo->getEmptyEntity();
                 $prestashopHasProduct->productId = $pId;
                 $prestashopHasProduct->productVariantId = $pVariantId;
+                $prestashopHasProduct->marketplaceHasShopId = 2;
                 $prestashopHasProduct->smartInsert();
             }
         }
