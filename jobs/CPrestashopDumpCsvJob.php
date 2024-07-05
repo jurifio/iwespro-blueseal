@@ -20,7 +20,7 @@ use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProduct;
 use bamboo\core\events\AEventListener;
 use PDO;
-use PDO\Exception;
+use PDOException;
 
 
 /**
