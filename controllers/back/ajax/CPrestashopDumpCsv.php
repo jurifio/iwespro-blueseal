@@ -56,176 +56,182 @@ class CPrestashopDumpCsv extends AAjaxController
         } else {
             $save_to = '/home/iwespro/public_html/temp-prestashop/';
         }
-        if (file_exists($save_to . 'psz6_category.csv')) {
-            unlink($save_to . 'psz6_category.csv');
+        if (file_exists($save_to . 'prodotti.csv')) {
+            unlink($save_to . 'prodotti.csv');
         }
-        $category_csv = fopen($save_to . 'psz6_category.csv', 'w');
-
-        if (file_exists($save_to . 'psz6_product.csv')) {
-            unlink($save_to . 'psz6_product.csv');
+        if (file_exists($save_to . 'variazioni.csv')) {
+            unlink($save_to . 'variazioni.csv');
         }
-        $product_csv = fopen($save_to . 'psz6_product.csv', 'w');
-
-        if (file_exists($save_to . 'psz6_product_shop.csv')) {
-            unlink($save_to . 'psz6_product_shop.csv');
+        if (file_exists($save_to . 'ps_category.csv')) {
+            unlink($save_to . 'ps_category.csv');
         }
-        $product_shop_csv = fopen($save_to . 'psz6_product_shop.csv', 'w');
-        if (file_exists($save_to . 'psz6_product_lang.csv')) {
-            unlink($save_to . 'psz6_product_lang.csv');
+        $category_csv = fopen($save_to . 'ps_category.csv', 'w');
+
+        if (file_exists($save_to . 'ps_product.csv')) {
+            unlink($save_to . 'ps_product.csv');
+        }
+        $product_csv = fopen($save_to . 'ps_product.csv', 'w');
+
+        if (file_exists($save_to . 'ps_product_shop.csv')) {
+            unlink($save_to . 'ps_product_shop.csv');
+        }
+        $product_shop_csv = fopen($save_to . 'ps_product_shop.csv', 'w');
+        if (file_exists($save_to . 'ps_product_lang.csv')) {
+            unlink($save_to . 'ps_product_lang.csv');
         }
 
-        $product_lang_csv = fopen($save_to . 'psz6_product_lang.csv', 'w');
+        $product_lang_csv = fopen($save_to . 'ps_product_lang.csv', 'w');
 
 
-        if (file_exists($save_to . 'psz6_product_attribute.csv')) {
-            unlink($save_to . 'psz6_product_attribute.csv');
+        if (file_exists($save_to . 'ps_product_attribute.csv')) {
+            unlink($save_to . 'ps_product_attribute.csv');
         }
-        $product_attribute_csv = fopen($save_to . 'psz6_product_attribute.csv', 'w');
+        $product_attribute_csv = fopen($save_to . 'ps_product_attribute.csv', 'w');
 
 
-        if (file_exists($save_to . 'psz6_product_attribute_combination.csv')) {
-            unlink($save_to . 'psz6_product_attribute_combination.csv');
+        if (file_exists($save_to . 'ps_product_attribute_combination.csv')) {
+            unlink($save_to . 'ps_product_attribute_combination.csv');
         }
-        $product_attribute_combination_csv = fopen($save_to . 'psz6_product_attribute_combination.csv', 'w');
-        if (file_exists($save_to . 'psz6_product_attribute_shop.csv')) {
-            unlink($save_to . 'psz6_product_attribute_shop.csv');
+        $product_attribute_combination_csv = fopen($save_to . 'ps_product_attribute_combination.csv', 'w');
+        if (file_exists($save_to . 'ps_product_attribute_shop.csv')) {
+            unlink($save_to . 'ps_product_attribute_shop.csv');
         }
-        $product_attribute_shop_csv = fopen($save_to . 'psz6_product_attribute_shop.csv', 'w');
+        $product_attribute_shop_csv = fopen($save_to . 'ps_product_attribute_shop.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_feature_product.csv')) {
-            unlink($save_to . 'psz6_feature_product.csv');
+        if (file_exists($save_to . 'ps_feature_product.csv')) {
+            unlink($save_to . 'ps_feature_product.csv');
         }
-        $feature_product_csv = fopen($save_to . 'psz6_feature_product.csv', 'w');
-        if (file_exists($save_to . 'psz6_image.csv')) {
-            unlink($save_to . 'psz6_image.csv');
+        $feature_product_csv = fopen($save_to . 'ps_feature_product.csv', 'w');
+        if (file_exists($save_to . 'ps_image.csv')) {
+            unlink($save_to . 'ps_image.csv');
         }
-        $image_csv = fopen($save_to . 'psz6_image.csv', 'w');
-
-
-        if (file_exists($save_to . 'psz6_image_link.csv')) {
-            unlink($save_to . 'psz6_image_link.csv');
-        }
-        $image_link_csv = fopen($save_to . 'psz6_image_link.csv', 'w');
-
-        if (file_exists($save_to . 'psz6_image_lang.csv')) {
-            unlink($save_to . 'psz6_image_lang.csv');
-        }
-        $image_lang_csv = fopen($save_to . 'psz6_image_lang.csv', 'w');
-
-        if (file_exists($save_to . 'psz6_image_shop.csv')) {
-            unlink($save_to . 'psz6_image_shop.csv');
-        }
-        $image_shop_csv = fopen($save_to . 'psz6_image_shop.csv', 'w');
-
-        if (file_exists($save_to . 'psz6_stock_available.csv')) {
-            unlink($save_to . 'psz6_stock_available.csv');
-        }
-        $stock_available_csv = fopen($save_to . 'psz6_stock_available.csv', 'w');
+        $image_csv = fopen($save_to . 'ps_image.csv', 'w');
 
 
-        if (file_exists($save_to . 'psz6_stock_mvt.csv')) {
-            unlink($save_to . 'psz6_stock_mvt.csv');
+        if (file_exists($save_to . 'ps_image_link.csv')) {
+            unlink($save_to . 'ps_image_link.csv');
         }
-        $stock_mvt_csv = fopen($save_to . 'psz6_stock_mvt.csv', 'w');
+        $image_link_csv = fopen($save_to . 'ps_image_link.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_manufacturer_shop.csv')) {
-            unlink($save_to . 'psz6_manufacturer_shop.csv');
+        if (file_exists($save_to . 'ps_image_lang.csv')) {
+            unlink($save_to . 'ps_image_lang.csv');
         }
-        $manufacturer_shop_csv = fopen($save_to . 'psz6_manufacturer_shop.csv', 'w');
+        $image_lang_csv = fopen($save_to . 'ps_image_lang.csv', 'w');
+
+        if (file_exists($save_to . 'ps_image_shop.csv')) {
+            unlink($save_to . 'ps_image_shop.csv');
+        }
+        $image_shop_csv = fopen($save_to . 'ps_image_shop.csv', 'w');
+
+        if (file_exists($save_to . 'ps_stock_available.csv')) {
+            unlink($save_to . 'ps_stock_available.csv');
+        }
+        $stock_available_csv = fopen($save_to . 'ps_stock_available.csv', 'w');
+
+
+        if (file_exists($save_to . 'ps_stock_mvt.csv')) {
+            unlink($save_to . 'ps_stock_mvt.csv');
+        }
+        $stock_mvt_csv = fopen($save_to . 'ps_stock_mvt.csv', 'w');
+
+        if (file_exists($save_to . 'ps_manufacturer_shop.csv')) {
+            unlink($save_to . 'ps_manufacturer_shop.csv');
+        }
+        $manufacturer_shop_csv = fopen($save_to . 'ps_manufacturer_shop.csv', 'w');
         fputcsv($manufacturer_shop_csv, array('id_manufacturer', 'id_shop'), ";");
 
-        if (file_exists($save_to . 'psz6_category_shop.csv')) {
-            unlink($save_to . 'psz6_category_shop.csv');
+        if (file_exists($save_to . 'ps_category_shop.csv')) {
+            unlink($save_to . 'ps_category_shop.csv');
         }
-        $category_shop_csv = fopen($save_to . 'psz6_category_shop.csv', 'w');
+        $category_shop_csv = fopen($save_to . 'ps_category_shop.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_category_group.csv')) {
-            unlink($save_to . 'psz6_category_group.csv');
+        if (file_exists($save_to . 'ps_category_group.csv')) {
+            unlink($save_to . 'ps_category_group.csv');
         }
-        $category_group_csv = fopen($save_to . 'psz6_category_group.csv', 'w');
+        $category_group_csv = fopen($save_to . 'ps_category_group.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_supplier.csv')) {
-            unlink($save_to . 'psz6_supplier.csv');
+        if (file_exists($save_to . 'ps_supplier.csv')) {
+            unlink($save_to . 'ps_supplier.csv');
         }
-        $supplier_csv = fopen($save_to . 'psz6_supplier.csv', 'w');
+        $supplier_csv = fopen($save_to . 'ps_supplier.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_category_lang.csv')) {
-            unlink($save_to . 'psz6_category_lang.csv');
+        if (file_exists($save_to . 'ps_category_lang.csv')) {
+            unlink($save_to . 'ps_category_lang.csv');
         }
-        $category_lang_csv = fopen($save_to . 'psz6_category_lang.csv', 'w');
+        $category_lang_csv = fopen($save_to . 'ps_category_lang.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_manufacturer.csv')) {
-            unlink($save_to . 'psz6_manufacturer.csv');
+        if (file_exists($save_to . 'ps_manufacturer.csv')) {
+            unlink($save_to . 'ps_manufacturer.csv');
         }
-        $manufacturer_csv = fopen($save_to . 'psz6_manufacturer.csv', 'w');
+        $manufacturer_csv = fopen($save_to . 'ps_manufacturer.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_category_product.csv')) {
-            unlink($save_to . 'psz6_category_product.csv');
+        if (file_exists($save_to . 'ps_category_product.csv')) {
+            unlink($save_to . 'ps_category_product.csv');
         }
-        $category_product_csv = fopen($save_to . 'psz6_category_product.csv', 'w');
-        if (file_exists($save_to . 'psz6_supplier_lang.csv')) {
-            unlink($save_to . 'psz6_supplier_lang.csv');
+        $category_product_csv = fopen($save_to . 'ps_category_product.csv', 'w');
+        if (file_exists($save_to . 'ps_supplier_lang.csv')) {
+            unlink($save_to . 'ps_supplier_lang.csv');
         }
-        $supplier_lang_csv = fopen($save_to . 'psz6_supplier_lang.csv', 'w');
+        $supplier_lang_csv = fopen($save_to . 'ps_supplier_lang.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_supplier_shop.csv')) {
-            unlink($save_to . 'psz6_supplier_shop.csv');
+        if (file_exists($save_to . 'ps_supplier_shop.csv')) {
+            unlink($save_to . 'ps_supplier_shop.csv');
         }
-        $supplier_shop_csv = fopen($save_to . 'psz6_supplier_shop.csv', 'w');
+        $supplier_shop_csv = fopen($save_to . 'ps_supplier_shop.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_manufacturer_lang.csv')) {
-            unlink($save_to . 'psz6_manufacturer_lang.csv');
+        if (file_exists($save_to . 'ps_manufacturer_lang.csv')) {
+            unlink($save_to . 'ps_manufacturer_lang.csv');
         }
-        $manufacturer_lang_csv = fopen($save_to . 'psz6_manufacturer_lang.csv', 'w');
-        if (file_exists($save_to . 'psz6_attribute_shop.csv')) {
-            unlink($save_to . 'psz6_attribute_shop.csv');
+        $manufacturer_lang_csv = fopen($save_to . 'ps_manufacturer_lang.csv', 'w');
+        if (file_exists($save_to . 'ps_attribute_shop.csv')) {
+            unlink($save_to . 'ps_attribute_shop.csv');
         }
-        $attribute_shop_csv = fopen($save_to . 'psz6_attribute_shop.csv', 'w');
+        $attribute_shop_csv = fopen($save_to . 'ps_attribute_shop.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_attribute_group_lang.csv')) {
-            unlink($save_to . 'psz6_attribute_group_lang.csv');
+        if (file_exists($save_to . 'ps_attribute_group_lang.csv')) {
+            unlink($save_to . 'ps_attribute_group_lang.csv');
         }
-        $attribute_group_lang_csv = fopen($save_to . 'psz6_attribute_group_lang.csv', 'w');
+        $attribute_group_lang_csv = fopen($save_to . 'ps_attribute_group_lang.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_attribute_group_shop.csv')) {
-            unlink($save_to . 'psz6_attribute_group_shop.csv');
+        if (file_exists($save_to . 'ps_attribute_group_shop.csv')) {
+            unlink($save_to . 'ps_attribute_group_shop.csv');
         }
-        $attribute_group_shop_csv = fopen($save_to . 'psz6_attribute_group_shop.csv', 'w');
+        $attribute_group_shop_csv = fopen($save_to . 'ps_attribute_group_shop.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_attribute_group.csv')) {
-            unlink($save_to . 'psz6_attribute_group.csv');
+        if (file_exists($save_to . 'ps_attribute_group.csv')) {
+            unlink($save_to . 'ps_attribute_group.csv');
         }
-        $attribute_group_csv = fopen($save_to . 'psz6_attribute_group.csv', 'w');
+        $attribute_group_csv = fopen($save_to . 'ps_attribute_group.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_attribute.csv')) {
-            unlink($save_to . 'psz6_attribute.csv');
+        if (file_exists($save_to . 'ps_attribute.csv')) {
+            unlink($save_to . 'ps_attribute.csv');
         }
-        $attribute_csv = fopen($save_to . 'psz6_attribute.csv', 'w');
-        if (file_exists($save_to . 'psz6_attribute_lang.csv')) {
-            unlink($save_to . 'psz6_attribute_lang.csv');
+        $attribute_csv = fopen($save_to . 'ps_attribute.csv', 'w');
+        if (file_exists($save_to . 'ps_attribute_lang.csv')) {
+            unlink($save_to . 'ps_attribute_lang.csv');
         }
-        $attribute_lang_csv = fopen($save_to . 'psz6_attribute_lang.csv', 'w');
-        if (file_exists($save_to . 'psz6_feature_shop.csv')) {
-            unlink($save_to . 'psz6_feature_shop.csv');
+        $attribute_lang_csv = fopen($save_to . 'ps_attribute_lang.csv', 'w');
+        if (file_exists($save_to . 'ps_feature_shop.csv')) {
+            unlink($save_to . 'ps_feature_shop.csv');
         }
-        $feature_shop_csv = fopen($save_to . 'psz6_feature_shop.csv', 'w');
-        if (file_exists($save_to . 'psz6_feature.csv')) {
-            unlink($save_to . 'psz6_feature.csv');
+        $feature_shop_csv = fopen($save_to . 'ps_feature_shop.csv', 'w');
+        if (file_exists($save_to . 'ps_feature.csv')) {
+            unlink($save_to . 'ps_feature.csv');
         }
-        $feature_csv = fopen($save_to . 'psz6_feature.csv', 'w');
-        if (file_exists($save_to . 'psz6_feature_lang.csv')) {
-            unlink($save_to . 'psz6_feature_lang.csv');
+        $feature_csv = fopen($save_to . 'ps_feature.csv', 'w');
+        if (file_exists($save_to . 'ps_feature_lang.csv')) {
+            unlink($save_to . 'ps_feature_lang.csv');
         }
-        $feature_lang_csv = fopen($save_to . 'psz6_feature_lang.csv', 'w');
-        if (file_exists($save_to . 'psz6_feature_value.csv')) {
-            unlink($save_to . 'psz6_feature_value.csv');
+        $feature_lang_csv = fopen($save_to . 'ps_feature_lang.csv', 'w');
+        if (file_exists($save_to . 'ps_feature_value.csv')) {
+            unlink($save_to . 'ps_feature_value.csv');
         }
-        $feature_value_csv = fopen($save_to . 'psz6_feature_value.csv', 'w');
+        $feature_value_csv = fopen($save_to . 'ps_feature_value.csv', 'w');
 
-        if (file_exists($save_to . 'psz6_feature_value_lang.csv')) {
-            unlink($save_to . 'psz6_feature_value_lang.csv');
+        if (file_exists($save_to . 'ps_feature_value_lang.csv')) {
+            unlink($save_to . 'ps_feature_value_lang.csv');
         }
-        $feature_value_lang_csv = fopen($save_to . 'psz6_feature_value_lang.csv', 'w');
+        $feature_value_lang_csv = fopen($save_to . 'ps_feature_value_lang.csv', 'w');
 
         /**
          * @var $db CMySQLAdapter
@@ -1170,7 +1176,7 @@ ORDER BY `p`.`id`";
 
         //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
         $maxAttributeId = $pConnection->readTables(
-            ['psz6_product_attribute'],
+            ['ps_product_attribute'],
             [],
             ["id_product_attribute" => "MAX"]
         );
@@ -1187,8 +1193,8 @@ ORDER BY `p`.`id`";
             if ($value_product['status'] == 0) {
 
                 $findExtProdAttr = $pConnection->readTables(
-                    ['psz6_product_attribute'],
-                    ["psz6_product_attribute" =>
+                    ['ps_product_attribute'],
+                    ["ps_product_attribute" =>
                         [
                             "id_product" => $p
                         ]
@@ -1210,8 +1216,8 @@ ORDER BY `p`.`id`";
                 }
             } else if ($value_product['status'] == 2) {
                 $findExtProdAttr = $pConnection->readTables(
-                    ['psz6_product_attribute'],
-                    ["psz6_product_attribute" =>
+                    ['ps_product_attribute'],
+                    ["ps_product_attribute" =>
                         [
                             "id_product" => $p
                         ]
@@ -1553,33 +1559,33 @@ ORDER BY `p`.`id`";
 
                     /**
                      * select *
-                     * from psz6_product_attribute pa
-                     * join psz6_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
-                     * join psz6_attribute a ON a.id_attribute = pac.id_attribute
-                     * join psz6_attribute_lang al ON al.id_attribute = pac.id_attribute
+                     * from ps_product_attribute pa
+                     * join ps_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
+                     * join ps_attribute a ON a.id_attribute = pac.id_attribute
+                     * join ps_attribute_lang al ON al.id_attribute = pac.id_attribute
                      * where pa.id_product = 8827 && al.id_lang = 3
                      */
                     $rightSku = $pConnection->readTables(
-                        ['psz6_product_attribute',
-                            'psz6_product_attribute_combination' => [
+                        ['ps_product_attribute',
+                            'ps_product_attribute_combination' => [
                                 'Self' => ['id_product_attribute'],
-                                'psz6_product_attribute' => ['id_product_attribute']
+                                'ps_product_attribute' => ['id_product_attribute']
                             ],
-                            'psz6_attribute' => [
+                            'ps_attribute' => [
                                 'Self' => ['id_attribute'],
-                                'psz6_product_attribute_combination' => ['id_attribute']
+                                'ps_product_attribute_combination' => ['id_attribute']
                             ],
-                            'psz6_attribute_lang' => [
+                            'ps_attribute_lang' => [
                                 'Self' => ['id_attribute'],
-                                'psz6_product_attribute_combination' => ['id_attribute']
+                                'ps_product_attribute_combination' => ['id_attribute']
                             ]
                         ],
                         [
-                            "psz6_product_attribute" =>
+                            "ps_product_attribute" =>
                                 [
                                     "id_product" => $p
                                 ],
-                            'psz6_attribute_lang' => [
+                            'ps_attribute_lang' => [
                                 'id_lang' => 2,
                                 'name' => $value_product_attribute->productSize->name
                             ]
@@ -1903,81 +1909,81 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
 
         $phar = new \PharData($zipName);
-        $phar->addFile($save_to . 'psz6_stock_mvt.csv', 'psz6_stock_mvt.csv');
-        $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv'); //V
-        $phar->addFile($save_to . 'psz6_manufacturer.csv', 'psz6_manufacturer.csv');
-        $phar->addFile($save_to . 'psz6_manufacturer_lang.csv', 'psz6_manufacturer_lang.csv');
-        $phar->addFile($save_to . 'psz6_manufacturer_shop.csv', 'psz6_manufacturer_shop.csv');
-        $phar->addFile($save_to . 'psz6_supplier.csv', 'psz6_supplier.csv');
-        $phar->addFile($save_to . 'psz6_supplier_lang.csv', 'psz6_supplier_lang.csv');
-        $phar->addFile($save_to . 'psz6_supplier_shop.csv', 'psz6_supplier_shop.csv');
-        $phar->addFile($save_to . 'psz6_category_shop.csv', 'psz6_category_shop.csv');
-        $phar->addFile($save_to . 'psz6_category_group.csv', 'psz6_category_group.csv');
-        $phar->addFile($save_to . 'psz6_stock_available.csv', 'psz6_stock_available.csv');
-        $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv'); //V
-        $phar->addFile($save_to . 'psz6_attribute_group.csv', 'psz6_attribute_group.csv'); //V
-        $phar->addFile($save_to . 'psz6_attribute_group_lang.csv', 'psz6_attribute_group_lang.csv'); //V
-        $phar->addFile($save_to . 'psz6_attribute_group_shop.csv', 'psz6_attribute_group_shop.csv'); //V
-        $phar->addFile($save_to . 'psz6_attribute_lang.csv', 'psz6_attribute_lang.csv'); //V
-        $phar->addFile($save_to . 'psz6_category.csv', 'psz6_category.csv');
-        $phar->addFile($save_to . 'psz6_category_product.csv', 'psz6_category_product.csv');
-        $phar->addFile($save_to . 'psz6_category_lang.csv', 'psz6_category_lang.csv');
-        $phar->addFile($save_to . 'psz6_feature_shop.csv', 'psz6_feature_shop.csv');
-        $phar->addFile($save_to . 'psz6_feature.csv', 'psz6_feature.csv');
-        $phar->addFile($save_to . 'psz6_feature_lang.csv', 'psz6_feature_lang.csv');
-        $phar->addFile($save_to . 'psz6_feature_product.csv', 'psz6_feature_product.csv');
-        $phar->addFile($save_to . 'psz6_feature_value.csv', 'psz6_feature_value.csv');
-        $phar->addFile($save_to . 'psz6_feature_value_lang.csv', 'psz6_feature_value_lang.csv');
-        $phar->addFile($save_to . 'psz6_image.csv', 'psz6_image.csv');
-        $phar->addFile($save_to . 'psz6_image_lang.csv', 'psz6_image_lang.csv');
-        $phar->addFile($save_to . 'psz6_image_link.csv', 'psz6_image_link.csv');
-        $phar->addFile($save_to . 'psz6_image_shop.csv', 'psz6_image_shop.csv');
-        $phar->addFile($save_to . 'psz6_product.csv', 'psz6_product.csv');
-        $phar->addFile($save_to . 'psz6_product_shop.csv', 'psz6_product_shop.csv');
-        $phar->addFile($save_to . 'psz6_product_attribute.csv', 'psz6_product_attribute.csv');
-        $phar->addFile($save_to . 'psz6_product_attribute_combination.csv', 'psz6_product_attribute_combination.csv');
-        $phar->addFile($save_to . 'psz6_product_attribute_shop.csv', 'psz6_product_attribute_shop.csv');
-        $phar->addFile($save_to . 'psz6_product_lang.csv', 'psz6_product_lang.csv');
+        $phar->addFile($save_to . 'ps_stock_mvt.csv', 'ps_stock_mvt.csv');
+        $phar->addFile($save_to . 'ps_attribute.csv', 'ps_attribute.csv'); //V
+        $phar->addFile($save_to . 'ps_manufacturer.csv', 'ps_manufacturer.csv');
+        $phar->addFile($save_to . 'ps_manufacturer_lang.csv', 'ps_manufacturer_lang.csv');
+        $phar->addFile($save_to . 'ps_manufacturer_shop.csv', 'ps_manufacturer_shop.csv');
+        $phar->addFile($save_to . 'ps_supplier.csv', 'ps_supplier.csv');
+        $phar->addFile($save_to . 'ps_supplier_lang.csv', 'ps_supplier_lang.csv');
+        $phar->addFile($save_to . 'ps_supplier_shop.csv', 'ps_supplier_shop.csv');
+        $phar->addFile($save_to . 'ps_category_shop.csv', 'ps_category_shop.csv');
+        $phar->addFile($save_to . 'ps_category_group.csv', 'ps_category_group.csv');
+        $phar->addFile($save_to . 'ps_stock_available.csv', 'ps_stock_available.csv');
+        $phar->addFile($save_to . 'ps_attribute_shop.csv', 'ps_attribute_shop.csv'); //V
+        $phar->addFile($save_to . 'ps_attribute_group.csv', 'ps_attribute_group.csv'); //V
+        $phar->addFile($save_to . 'ps_attribute_group_lang.csv', 'ps_attribute_group_lang.csv'); //V
+        $phar->addFile($save_to . 'ps_attribute_group_shop.csv', 'ps_attribute_group_shop.csv'); //V
+        $phar->addFile($save_to . 'ps_attribute_lang.csv', 'ps_attribute_lang.csv'); //V
+        $phar->addFile($save_to . 'ps_category.csv', 'ps_category.csv');
+        $phar->addFile($save_to . 'ps_category_product.csv', 'ps_category_product.csv');
+        $phar->addFile($save_to . 'ps_category_lang.csv', 'ps_category_lang.csv');
+        $phar->addFile($save_to . 'ps_feature_shop.csv', 'ps_feature_shop.csv');
+        $phar->addFile($save_to . 'ps_feature.csv', 'ps_feature.csv');
+        $phar->addFile($save_to . 'ps_feature_lang.csv', 'ps_feature_lang.csv');
+        $phar->addFile($save_to . 'ps_feature_product.csv', 'ps_feature_product.csv');
+        $phar->addFile($save_to . 'ps_feature_value.csv', 'ps_feature_value.csv');
+        $phar->addFile($save_to . 'ps_feature_value_lang.csv', 'ps_feature_value_lang.csv');
+        $phar->addFile($save_to . 'ps_image.csv', 'ps_image.csv');
+        $phar->addFile($save_to . 'ps_image_lang.csv', 'ps_image_lang.csv');
+        $phar->addFile($save_to . 'ps_image_link.csv', 'ps_image_link.csv');
+        $phar->addFile($save_to . 'ps_image_shop.csv', 'ps_image_shop.csv');
+        $phar->addFile($save_to . 'ps_product.csv', 'ps_product.csv');
+        $phar->addFile($save_to . 'ps_product_shop.csv', 'ps_product_shop.csv');
+        $phar->addFile($save_to . 'ps_product_attribute.csv', 'ps_product_attribute.csv');
+        $phar->addFile($save_to . 'ps_product_attribute_combination.csv', 'ps_product_attribute_combination.csv');
+        $phar->addFile($save_to . 'ps_product_attribute_shop.csv', 'ps_product_attribute_shop.csv');
+        $phar->addFile($save_to . 'ps_product_lang.csv', 'ps_product_lang.csv');
 
         if ($phar->count() > 0) {
             /** @var \PharData $compressed */
             $compressed = $phar->compress(\Phar::GZ);
             if (file_exists($compressed->getPath())) {
-                unlink($save_to . 'psz6_attribute.csv');
-                unlink($save_to . 'psz6_stock_available.csv');
-                unlink($save_to . 'psz6_attribute_shop.csv');
-                unlink($save_to . 'psz6_attribute_group.csv');
-                unlink($save_to . 'psz6_category_shop.csv');
-                unlink($save_to . 'psz6_attribute_group_lang.csv');
-                unlink($save_to . 'psz6_attribute_group_shop.csv');
-                unlink($save_to . 'psz6_category_product.csv');
-                unlink($save_to . 'psz6_category_group.csv');
-                unlink($save_to . 'psz6_attribute_lang.csv');
-                unlink($save_to . 'psz6_category.csv');
-                unlink($save_to . 'psz6_category_lang.csv');
-                unlink($save_to . 'psz6_feature.csv');
-                unlink($save_to . 'psz6_feature_shop.csv');
-                unlink($save_to . 'psz6_feature_lang.csv');
-                unlink($save_to . 'psz6_feature_product.csv');
-                unlink($save_to . 'psz6_feature_value.csv');
-                unlink($save_to . 'psz6_feature_value_lang.csv');
-                unlink($save_to . 'psz6_image.csv');
-                unlink($save_to . 'psz6_image_lang.csv');
-                unlink($save_to . 'psz6_image_link.csv');
-                unlink($save_to . 'psz6_image_shop.csv');
-                unlink($save_to . 'psz6_product.csv');
-                unlink($save_to . 'psz6_product_attribute.csv');
-                unlink($save_to . 'psz6_product_attribute_combination.csv');
-                unlink($save_to . 'psz6_product_attribute_shop.csv');
-                unlink($save_to . 'psz6_product_lang.csv');
-                unlink($save_to . 'psz6_product_shop.csv');
-                unlink($save_to . 'psz6_manufacturer.csv');
-                unlink($save_to . 'psz6_manufacturer_lang.csv');
-                unlink($save_to . 'psz6_manufacturer_shop.csv');
-                unlink($save_to . 'psz6_supplier.csv');
-                unlink($save_to . 'psz6_supplier_lang.csv');
-                unlink($save_to . 'psz6_supplier_shop.csv');
-                unlink($save_to . 'psz6_stock_mvt.csv');
+                unlink($save_to . 'ps_attribute.csv');
+                unlink($save_to . 'ps_stock_available.csv');
+                unlink($save_to . 'ps_attribute_shop.csv');
+                unlink($save_to . 'ps_attribute_group.csv');
+                unlink($save_to . 'ps_category_shop.csv');
+                unlink($save_to . 'ps_attribute_group_lang.csv');
+                unlink($save_to . 'ps_attribute_group_shop.csv');
+                unlink($save_to . 'ps_category_product.csv');
+                unlink($save_to . 'ps_category_group.csv');
+                unlink($save_to . 'ps_attribute_lang.csv');
+                unlink($save_to . 'ps_category.csv');
+                unlink($save_to . 'ps_category_lang.csv');
+                unlink($save_to . 'ps_feature.csv');
+                unlink($save_to . 'ps_feature_shop.csv');
+                unlink($save_to . 'ps_feature_lang.csv');
+                unlink($save_to . 'ps_feature_product.csv');
+                unlink($save_to . 'ps_feature_value.csv');
+                unlink($save_to . 'ps_feature_value_lang.csv');
+                unlink($save_to . 'ps_image.csv');
+                unlink($save_to . 'ps_image_lang.csv');
+                unlink($save_to . 'ps_image_link.csv');
+                unlink($save_to . 'ps_image_shop.csv');
+                unlink($save_to . 'ps_product.csv');
+                unlink($save_to . 'ps_product_attribute.csv');
+                unlink($save_to . 'ps_product_attribute_combination.csv');
+                unlink($save_to . 'ps_product_attribute_shop.csv');
+                unlink($save_to . 'ps_product_lang.csv');
+                unlink($save_to . 'ps_product_shop.csv');
+                unlink($save_to . 'ps_manufacturer.csv');
+                unlink($save_to . 'ps_manufacturer_lang.csv');
+                unlink($save_to . 'ps_manufacturer_shop.csv');
+                unlink($save_to . 'ps_supplier.csv');
+                unlink($save_to . 'ps_supplier_lang.csv');
+                unlink($save_to . 'ps_supplier_shop.csv');
+                unlink($save_to . 'ps_stock_mvt.csv');
 
 
             }

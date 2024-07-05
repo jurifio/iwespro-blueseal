@@ -216,10 +216,10 @@ ORDER BY `p`.`id`";
 
         foreach ($res_product as $value_product) {
             $p = $value_product['prestaId'];
-            $deletepsz6_image_shop = $db_con->prepare("DELETE FROM psz6_image_shop WHERE id_product=" . $p);
-            $deletepsz6_image_shop->execute();
-            $deletepsz6_image = $db_con->prepare("DELETE FROM psz6_image WHERE id_product=" . $p);
-            $deletepsz6_image->execute();
+            $deletepsz6_image_shop = $db_con->prepare("DELETE FROM ps_image_shop WHERE id_product=" . $p);
+            $deleteps_image_shop->execute();
+            $deleteps_image = $db_con->prepare("DELETE FROM ps_image WHERE id_product=" . $p);
+            $deleteps_image->execute();
 
             $id_supplier = $value_product['id_supplier'];
             $id_manufacturer = $value_product['id_manufacturer'];
@@ -299,10 +299,10 @@ ORDER BY `p`.`id`";
             $state = $value_product['state'];
             $status = $value_product['status'];
             try {
-                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product WHERE id_product=" . $p);
+                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM ps_feature_product WHERE id_product=" . $p);
                 $stmtFeatureProductDelete->execute();
 
-                $stmtInsertProduct = $db_con->prepare("INSERT INTO psz6_product (`id_product`,
+                $stmtInsertProduct = $db_con->prepare("INSERT INTO ps_product (`id_product`,
                                                                           `id_supplier`,
                                                                           `id_manufacturer`,
                                                                           `id_category_default`,
@@ -467,7 +467,7 @@ ORDER BY `p`.`id`";
                 $stmtInsertProduct->execute();
 
 
-                $stmtInsertProductShop = $db_con->prepare("INSERT INTO psz6_product_shop (       
+                $stmtInsertProductShop = $db_con->prepare("INSERT INTO ps_product_shop (       
                                                                           `id_product`,
                                                                           `id_shop`,
                                                                           `id_category_default`,
@@ -586,7 +586,7 @@ ORDER BY `p`.`id`";
                     $product_not_available = "Delivered in 10-15 Days";
                     $valuelang = 1;
 
-                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                               `id_product`,
                                                                `id_shop`,
                                                                `id_lang`,
@@ -648,7 +648,7 @@ ORDER BY `p`.`id`";
                     $valuelang = 1;
 
 
-                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                               `id_product`,
                                                                `id_shop`,
                                                                `id_lang`,
@@ -706,7 +706,7 @@ ORDER BY `p`.`id`";
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
                     $valuelang = 2;
 
-                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                               `id_product`,
                                                                `id_shop`,
                                                                `id_lang`,
@@ -770,7 +770,7 @@ ORDER BY `p`.`id`";
 
                     $valuelang = 2;
 
-                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                               `id_product`,
                                                                `id_shop`,
                                                                `id_lang`,
@@ -828,7 +828,7 @@ ORDER BY `p`.`id`";
                       $product_not_available = "Delivered in 10-15 Days";
                       $valuelang = 3;
 
-                      $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                      $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                                     `id_product`,
                                                                      `id_shop`,
                                                                      `id_lang`,
@@ -873,7 +873,7 @@ ORDER BY `p`.`id`";
 
                       $valuelang = 3;
 
-                      $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                      $stmtLangProduct = $db_con->prepare("INSERT INTO ps_product_lang (
                                                                     `id_product`,
                                                                      `id_shop`,
                                                                      `id_lang`,
@@ -906,16 +906,16 @@ ORDER BY `p`.`id`";
                       $stmtLangProduct->execute();
                   }*/
                 /** ricerca varianti attributi */
-                /**** acquisizione ultimo id attributo tabella psz6_attribute_product
+                /**** acquisizione ultimo id attributo tabella ps_attribute_product
                  */
-                $stmtLastIdProductAttribute = $db_con->prepare("SELECT max(id_product_attribute) AS maxIdProductAttribute FROM psz6_product_attribute");
+                $stmtLastIdProductAttribute = $db_con->prepare("SELECT max(id_product_attribute) AS maxIdProductAttribute FROM ps_product_attribute");
                 $stmtLastIdProductAttribute->execute();
                 $id_product_attribute = $stmtLastIdProductAttribute->fetch();
                 $w = $id_product_attribute[0];
 
                 $res_product_attribute = $productSkuRepo->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                 $lock_default_on = 0;
-                $stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM psz6_stock_available WHERE id_product=" . $p);
+                $stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM ps_stock_available WHERE id_product=" . $p);
                 $stmtdeleteProductAttributeStockAvailable->execute();
                 foreach ($res_product_attribute as $value_product_attribute) {
                     $w = $w + 1;
@@ -941,7 +941,7 @@ ORDER BY `p`.`id`";
                         $available_date = '2018-08-01';
                     }
 
-                    $stmtInsertProductAttribute = $db_con->prepare("INSERT INTO psz6_product_attribute (`id_product_attribute`,
+                    $stmtInsertProductAttribute = $db_con->prepare("INSERT INTO ps_product_attribute (`id_product_attribute`,
                                                                           `id_product`,
                                                                           `reference`,
                                                                           `supplier_reference`,
@@ -1004,7 +1004,7 @@ ORDER BY `p`.`id`";
                     $stmtInsertProductAttribute->execute();
 
 
-                    $stmtInsertProductAttributeCombination = $db_con->prepare("INSERT INTO psz6_product_attribute_combination (
+                    $stmtInsertProductAttributeCombination = $db_con->prepare("INSERT INTO ps_product_attribute_combination (
                                                               `id_attribute`,
                                                               `id_product_attribute`) 
                                                    VALUES ('" . $productSizeId_attribute_combination . "',
@@ -1017,7 +1017,7 @@ ORDER BY `p`.`id`";
                     $stmtInsertProductAttributeCombination->execute();
 
 
-                    $stmtInsertProductAttributeShop = $db_con->prepare("INSERT INTO psz6_product_attribute_shop (
+                    $stmtInsertProductAttributeShop = $db_con->prepare("INSERT INTO ps_product_attribute_shop (
                                                                           `id_product`,
                                                                           `id_product_attribute`,
                                                                           `id_shop`,
@@ -1063,7 +1063,7 @@ ORDER BY `p`.`id`";
                     $stmtInsertProductAttributeShop->execute();
 
 
-                    $stmtInsertProductAttributeStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+                    $stmtInsertProductAttributeStockAvailable = $db_con->prepare("INSERT INTO ps_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -1111,11 +1111,11 @@ ORDER BY `p`.`id`";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_quantity_stock as $res_value_quantity) {
             try {
-                $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    psz6_stock_available WHERE id_product=" . $res_value_quantity['ProductId'] . " AND id_product_attribute=0");
+                $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    ps_stock_available WHERE id_product=" . $res_value_quantity['ProductId'] . " AND id_product_attribute=0");
                 $stmtCheckStockAvailable->execute();
                 $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
                 if ($rows[0]['checkStockExist'] == 0) {
-                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO ps_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -1138,7 +1138,7 @@ ORDER BY `p`.`id`";
                     $stmtInsertProductStockAvailable->execute();
 
                 } else {
-                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO ps_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -1183,7 +1183,7 @@ ORDER BY `p`.`id`";
         $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
             try {
-                $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
+                $stmtFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
                                                    VALUES ('" . $value_feature_product['productDetailLabelId'] . "',
                                                            '" . $value_feature_product['prestaId'] . "',
                                                            '" . $value_feature_product['productDetailId'] . "')");
@@ -1208,9 +1208,9 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $current_productId = 0;
         foreach ($image_product as $image_lang_product) {
             try {
-                $deletepsz6_image_lang = $db_con->prepare("DELETE pil FROM psz6_image_lang  pil  INNER  JOIN
-                psz6_image pi ON  pil.id_image=pi.id_image   WHERE id_product =" . $image_lang_product['productId']);
-                $deletepsz6_image_lang->execute();
+                $deleteps_image_lang = $db_con->prepare("DELETE pil FROM ps_image_lang  pil  INNER  JOIN
+                ps_image pi ON  pil.id_image=pi.id_image   WHERE id_product =" . $image_lang_product['productId']);
+                $deleteps_image_lang->execute();
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
             }
@@ -1229,7 +1229,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 if ($cover != 1) {
                     $cover = 'null';
                 }
-                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_product`,`position`,`cover`) 
+                $stmtInsertImage = $db_con->prepare("INSERT INTO ps_image (`id_product`,`position`,`cover`) 
                                                    VALUES (
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $position . "',
@@ -1243,13 +1243,13 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 $stmtInsertImage->execute();
 
 
-                $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
+                $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM ps_image");
                 $stmtLastIdImageProduct->execute();
                 $id_lastImage = $stmtLastIdImageProduct->fetch();
                 $q = $id_lastImage[0];
                 if ($cover != 1) {
                     $cover = 'null';
-                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO ps_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
                                                            '" . $shopId . "',
@@ -1263,7 +1263,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                     );
                     $stmtInsertImageShop->execute();
                 } else {
-                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO ps_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
                                                            '" . $value_image_product['shopId'] . "',
@@ -1279,7 +1279,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 }
 
 
-                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO ps_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '1',
                                                            '" . $value_image_product['reference'] . "')
@@ -1289,7 +1289,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            `legend` = '" . $value_image_product['reference'] . "'                                                                                                                      
                                                                                                                       ");
                 $stmtInsertImageLang->execute();
-                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO ps_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '2',
                                                            '" . $value_image_product['reference'] . "')
@@ -1299,7 +1299,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
                                                                                                                       ");
                 $stmtInsertImageLang->execute();
-                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO ps_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')
@@ -1366,7 +1366,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 $errorMsg = curl_error($ch);
                 $errorNumber = curl_errno($ch);
                 curl_close($ch);
-                $success = file_get_contents("http://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=" . $q);
+                $success = file_get_contents("https://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=" . $q);
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
             }
