@@ -14,6 +14,7 @@ use bamboo\core\base\CSerialNumber;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
+use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CProductPublicSku;
