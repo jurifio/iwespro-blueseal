@@ -663,7 +663,7 @@ CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.
 		'' as `Product UPC`,
 		'' as `Product ISBN`,
 		'' as `Product MPN`,     
-	'' AS 		`Custom Column 1`,
+	CONCAT(st.sigla, ' ',st.address,',',st.`number`,' ',`st`.`city`,' ',`st`.`phone`) AS 		`Custom Column 1`,
 	'' AS 		`Custom Column 2`,
 	'' AS 		`Custom Column 3`
 
@@ -671,21 +671,27 @@ FROM `Product`   `p`
         JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
         JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
         JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
-        JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+        JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId` )
         JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
    
-        JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
-        JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
-        JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-        JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+        JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`) 
+        JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)= (`phpc`.`productId`, `phpc`.`productVariantId`)
+        JOIN  `ProductDescriptionTranslation` `pdt` ON `p`.`id` = `pdt`.`productId` AND `p`.`productVariantId` = `pdt`.`productVariantId`
+        JOIN `DirtyProduct` `dp` ON `p`.`id` = `dp`.`productId` AND `dp`.`productVariantId` = `p`.`productVariantId`
+        JOIN `DirtySku` `ds` ON `dp`.id=ds.dirtyProductId 
+        JOIN Storehouse st ON ds.shopId=st.shopId AND ds.storeHouseId=st.id 
        
         left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
         JOIN ProductSizeGroup pghps ON p.productSizeGroupId=pghps.id
         JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
 		join ProductSize psz on S2.productSizeId = psz.id
      
-WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1
-GROUP BY S2.productId,S2.productVariantId,S2.productSizeId ";
+WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
+  (if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 1, 2))= 1
+GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId ";
 
 
 
