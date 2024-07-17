@@ -460,11 +460,8 @@ $sqlVariazioni="SELECT p.id as productId,
 		  CONCAT(`S2`.`productId`,'-',S2.productVariantId,'-',S2.productSizeId)  AS `Reference_combination`,
 		  'Colore|Taglia' as `Attribute Names`,
 		  concat(`pv`.`name`,'|',`psz`.`name`) as `Attribute Values`,
-		  '' as `Supplier Reference`,
-		  '' as `Supplier price`,
+		 
 		  S2.ean AS EAN,
-		  
-		
 			(SELECT GROUP_CONCAT(concat('https://cdn.iwes.it/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|') FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
 			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124' limit 1) as Images,
 			
@@ -483,7 +480,7 @@ $sqlVariazioni="SELECT p.id as productId,
 '' AS `Image 6`,
 '' AS `Image 7`,
 '' AS `Image 8`,
-S2.price as `Retail Price Tax Exc`,
+ S2.price as `Retail Price Tax Exc`,
  S2.price as `Retail Price Tax Inc`, 
  S2.salePrice as `Discounted Price Tax Exc`,
  S2.salePrice as `Discounted Price Tax Inc`,
@@ -507,24 +504,16 @@ S2.stockQty as Quantity,
  '' AS 	`Availability date`,
 0 as `Impact on Weight`,
 if(S2.stockQty > 1,'1','0') AS `Default`,
-'' AS ISBN,
-'' AS UPC,
-		
-		'' AS MPN,
 		 '15.000000'                                                                      AS `Width`,
         '25.000000'                                                                      AS `Height`,
         '10.000000'                                                                      AS `Depth`,
         '1.000000'                                                                      AS `Weight`,
-		CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL IT`,
+CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL IT`,
 CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL DE`,	
 CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL GB`,	
 CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL FR`,	
 1 AS 		`Shop ID`,
-	'Cartechini Shop' AS 		`Shop Name`,
-
-	
-		  
-		  concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name IT`,
+	'Cartechini Shop' AS 		`Shop Name`, concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name IT`,
 		   concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name DE`,
 		    concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name GB`,
 			 concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name FR`,
@@ -555,7 +544,6 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
    '' as `Product Discount to`,
     '' as `tax Rule`,
 	 `pb`.`name`    AS `Brand`,
- 1 as Suppliers,
   (SELECT `node`.`slug` FROM `ProductCategory` `node`  WHERE 
 		  `node`.`id`=`phpc`.`productCategoryId`  ) AS 
  `Default Category IT`,
@@ -583,11 +571,7 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
 	 (SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp2`.`name`)  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
 			WHERE phpp2.productId=p.id AND phpp2.productVariantId=p.productVariantId AND pp2.size='1124' AND   `pp2`.`order`=1 limit 1 ) AS `Cover Image_URL`,
 		
-			(SELECT GROUP_CONCAT(concat('https://cdn.iwes.it/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|') FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
-			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124' limit 1) as Images,	  
-			'Catalogo' as Catalogo,
 			'' as Accessories,
-			'' as Carriers,
 	'' AS `Meta Title IT`,
 		'' AS 	`Meta Title DE`,
 		'' AS	`Meta Title GB`,
@@ -602,24 +586,9 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
 		'' AS	`Meta Keywords FR`,	  
  0 as `Unit Price`,
  '' as Unity,
- p.qty as `Quantity`,
   '' as Suppliers,
   '' as `Supplier References`,
  '' as `Supplier Prices`,		
-	(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp22`.`name`)  FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
-			WHERE phpp22.productId=p.id AND phpp22.productVariantId=p.productVariantId AND pp22.size='1124' AND `pp22`.`order`=1 limit 1) AS `Image 1`,				
-			(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp23`.`name`)  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
-			WHERE phpp23.productId=p.id AND phpp23.productVariantId=p.productVariantId AND pp23.size='1124' AND `pp23`.`order`=2 limit 1) AS `Image 2`,
-			
-(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp24`.`name`)  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
-			WHERE phpp24.productId=p.id AND phpp24.productVariantId=p.productVariantId AND `pp24`.`size`='1124' AND `pp24`.`order`=3 limit 1) AS `Image 3`,
-			
-(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp25`.`name`)  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
-			WHERE phpp25.productId=p.id AND phpp25.productVariantId=p.productVariantId AND `pp25`.`size`='1124' AND `pp25`.`order`=4 LIMIT 1) AS `Image 4`,
-''  AS `Image 5`,	
-'' AS `Image 6`,
-'' AS `Image 7`,
-'' AS `Image 8`,	
 (SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp26`.`name`)  FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
 			WHERE phpp26.productId=p.id AND phpp26.productVariantId=p.productVariantId AND pp26.size='1124' AND `pp26`.`order`=1 LIMIT 1) AS	`Image Captions`,
 			'Catalogo' as `Catalogo`,
@@ -688,7 +657,7 @@ WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 1, 2))= 1
-GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId ";
+GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId  ";
 
 
 
