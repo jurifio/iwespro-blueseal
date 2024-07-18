@@ -611,8 +611,9 @@ CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.
 		'' as `Product EAN`,
 		'' as `Product UPC`,
 		'' as `Product ISBN`,
-		'' as `Product MPN`,     
-	CONCAT(st.sigla, ' ',st.address,',',st.`number`,' ',`st`.`city`,' ',`st`.`phone`) AS 		`Custom Column 1`,
+		'' as `Product MPN`,   
+	
+ group_concat(DISTINCT concat(st.sigla, ' ',st.address,',',st.`number`,' ',`st`.`city`,' ',`st`.`phone`,'size:',ds.size, 'qty:',ds.qty)) AS 		`Custom Column 1`,
 	'' AS 		`Custom Column 2`,
 	'' AS 		`Custom Column 3`
 
@@ -639,8 +640,8 @@ WHERE p.qty>0  AND S2.stockQty>0 AND p.productSeasonId>37 AND pdt.langId=1 AND s
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), 1, 2))= 1 AND `ds`.`status`='ok'
-GROUP BY S2.productId,S2.productVariantId,S2.productSizeId,ds.storeHouseId ";
+                                                            FROM ProductHasProductPhoto), 1, 2))= 1 AND `ds`.`status`='ok' AND ds.productSizeId=S2.productSizeId AND ds.shopId=S2.shopId AND ds.qty>0
+GROUP BY S2.productId,S2.productVariantId,S2.productSizeId ";
 
 
 
