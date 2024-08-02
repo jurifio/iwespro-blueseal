@@ -276,9 +276,9 @@ concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Descri
 		'' AS 	`Meta Keywords GB`,
 		'' AS	`Meta Keywords FR`,	 
 CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL IT`,
-CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
-CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
-CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
+			CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
+			CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
+			CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,		
  S2.price as `Retail Price Tax Exc`,
  S2.price as `Retail Price Tax Inc`, 
  S2.salePrice as `Discounted Price Tax Exc`,
@@ -306,7 +306,7 @@ CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.
   '' as `Supplier References`,
  '' as `Supplier Prices`,
   (SELECT `node`.`slug` FROM `ProductCategory` `node`  WHERE 
-		  `node`.`id`=`phpc`.`productCategoryId`  ) AS 
+		  `node`.`id`=`phpc`.`productCategoryId`) AS 
  `Default Category IT`,
 	 (SELECT `node1`.`slug` FROM `ProductCategory` `node1`  WHERE 
 		  `node1`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category DE`,
@@ -382,7 +382,7 @@ CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.
 			'' AS `Attachment Descriptions GB`,
 			'' AS  `Attachment Descriptions FR`,
 			'' AS 	`Pack Items`,	
-				
+			
 			
         'both' as Visibility,
 		1 as `Available for order`,
@@ -443,7 +443,11 @@ FROM `Product`   `p`
        
        
         left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
-WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1
+WHERE p.qty > 0  AND p.productSeasonId > 40 AND pdt.langId=1 AND
+  (if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 1, 2))= 1
 GROUP BY p.id,p.productVariantId 
 ORDER BY `p`.`id`";
         $res_Prodotti = \Monkey::app()->dbAdapter->query($sqlProdotti, [])->fetchAll();
@@ -611,9 +615,9 @@ CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.
 		'' as `Product EAN`,
 		'' as `Product UPC`,
 		'' as `Product ISBN`,
-		'' as `Product MPN`,   
-	
- group_concat(DISTINCT concat(st.sigla, ' ',st.address,',',st.`number`,' ',`st`.`city`,' ',`st`.`phone`,'size:',ds.size, 'qty:',ds.qty)) AS 		`Custom Column 1`,
+		'' as `Product MPN`,     
+	(SELECT  distinct GROUP_CONCAT(`st2`.`sigla`, ' ',`st2`.`address`,' ', `st2`.`number`,' ',`st2`.`city`,' ',`st2`.`phone`,' TG: ', `ds2`.`size`,' QT: ', `ds2`.`qty` SEPARATOR ' | ') from  DirtySku ds2
+	 join Storehouse st2 on ds2.storeHouseId=st2.id AND ds2.shopId=st2.shopid WHERE  ds2.dirtyProductId=dp.id  AND ds2.productSizeId=S2.productSizeId AND `ds2`.`status`='ok' AND ds2.qty > 0 AND ds2.shopId=1) AS 		`Custom Column 1`,
 	'' AS 		`Custom Column 2`,
 	'' AS 		`Custom Column 3`
 
@@ -629,18 +633,18 @@ FROM `Product`   `p`
         JOIN  `ProductDescriptionTranslation` `pdt` ON `p`.`id` = `pdt`.`productId` AND `p`.`productVariantId` = `pdt`.`productVariantId`
         JOIN `DirtyProduct` `dp` ON `p`.`id` = `dp`.`productId` AND `dp`.`productVariantId` = `p`.`productVariantId`
         JOIN `DirtySku` `ds` ON `dp`.id=ds.dirtyProductId 
-        JOIN Storehouse st ON ds.shopId=st.shopId AND ds.storeHouseId=st.id 
+        JOIN `Storehouse` st ON ds.shopId=st.shopId AND ds.storeHouseId=st.id 
        
         left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
         JOIN ProductSizeGroup pghps ON p.productSizeGroupId=pghps.id
         JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
 		join ProductSize psz on S2.productSizeId = psz.id
      
-WHERE p.qty>0  AND S2.stockQty>0 AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
+WHERE p.qty>0  AND S2.stockQty>0 AND p.productSeasonId>40 AND pdt.langId=1 AND s.id=1 AND
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), 1, 2))= 1 AND `ds`.`status`='ok' AND ds.productSizeId=S2.productSizeId AND ds.shopId=S2.shopId AND ds.qty>0
+                                                            FROM ProductHasProductPhoto), 1, 2))= 1 AND `ds`.`status`='ok'
 GROUP BY S2.productId,S2.productVariantId,S2.productSizeId ";
 
 
