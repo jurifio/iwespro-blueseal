@@ -141,7 +141,7 @@ class CProductFastListAjaxController extends AAjaxController
                                                             FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
                          (SELECT COUNT(*) FROM 
                   ProductHasProductPhoto phpp2 join ProductPhoto pph2 on phpp2.productPhotoId=pph2.id where
-                  phpp2.productId=p.id and phpp2.productVariantId=p.productVariantId and ph2.size='1124')                AS nPhotos,
+                  phpp2.productId=p.id and phpp2.productVariantId=p.productVariantId and pph2.size='1124')                AS nPhotos,
                   pc.id                                                                                             AS categoryId,
                   pcg.name                                                                                          AS colorGroup,
                   p.isOnSale                                                                                        AS isOnSale,
@@ -262,7 +262,7 @@ if($allShops) {
             }
             $row['dummyPicture'] = $val->getDummyPictureUrl();
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
-            $row['nPhotos'] = $val->productPhoto->count();
+            $row['nPhotos'] = $val->productPhoto->count()/4;
             $row['dummyVideo'] = ($val->dummyVideo != null) ? 'sì' : 'no';
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
