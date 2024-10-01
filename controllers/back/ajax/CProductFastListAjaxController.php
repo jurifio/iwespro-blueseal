@@ -262,7 +262,7 @@ if($allShops) {
             }
             $row['dummyPicture'] = $val->getDummyPictureUrl();
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
-            $row['nPhotos'] = $val->productPhoto->count()/4;
+            $row['nPhotos'] = number_format(($val->productPhoto->count()/4),0,'','');
             $row['dummyVideo'] = ($val->dummyVideo != null) ? 'sì' : 'no';
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
