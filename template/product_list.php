@@ -333,6 +333,9 @@
                 data-remote="bs.insert.product.prestashop"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="'bs.product.prestashop.syncro"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.sku.insert.ean"
         ></bs-toolbar-button>
     </bs-toolbar-group>

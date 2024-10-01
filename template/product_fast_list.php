@@ -187,6 +187,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ha Foto
                                 </th>
+                                <th data-slug="nPhotos"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero Foto
+                                </th>
                                 <th data-slug="productName"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Nome
@@ -471,6 +475,9 @@
     <bs-toolbar-group data-group-label="Lista Prestashop">
         <bs-toolbar-button
                 data-remote="bs.insert.product.prestashop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="'bs.product.prestashop.syncro"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.sku.insert.ean"
