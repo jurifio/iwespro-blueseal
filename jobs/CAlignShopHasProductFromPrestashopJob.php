@@ -63,7 +63,7 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
             while ($rowCollect = $stmtCollect->fetch(PDO::FETCH_ASSOC)) {
                 $productCode=str_replace(' ', '-',trim($rowCollect['productCode']));
                 $this->report('CAlignShopHasProductFromPrestashopJob', 'product', $rowCollect['productCode'].'-'.$arrayProductId[0].' '.$arrayProductId[1]);
-                $arrayProductId= explode('-', $productCode);
+                $arrayProductId = explode('-', $productCode);
                 if(!empty($arrayProductId)) {
                     $this->report('CAlignShopHasProductFromPrestashopJob', 'product', $rowCollect['productCode'] . '-' . $arrayProductId[0] . ' ' . $arrayProductId[1]);
                     $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $arrayProductId[0], 'productVariantId' => $arrayProductId[1], 'shopId' => $arg]);
