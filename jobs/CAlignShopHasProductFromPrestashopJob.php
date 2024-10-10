@@ -13,6 +13,7 @@ use bamboo\domain\entities\CAggregatorHasProduct;
 use bamboo\domain\entities\CMarketplaceAccountHasProduct;
 use bamboo\domain\entities\CProductBrand;
 use DateTime;
+use PDO;
 
 
 /**
