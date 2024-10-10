@@ -16,7 +16,7 @@ use DateTime;
 
 
 /**
- * Class CMarketplaceHasProductJob
+ * Class CAlignShopHasProductFromPrestashopJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
