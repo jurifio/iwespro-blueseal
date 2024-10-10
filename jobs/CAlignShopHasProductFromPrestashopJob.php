@@ -60,7 +60,7 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
             $stmtCollect = $db_con->prepare('select id_product as prestashopId, reference as productCode from ps_product ');
             $stmtCollect->execute();
             while ($rowCollect = $stmtCollect->fetch(PDO::FETCH_ASSOC)) {
-                $arrayProductId = explode('-', $rowCollect['productCode']);
+                $arrayProductId[]= explode('-', $rowCollect['productCode']);
                 $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $arrayProductId[0], 'productVariantId' => $arrayProductId[1], 'shopId' => $arg]);
                 $shopHasProduct->prestashopId = $rowCollect['prestashopId'];
                 $shopHasProduct->update();
