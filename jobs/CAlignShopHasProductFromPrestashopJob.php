@@ -57,22 +57,20 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
                 $res .= $e->getMessage();
                 $this->report('Connection to Prestashop DB', 'error connection');
             }
-            $arrayProductId=[];
-            $stmtCollect = $db_con->prepare('select id_product as prestashopId, reference as productCode from ps_product ');
+
+            $stmtCollect = $db_con->prepare("select id_product as prestashopId, SUBSTRING_INDEX(reference, '-', 1) as productId,
+       SUBSTRING_INDEX(reference, '-', -1) as productVariantId from ps_product ");
             $stmtCollect->execute();
             while ($rowCollect = $stmtCollect->fetch(PDO::FETCH_ASSOC)) {
-                $productCode=str_replace(' ', '-',trim($rowCollect['productCode']));
-                $this->report('CAlignShopHasProductFromPrestashopJob', 'product', $rowCollect['productCode'].'-'.$arrayProductId[0].' '.$arrayProductId[1]);
-                $arrayProductId = explode('-', $productCode);
-                if(!empty($arrayProductId)) {
+
                     $this->report('CAlignShopHasProductFromPrestashopJob', 'product', $rowCollect['productCode'] . '-' . $arrayProductId[0] . ' ' . $arrayProductId[1]);
-                    $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $arrayProductId[0], 'productVariantId' => $arrayProductId[1], 'shopId' => $arg]);
+                    $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $rowCollect['productId'], 'productVariantId' =>  $rowCollect['productVariantId'], 'shopId' => $arg]);
                     if ($shopHasProduct) {
                         $shopHasProduct->prestashopId = $rowCollect['prestashopId'];
                         $shopHasProduct->update();
                     }
                 }
-            }
+
 
 
             $this->report('CAlignShopHasProductFromPrestashopJob', 'End Work Updating', '');
