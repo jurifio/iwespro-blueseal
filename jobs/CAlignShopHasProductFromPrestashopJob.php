@@ -37,7 +37,7 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
      */
     public function run($args = null)
     {
-        $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+
 
 
         try {
@@ -47,6 +47,7 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
             $db_user = 'cartechini_sco2';
             $db_pass = 'Zora231074!';
             $res = "";
+            $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
             try {
 
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -56,11 +57,13 @@ class CAlignShopHasProductFromPrestashopJob extends ACronJob
                 $res .= $e->getMessage();
                 $this->report('Connection to Prestashop DB', 'error connection');
             }
-
+            $arrayProductId=[];
             $stmtCollect = $db_con->prepare('select id_product as prestashopId, reference as productCode from ps_product ');
             $stmtCollect->execute();
             while ($rowCollect = $stmtCollect->fetch(PDO::FETCH_ASSOC)) {
-                $arrayProductId[]= explode('-', $rowCollect['productCode']);
+                $productCode=str_replace(' ', '-',trim($rowCollect['productCode']));
+                $arrayProductId= explode('-', $productCode);
+                $this->report('CAlignShopHasProductFromPrestashopJob', 'product', $rowCollect['productCode'].'-'.$arrayProductId[0].' '.$arrayProductId[1]);
                 $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $arrayProductId[0], 'productVariantId' => $arrayProductId[1], 'shopId' => $arg]);
                 if($shopHasProduct) {
                     $shopHasProduct->prestashopId = $rowCollect['prestashopId'];
