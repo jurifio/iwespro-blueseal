@@ -165,13 +165,15 @@ class CProductFastListAjaxController extends AAjaxController
                    FROM ProductSku
                    WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
                    (SELECT ifnull(group_concat(distinct ma.name), '')
+                           
                    FROM Marketplace m
                      JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                      JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
                    WHERE mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
                          
-                if(isnull(prHp.productId), 'no', 'si') inPrestashop
+                if(isnull(prHp.productId), 'no', 'si') inPrestashop,
+                sp.prestashopId as prestashopId
                 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
@@ -288,6 +290,7 @@ if($allShops) {
             }
             $row['status'] = $val->productStatus->name . ' ' . $onlyCatalogue;
             $row['productPriority'] = $val->sortingPriorityId;
+            $row['prestashopId']=$val->shopHasProduct->prestashopId;
 
             $qty = 0;
             $shopz = [];

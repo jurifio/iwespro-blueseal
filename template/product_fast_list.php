@@ -293,6 +293,10 @@
                                     data-searchable="true"
                                     data-orderable="false">Prodotto
                                 </th>
+                                <th data-slug="prestashopId"
+                                    data-searchable="true"
+                                    data-orderable="false">ID Prestashop
+                                </th>
 
 
                             </tr>

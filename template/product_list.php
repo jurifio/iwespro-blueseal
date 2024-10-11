@@ -183,6 +183,10 @@
                                     data-searchable="true"
                                     data-orderable="true">Prestashop
                                 </th>
+                                <th data-slug="prestashopId"
+                                    data-searchable="true"
+                                    data-orderable="false">ID Prestashop
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

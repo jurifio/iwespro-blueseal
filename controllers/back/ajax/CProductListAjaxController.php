@@ -80,7 +80,8 @@ class CProductListAjaxController extends AAjaxController
                          
                 if(isnull(prHp.productId), 'no', 'si') inPrestashop
                 ,
-                (SELECT COUNT(*) FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId=p.id AND phpp.productVariantId=p.productVariantId and phpo.size='1124') AS CountPhoto
+                (SELECT COUNT(*) FROM ProductPhoto phpo JOIN ProductHasProductPhoto phpp ON phpo.id=phpp.productPhotoId WHERE phpp.productId=p.id AND phpp.productVariantId=p.productVariantId and phpo.size='1124') AS CountPhoto,
+                 sp.prestashopId as prestashopId
 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
@@ -143,6 +144,7 @@ FROM Product p
             $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
             $val->productStatus->isReady == 1 ? 'arancione' : ""
             );
+            $row['prestashopId']=$val->shopHasProduct->prestashopId;
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
