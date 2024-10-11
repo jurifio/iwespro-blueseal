@@ -144,7 +144,7 @@ FROM Product p
             $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
             $val->productStatus->isReady == 1 ? 'arancione' : ""
             );
-            $row['prestashopId']=$val->shopHasProduct->prestashopId;
+
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
@@ -213,7 +213,7 @@ FROM Product p
             //$row['mup'] = '<span class="small">';
             //$row['mup'] .= implode('<br />', $mup);
             //$row['mup'] .= '</span>';
-
+            $row['prestashopId']=[];
             $row['friendPrices'] = [];
             $row['friendValues'] = [];
             $row['friendSalePrices'] = [];
@@ -221,11 +221,13 @@ FROM Product p
                 $row['friendPrices'][] = $shp->price;
                 $row['friendValues'][] = $shp->value;
                 $row['friendSalePrices'][] = $shp->salePrice;
+                $row['prestashopId'][]=$shp->prestashopId;
             }
 
             $row['friendPrices'] = implode('<br />',$row['friendPrices']);
             $row['friendValues'] = implode('<br />',$row['friendValues']);
             $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
+            $row['prestashopId']=implode('<br />',$row['prestashopId']);
 
             $row['colorNameManufacturer'] = $val->productVariant->description;
 

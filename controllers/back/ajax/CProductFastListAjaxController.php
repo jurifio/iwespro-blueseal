@@ -290,7 +290,7 @@ if($allShops) {
             }
             $row['status'] = $val->productStatus->name . ' ' . $onlyCatalogue;
             $row['productPriority'] = $val->sortingPriorityId;
-            $row['prestashopId']=$val->shopHasProduct->prestashopId;
+
 
             $qty = 0;
             $shopz = [];
@@ -329,6 +329,7 @@ if($allShops) {
             //$row['mup'] .= implode('<br />', $mup);
             //$row['mup'] .= '</span>';
 
+            $row['prestashopId']=[];
             $row['friendPrices'] = [];
             $row['friendValues'] = [];
             $row['friendSalePrices'] = [];
@@ -336,11 +337,13 @@ if($allShops) {
                 $row['friendPrices'][] = $shp->price;
                 $row['friendValues'][] = $shp->value;
                 $row['friendSalePrices'][] = $shp->salePrice;
+                $row['prestashopId'][]=$shp->prestashopId;
             }
 
             $row['friendPrices'] = implode('<br />',$row['friendPrices']);
             $row['friendValues'] = implode('<br />',$row['friendValues']);
             $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
+            $row['prestashopId']=implode('<br />',$row['prestashopId']);
 
             $row['colorNameManufacturer'] = ($val->productVariant->description=='')? $val->productVariant->name : $val->productVariant->description;
 
