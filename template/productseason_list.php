@@ -74,15 +74,38 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Stagioni">
         <bs-toolbar-button
-                    data-tag="a"
-                    data-icon="fa-file-o fa-plus"
-                    data-permission="allShops"
-                    data-class="btn btn-default"
-                    data-rel="tooltip"
-                    data-title="Aggiungi una nuova stagione manuale"
-                    data-placement="bottom"
-                    data-href="/blueseal/prodotti/season-aggiungi"
-            ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/user/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.action.add.productseason"
+                data-title="Aggiungi"
+                data-placement="bottom"
+
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-pencil"
+                data-permission="/admin/user/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.action.modify.productseason"
+                data-title="Modifica"
+                data-placement="bottom"
+
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eraser"
+                data-permission="/admin/user/delete"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.action.delete.proudctseason"
+                data-title="cancella"
+                data-placement="bottom"
+
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
