@@ -109,7 +109,7 @@ class CDictionaryGroupSizeEditAjaxController extends AAjaxController
     public
     function put()
     {
-        $sizeId = $this->app->router->request()->getRequestData('sizeId');
+        $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
         $id = $this->app->router->request()->getRequestData('id');
         $names = explode('_', $id);
         $shopId = $names[0];
@@ -117,9 +117,9 @@ class CDictionaryGroupSizeEditAjaxController extends AAjaxController
 
         \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productSize = \Monkey::app()->repoFactory->create('DictionarySize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productSize = \Monkey::app()->repoFactory->create('DictionaryGroupSize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
-            $productSize->productSizeId = $sizeId;
+            $productSize->productSizeGroupId = $productSizeGroupId;
             $productSize->update();
 
             \Monkey::app()->repoFactory->commit();
