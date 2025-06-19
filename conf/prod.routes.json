@@ -4811,6 +4811,35 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/importatori/dizionari/gruppitaglie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryGroupSizeListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/gruppitaglie/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryGroupSizeEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
