@@ -85,7 +85,7 @@ GROUP BY `d1`.`shopId`";
                                                 WHERE d1.shopId = ?", [$shop->id])->fetchAll();
             $res2 = $this->app->dbAdapter->query("SELECT count(0) AS mancanti
                                                 FROM DictionaryGroupSize d1
-                                                WHERE (d1.shopId = ? AND isnull(d1.productSizeId))", [$shop->id])->fetchAll();
+                                                WHERE (d1.shopId = ? AND isnull(d1.productSizeGroupId))", [$shop->id])->fetchAll();
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$shop->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
