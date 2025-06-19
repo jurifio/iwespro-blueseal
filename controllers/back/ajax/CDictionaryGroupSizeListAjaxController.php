@@ -5,7 +5,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 
 /**
- * Class CDictionarySizeListAjaxController
+ * Class CDictionaryGroupSizeListAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
  * @author Iwes  International Web Ecommerce ServicesTeam <juri@iwes.it>, ${DATE}
@@ -50,7 +50,7 @@ class CDictionaryGroupSizeListAjaxController extends AAjaxController
 
     public function get()
     {
-        $editShopLink = $this->urls['base']."importatori/dizionari/gruppitaglie/modifica";
+        $editShopLinkSize = $this->urls['base']."importatori/dizionari/gruppitaglie/modifica";
 
         $sql = "SELECT
   `d1`.`shopId`                                                              AS `id`,
@@ -89,7 +89,7 @@ GROUP BY `d1`.`shopId`";
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$shop->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['shopId'] = '<a data-toggle="tooltip" title="traduci Gruppo taglia" data-placement="right" href="'.$editShopLink.'/'.$shop->id.'" >'.$shop->title.'</a>';
+            $response['data'][$i]['shopId'] = '<a data-toggle="tooltip" title="traduci Gruppo taglia" data-placement="right" href="'.$editShopLinkSize.'/'.$shop->id.'" >'.$shop->title.'</a>';
             $response['data'][$i]['count'] = $res[0]['count1'];
             $response['data'][$i]['mancanti'] = $res2[0]['mancanti'];
             $response['data'][$i]['id'] = $shop->id;
