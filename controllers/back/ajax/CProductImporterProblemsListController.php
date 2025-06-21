@@ -5,6 +5,8 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CShopHasProduct;
+use bamboo\domain\entities\CProductSizeGroup;
+use bamboo\domain\entities\CProductSizeMacroGroup;
 use DateTime;
 use Exception;
 use Monkey;
@@ -88,7 +90,17 @@ class CProductImporterProblemsListController extends AAjaxController
             $row["shop"] = $shopHasProduct->shop->name;
             $row["nshop"] = $shopHasProduct->product->shopHasProduct->count();
             $row["code"] = $shopHasProduct->product->printCpf();
-            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->productSizeMacroGroup->name)[0])[0];
+            $productSizeGroupId=$shopHasProduct->productSizeGroupId;
+            $productSizeGroup=\Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneBy(['id'=>$shopHasProduct->productSizeGroupId]);
+            if($productSizeGroup) {
+                $ProductSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['id' => $productSizeGroup->productSizeMacroGroupId]);
+
+
+                $macroname = explode("_", explode("-", $ProductSizeMacroGroup->name)[0])[0];
+            }
+            else{
+                $macroname='';
+            }
             $row["sizeGroup"] = '<span class="small">' . $shopHasProduct->productSizeGroup->locale . '-' . $macroname . '</span>';
             $row["dummyPicture"] = '<img width="80" src="' . $shopHasProduct->product->getDummyPictureUrl() . '">';
             $row["brand"] = $shopHasProduct->product->productBrand->name;

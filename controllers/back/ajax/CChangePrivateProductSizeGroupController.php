@@ -25,18 +25,9 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
 {
     public function get()
     {
-        $products = \Monkey::app()->router->request()->getRequestData('products');
-        if ($products) {
-            $productRepo = \Monkey::app()->repoFactory->create('Product');
-            $shopHasProducts = [];
-            foreach ($products as $productIds) {
-                foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
-                    $shopHasProducts[] = $shopHasProduct->printId();
-                };
-            }
-        } else {
+
             $shopHasProducts = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
-        }
+
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
 
         $points = [];
