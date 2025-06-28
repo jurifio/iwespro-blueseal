@@ -2415,8 +2415,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
 
         /*****  trasferimento ftp ******/
-        $ftp_server = "84.247.137.139";
-        $ftp_user_name = "cartechini";
+        $ftp_server = "5.189.152.89";
+        $ftp_user_name = "export@cartechinishop.com";
         $ftp_user_pass = "Scoponi2024!";
         $remote_file = "/home/cartechini/public_html/import/";
 
