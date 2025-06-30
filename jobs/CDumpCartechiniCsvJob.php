@@ -1,0 +1,342 @@
+<?php
+
+namespace bamboo\blueseal\jobs;
+
+use bamboo\domain\entities\CCartAbandonedEmailSend;
+use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
+use bamboo\domain\entities\COrder;
+use bamboo\domain\entities\CCart;
+use bamboo\domain\entities\CCartAbandonedEmailParam;
+use bamboo\domain\entities\CCouponType;
+use bamboo\domain\entities\CCoupon;
+use bamboo\domain\entities\CCartLine;
+use bamboo\core\base\CSerialNumber;
+use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\repositories\CEmailRepo;
+
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CProductPublicSku;
+use bamboo\domain\entities\CProduct;
+use bamboo\core\events\AEventListener;
+
+
+/**
+ * Class CCartAbandonedSendEmail
+ * @package bamboo\blueseal\jobs
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 10/07/2018
+ * @since 1.0
+ */
+class CDumpCartechiniCsvJob extends ACronJob
+{
+    /**
+     * @param null $args
+     * @throws \bamboo\core\exceptions\BambooDBALException
+     */
+    public function run($args = null)
+    {
+        ini_set('memory_limit', '2048M');
+if (ENV=='dev'){
+    $host = 'localhost';
+    $db   = 'pickyshop_dev';
+    $user = 'root';
+    $pass = 'geh44fed';
+    $charset = 'utf8_general_ci';
+}else{
+    $host = 'localhost';
+    $db   = 'pickyshopfront';
+    $user = 'pickyshop4';
+    $pass = 'rrtYvg6W!';
+    $charset = 'utf8mb4';
+}
+
+
+// --- CONFIGURAZIONE FILE ---
+        $csvFileName = 'prodotti.csv';
+if (ENV=='dev') {
+    $tempPath = '/media/sf_sites/iwespro/temp-prestashop/' . $csvFileName;
+}else{
+    $tempPath = '/home/iwespro/public_html/temp-prestashop/' . $csvFileName;
+}
+// --- CONFIGURAZIONE SFTP ---
+        $remoteHost = '5.189.152.89';
+        $remoteUser = 'root';
+        $remotePass = 'aqV^bJ7?E.Np';
+        $remotePath = '/home/cartechini/public_html/import' . $csvFileName;
+
+// --- CONNESSIONE DATABASE ---
+        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+        $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+
+        try {
+            $pdo = new PDO($dsn, $user, $pass, $options);
+
+            // --- QUERY ---
+            $stmt = $pdo->query("SELECT p.id as productId,
+		 concat(`p`.`id`,'-',p.productVariantId)  AS `Reference`,
+		  concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name IT`,
+		   concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name DE`,
+		    concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name GB`,
+			 concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name FR`,
+			 1 AS active,
+			  concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description IT`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description DE`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description GB`,	
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description FR`,	
+ concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description IT`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description DE`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description GB`,	
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description FR`,	
+	'' AS `Meta Title IT`,
+		'' AS 	`Meta Title DE`,
+		'' AS	`Meta Title GB`,
+		'' AS	`Meta Title FR`,
+		'' AS	`Meta Description IT`,
+		'' AS	`Meta Description DE`,
+		'' AS	`Meta Description GB`,
+		'' AS	`Meta Description FR`,
+		'' AS	`Meta Keywords IT`,
+		'' AS `Meta Keywords DE`,
+		'' AS 	`Meta Keywords GB`,
+		'' AS	`Meta Keywords FR`,	 
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL IT`,
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
+ S2.price as `Retail Price Tax Exc`,
+ S2.price as `Retail Price Tax Inc`, 
+ S2.salePrice as `Discounted Price Tax Exc`,
+ S2.salePrice as `Discounted Price Tax Inc`,
+ '' AS `Discounted Price Tax Exc If Discount Exists`,
+		'' AS 	`Discounted Price Tax Inc If Discount Exists`,
+		'' AS 	`Discount Percent`,
+		'' AS 	`Discount Amount`,
+		'' AS 	`Discount Base Price`,
+		'' AS 	`Discount Starting Unit`,
+		'' AS 	`Discount from`,
+		'' AS 	`Discount to`,
+ '' AS `Cost price (Wholesale price)`,
+ 0 as `Unit Price`,
+ '' as Unity,
+ '' as `tax Rule`,
+ p.qty as `Quantity`,
+ 'in Stock' as `Stock Availability`,
+ 1 as `Minimal Quantity`,
+ '' as `Stock Location`,
+ 0 as `Low Stock Level`,
+ '' as `Email Alert on Low Stock`,
+  `pb`.`name`    AS `Brand (Manufacturer)`,
+  '' as Suppliers,
+  '' as `Supplier References`,
+ '' as `Supplier Prices`,
+  (SELECT `node`.`slug` FROM `ProductCategory` `node`  WHERE 
+		  `node`.`id`=`phpc`.`productCategoryId`  ) AS 
+ `Default Category IT`,
+	 (SELECT `node1`.`slug` FROM `ProductCategory` `node1`  WHERE 
+		  `node1`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category DE`,
+	 (SELECT `node2`.`slug` FROM `ProductCategory` `node2`  WHERE 
+		  `node2`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category GB`,
+ (SELECT `node3`.`slug` FROM `ProductCategory` `node3`  WHERE 
+		  `node3`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category FR`,
+	(SELECT CONCAT(GROUP_CONCAT(`parent10`.`slug` SEPARATOR ' | '),' | ',`node10`.`slug`) FROM `ProductCategory` AS `node10`,
+        `ProductCategory` AS `parent10` WHERE 
+		  `node10`.`lft` BETWEEN `parent10`.`lft` AND parent10.rght  AND node10.id!=parent10.id AND `node10`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories IT`,
+		  
+	(SELECT CONCAT(GROUP_CONCAT(`parent20`.`slug` SEPARATOR ' | '),' | ',`node20`.`slug`) FROM `ProductCategory` AS `node20`,
+        `ProductCategory` AS `parent20` WHERE 
+		  `node20`.`lft` BETWEEN `parent20`.`lft` AND parent20.rght  AND node20.id!=parent20.id AND `node20`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories DE`,
+		  
+	(SELECT CONCAT(GROUP_CONCAT(`parent30`.`slug` SEPARATOR ' | '),' | ',`node30`.`slug`) FROM `ProductCategory` AS `node30`,
+        `ProductCategory` AS `parent30` WHERE 
+		  `node30`.`lft` BETWEEN `parent30`.`lft` AND parent30.rght  AND node30.id!=parent30.id AND `node30`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories GB`,
+		  
+(SELECT CONCAT(GROUP_CONCAT(`parent40`.`slug` SEPARATOR ' | '),' | ',`node40`.`slug`) FROM `ProductCategory` AS `node40`,
+        `ProductCategory` AS `parent40` WHERE 
+		  `node40`.`lft` BETWEEN `parent40`.`lft` AND parent40.rght  AND node40.id!=parent40.id AND `node40`.`id`=`phpc`.`productCategoryId`  ) AS 		`Categories FR`,
+		  
+ (SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp2`.`name`)  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
+			WHERE phpp2.productId=p.id AND phpp2.productVariantId=p.productVariantId AND pp2.size='1124' AND   `pp2`.`order`=1 LIMIT 1) AS `image_URL`,
+		
+			(SELECT GROUP_CONCAT(concat('https://cdn.iwes.it/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|') FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
+			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124') as Images,
+			
+	(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp22`.`name`)  FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
+			WHERE phpp22.productId=p.id AND phpp22.productVariantId=p.productVariantId AND pp22.size='1124' AND `pp22`.`order`=1 LIMIT 1) AS `Image 1`,
+				
+			(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp23`.`name`)  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
+			WHERE phpp23.productId=p.id AND phpp23.productVariantId=p.productVariantId AND pp23.size='1124' AND `pp23`.`order`=2 LIMIT 1 ) AS `Image 2`,
+			
+(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp24`.`name`)  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
+			WHERE phpp24.productId=p.id AND phpp24.productVariantId=p.productVariantId AND `pp24`.`size`='1124' AND `pp24`.`order`=3 LIMIT 1) AS `Image 3`,
+			
+(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp25`.`name`)  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
+			WHERE phpp25.productId=p.id AND phpp25.productVariantId=p.productVariantId AND `pp25`.`size`='1124' AND `pp25`.`order`=4 LIMIT 1) AS `Image 4`,
+''  AS `Image 5`,	
+'' AS `Image 6`,
+'' AS `Image 7`,
+'' AS `Image 8`,	
+(SELECT concat('https://cdn.iwes.it/',pb.slug,'/',`pp26`.`name`)  FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
+			WHERE phpp26.productId=p.id AND phpp26.productVariantId=p.productVariantId AND pp26.size='1124' AND `pp26`.`order`=1 LIMIT 1) AS	`Image Captions`,
+			'Catalogo' as `Catalogo`,
+			'' as `Related products (Accessories)`,
+	'' as Carriers,
+	(SELECT group_concat(DISTINCT t1.name SEPARATOR '|')
+                   FROM ProductHasTag pht1
+                     JOIN TagTranslation t1 ON pht1.tagId = t1.tagId
+                   WHERE langId = 1 AND pht1.productId = p.id AND pht1.productVariantId = p.productVariantId)   AS `Tags IT`,
+				   (SELECT group_concat(DISTINCT t2.name SEPARATOR '|')
+                   FROM ProductHasTag pht2
+                     JOIN TagTranslation t2 ON pht2.tagId = t2.tagId
+                   WHERE langId = 3 AND pht2.productId = p.id AND pht2.productVariantId = p.productVariantId)   AS `Tags DE`,
+				   (SELECT group_concat(DISTINCT t3.name SEPARATOR '|')
+                   FROM ProductHasTag pht3
+                     JOIN TagTranslation t3 ON pht3.tagId = t3.tagId
+                   WHERE langId = 2 AND pht3.productId = p.id AND pht3.productVariantId = p.productVariantId)   AS `Tags GB`,
+				   (SELECT group_concat(DISTINCT t4.name SEPARATOR '|')
+                   FROM ProductHasTag pht4
+                     JOIN TagTranslation t4 ON pht4.tagId = t4.tagId
+                   WHERE langId = 2 AND pht4.productId = p.id AND pht4.productVariantId = p.productVariantId)   AS `Tags FR`,
+				   '' AS Attachments,
+				 '' AS   	`Attachment Names IT`,
+			'' AS  `Attachment Names DE`,
+			 '' AS `Attachment Names GB`,
+			'' AS  `Attachment Names FR`,
+			'' AS `Attachment Descriptions IT`,
+			'' AS `Attachment Descriptions DE`,
+			'' AS `Attachment Descriptions GB`,
+			'' AS  `Attachment Descriptions FR`,
+			'' AS 	`Pack Items`,	
+			CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL IT`,
+CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
+CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
+CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
+			
+        'both' as Visibility,
+		1 as `Available for order`,
+		1 as `Show Price`,
+		0 as `On Sale`,
+		'new' as `Condition`,
+		'' as EAN,
+		'' AS UPC,
+		'' AS ISBN,
+		'' AS MPN,
+		 '15.000000'                                                                      AS `Width`,
+        '25.000000'                                                                      AS `Height`,
+        '10.000000'                                                                      AS `Depth`,
+        '1.000000'                                                                      AS `Weight`,
+		2 AS `Action when out of stock`,
+		'' AS 	`Label when in stock`,
+		'' AS 	`Label when backorder`,
+		'' AS 	`Availability date`,
+		1 AS `Delivery time`,
+		'' AS 	`Delivery time if in-stock IT`,
+		'' AS 	`Delivery time if in-stock DE`,
+		'' AS 	`Delivery time if in-stock GB`,
+		'' AS 	`Delivery time if in-stock FR`,
+		'' AS 	`Delivery time if out-of-stock IT`,
+	'' AS 		`Delivery time if out-of-stock DE`,
+	'' AS 		`Delivery time if out-of-stock GB`,
+	'' AS 		`Delivery time if out-of-stock FR`,
+	1 AS 		`Shop ID`,
+	'Cartechini Shop' AS 		`Shop Name`,
+	'' AS 		`Custom Column 1`,
+	'' AS 		`Custom Column 2`,
+	'' AS 		`Custom Column 3`
+		
+		
+   
+        
+        
+      
+
+
+FROM `Product`   `p`
+        JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
+        JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+        JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+        JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+        JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
+        JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
+        JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
+        JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
+        JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+        JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+        JOIN ProductHasProductPhoto phsp ON p.id=phsp.productId AND p.productVariantId=phsp.productVariantId
+        JOIN ProductPhoto ph ON phsp.productPhotoId=ph.id
+        left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+        JOIN ProductSizeGroup pghps ON p.productSizeGroupId=pghps.id
+        JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
+        
+       
+       
+        left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
+WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1 AND
+  (if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 1, 2))= 1
+GROUP BY p.id,p.productVariantId 
+ORDER BY `p`.`id`");
+
+            // --- CREAZIONE FILE CSV ---
+            $fp = fopen($tempPath, 'w');
+
+            // Header
+            $headers = array_keys($stmt->fetch(PDO::FETCH_ASSOC));
+            fputcsv($fp, $headers);
+
+            // Ritorna all'inizio per leggere tutti i dati
+            $stmt->execute(); // re-run la query
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                fputcsv($fp, $row);
+            }
+
+            fclose($fp);
+
+            echo "✅ CSV generato con successo: $csvFileName\n";
+
+            // --- INVIO FILE VIA SFTP ---
+            $connection = ssh2_connect($remoteHost, 22);
+            if (!$connection) {
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Connessione SSH fallita",'line 306','');
+            }
+
+            if (!ssh2_auth_password($connection, $remoteUser, $remotePass)) {
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Autenticazione SSH fallita","line 312",'');
+            }
+
+            $sftp = ssh2_sftp($connection);
+            $remoteStream = @fopen("ssh2.sftp://$sftp$remotePath", 'w');
+
+            if (!$remoteStream) {
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Impossibile aprire il file remoto per scrittura","line 319",'');
+            }
+
+            $localStream = @fopen($tempPath, 'r');
+            if (!$localStream) {
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Impossibile aprire il file CSV locale","line 324","");           }
+
+            while (!feof($localStream)) {
+                fwrite($remoteStream, fread($localStream, 8192));
+            }
+
+            fclose($localStream);
+            fclose($remoteStream);
+
+            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","success","✅ File caricato correttamente su $remoteHost\n",'file prodotti caricato','');
+
+        } catch (Exception $e) {
+            echo "⚠️ Errore: " . $e->getMessage();
+        }
+
+           }
+
+
+}
