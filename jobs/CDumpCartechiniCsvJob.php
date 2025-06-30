@@ -18,6 +18,9 @@ use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProduct;
 use bamboo\core\events\AEventListener;
+use PDO;
+use DateTime;
+
 
 
 /**
@@ -41,7 +44,7 @@ class CDumpCartechiniCsvJob extends ACronJob
      */
     public function run($args = null)
     {
-        ini_set('memory_limit', '2048M');
+
 if (ENV=='dev'){
     $host = 'localhost';
     $db   = 'pickyshop_dev';
