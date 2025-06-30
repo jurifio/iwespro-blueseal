@@ -47,13 +47,16 @@ class CUpdateGroupsizeJob extends ACronJob
             $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
 
             $sql = "select d.id as dirtyProductId,
-       d.productId as productId,
-       d.productVariantId as productVariantId,
-       d.shopId as shopId,
+       shp.productId as productId,
+       shp.productVariantId as productVariantId,
+       shp.shopId as shopId,
        dgs.productSizeGroupId as productSizeGroupId
-         from DirtyProduct  d  join DirtyProductExtend dpe on d.id = dpe.dirtyProductId 
+       
+         from ShopHasProduct shp 
+			join DirtyProduct  d ON shp.shopId=d.shopId AND shp.productId=d.productId AND shp.productVariantId=d.productVariantId 
+			 join DirtyProductExtend dpe on d.id = dpe.dirtyProductId 
          join DictionaryGroupSize dgs on dpe.sizeGroup=dgs.term 
-         where d.dirtyStatus!='k'  and d.shopId=dgs.shopId";
+         where  d.fullMatch=0  and shp.shopId=dgs.shopId and dpe.sizeGroup is not null group by d.id";
             $res = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
             foreach ($res as $result) {
