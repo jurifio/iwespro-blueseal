@@ -42,11 +42,33 @@ class CUpdateGroupsizeJob extends ACronJob
      */
     public function run($args = null)
     {
-        ini_set('memory_limit', '2048M');
-        set_time_limit(0);
+        try {
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
+            $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
 
- $sql = 'select d.id  as ';
+            $sql = "select d.id as dirtyProductId,
+       d.productId as productId,
+       d.productVariantId as productVariantId,
+       d.shopId as shopId,
+       dgs.productSizeGroupId as productSizeGroupId
+         from DirtyProduct  d  join DirtyProductExtend dpe on d.id = dpe.dirtyProductId 
+         join DictionaryGroupSize dgs on dpe.sizeGroup=dgs.term 
+         where d.dirtyStatus!='k'  and d.shopId=dgs.shopId";
+            $res = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
+            foreach ($res as $result) {
+                $product = $productRepo->findOneBy(['productId' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
+                $product->productSizeGroupId = $result['productSizeGroupId'];
+                $product->update();
+                $shopHasProduct = $shopHasProductRepo->findOneBy(['shopId' => $result['shopId'], 'productId' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
+                $shopHasProduct->productSizeGroupId = $result['productSizeGroupId'];
+                $shopHasProduct->update();
+
+            }
+
+        }catch (\Throwable $e){
+            \Monkey::app()->applicationLog("CUpdateGroupSizeJob","error","verificare",$e->getLine().'-'.$e->getMessage(),"");
+        }
 
 
 
