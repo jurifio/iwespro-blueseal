@@ -60,7 +60,7 @@ class CUpdateGroupsizeJob extends ACronJob
             $res = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
             foreach ($res as $result) {
-                $product = $productRepo->findOneBy(['productId' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
+                $product = $productRepo->findOneBy(['id' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
                 if($product) {
                     $product->productSizeGroupId = $result['productSizeGroupId'];
                     $product->update();
