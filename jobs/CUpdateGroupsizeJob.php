@@ -55,17 +55,22 @@ class CUpdateGroupsizeJob extends ACronJob
          from ShopHasProduct shp 
 			join DirtyProduct  d ON shp.shopId=d.shopId AND shp.productId=d.productId AND shp.productVariantId=d.productVariantId 
 			 join DirtyProductExtend dpe on d.id = dpe.dirtyProductId 
-         join DictionaryGroupSize dgs on dpe.sizeGroup=dgs.term 
+         join DictionaryGroupSize dgs on dpe.sizeGroup=dgs.term and dpe.shopId=dgs.shopId
          where  d.fullMatch=0  and shp.shopId=dgs.shopId and dpe.sizeGroup is not null group by d.id";
             $res = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
             foreach ($res as $result) {
                 $product = $productRepo->findOneBy(['productId' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
-                $product->productSizeGroupId = $result['productSizeGroupId'];
-                $product->update();
+                if($product) {
+                    $product->productSizeGroupId = $result['productSizeGroupId'];
+                    $product->update();
+                }
+
                 $shopHasProduct = $shopHasProductRepo->findOneBy(['shopId' => $result['shopId'], 'productId' => $result['productId'], 'productVariantId' => $result['productVariantId']]);
-                $shopHasProduct->productSizeGroupId = $result['productSizeGroupId'];
-                $shopHasProduct->update();
+                if($shopHasProduct) {
+                    $shopHasProduct->productSizeGroupId = $result['productSizeGroupId'];
+                    $shopHasProduct->update();
+                }
 
             }
 
@@ -76,7 +81,7 @@ class CUpdateGroupsizeJob extends ACronJob
 
 
 
-        return $res;
+
     }
 
 
