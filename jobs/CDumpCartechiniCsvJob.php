@@ -72,7 +72,7 @@ if (ENV=='dev') {
         $ftpHost = '5.189.152.89';
         $ftpUser = 'export@cartechinishop.com';
         $ftpPass = 'Scoponi2024!';
-        $ftpremotePath = '/' . $csvFileName;
+        $ftpRemotePath = '/' . $csvFileName;
 
 // --- CONNESSIONE DATABASE ---
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -322,9 +322,7 @@ ORDER BY `p`.`id`");
             if (!ftp_put($ftpConn, $ftpRemotePath, $tempPath, FTP_BINARY)) {
                 \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Impossibile aprire il file remoto per scrittura","line 319",'');
             }
-            if (!ftp_put($ftpConn, $ftpRemotePath, $tempPath, FTP_BINARY)) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","error",'errore connessione',"","");
-            }
+
 
             ftp_close($ftpConn);
 
