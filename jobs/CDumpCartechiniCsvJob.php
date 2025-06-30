@@ -69,10 +69,10 @@ if (ENV=='dev') {
     $tempPath = '/home/iwespro/public_html/temp-prestashop/' . $csvFileName;
 }
 // --- CONFIGURAZIONE SFTP ---
-        $remoteHost = '5.189.152.89';
-        $remoteUser = 'root';
-        $remotePass = 'aqV^bJ7?E.Np';
-        $remotePath = '/home/cartechini/public_html/import' . $csvFileName;
+        $ftpHost = '5.189.152.89';
+        $ftpUser = 'export@cartechinishop.com';
+        $ftpPass = 'Scoponi2024!';
+        $ftpremotePath = '/' . $csvFileName;
 
 // --- CONNESSIONE DATABASE ---
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -307,34 +307,29 @@ ORDER BY `p`.`id`");
             \Monkey::app()->applicationLog( "CDumpCartechiniCsvJob","success","CSV generato con successo: ",$csvFileName,"");
 
             // --- INVIO FILE VIA SFTP ---
-            $connection = ssh2_connect($remoteHost, 22);
-            if (!$connection) {
+            $ftpConn = ftp_connect($ftpHost);
+            if (!$ftpConn) {
                 \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Connessione SSH fallita",'line 306','');
             }
 
-            if (!ssh2_auth_password($connection, $remoteUser, $remotePass)) {
+            if (!ftp_login($ftpConn, $ftpUser, $ftpPass)) {
                 \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Autenticazione SSH fallita","line 312",'');
             }
+            ftp_pasv($ftpConn, true);
 
-            $sftp = ssh2_sftp($connection);
-            $remoteStream = @fopen("ssh2.sftp://$sftp$remotePath", 'w');
 
-            if (!$remoteStream) {
+
+            if (!ftp_put($ftpConn, $ftpRemotePath, $tempPath, FTP_BINARY)) {
                 \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Impossibile aprire il file remoto per scrittura","line 319",'');
             }
-
-            $localStream = @fopen($tempPath, 'r');
-            if (!$localStream) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Impossibile aprire il file CSV locale","line 324","");           }
-
-            while (!feof($localStream)) {
-                fwrite($remoteStream, fread($localStream, 8192));
+            if (!ftp_put($ftpConn, $ftpRemotePath, $tempPath, FTP_BINARY)) {
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","error",'errore connessione',"","");
             }
 
-            fclose($localStream);
-            fclose($remoteStream);
+            ftp_close($ftpConn);
 
-            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","success"," File caricato correttamente su $remoteHost\n","file prodotti caricato","");
+
+            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","success"," File caricato correttamente su ",$ftpHost." nella cartella ".$ftpRemotePath,"");
 
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","error", "Errore importazione",$e->getLine().'-'.$e->getMessage(),"");
