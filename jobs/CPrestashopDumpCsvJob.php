@@ -68,20 +68,22 @@ try {
         unlink($save_to . 'prodotti.csv');
     }
     $prodotti_csv = fopen($save_to . 'prodotti.csv', 'w');
+    chmod($save_to .'prodotti.csv', 0777);
     if (file_exists($save_to . 'variazioni.csv')) {
         unlink($save_to . 'variazioni.csv');
     }
     $variazioni_csv = fopen($save_to . 'variazioni.csv', 'w');
+    chmod($save_to .'variazioni.csv', 0777);
     if (file_exists($save_to . 'ps_category.csv')) {
         unlink($save_to . 'ps_category.csv');
     }
     $category_csv = fopen($save_to . 'ps_category.csv', 'w');
-
+    chmod($save_to .'ps_category.csv', 0777);
     if (file_exists($save_to . 'ps_product.csv')) {
         unlink($save_to . 'ps_product.csv');
     }
     $product_csv = fopen($save_to . 'ps_product.csv', 'w');
-
+    chmod($save_to .'ps_product.csv', 0777);
     if (file_exists($save_to . 'ps_product_shop.csv')) {
         unlink($save_to . 'ps_product_shop.csv');
     }
@@ -91,42 +93,47 @@ try {
     }
 
     $product_lang_csv = fopen($save_to . 'ps_product_lang.csv', 'w');
+    chmod($save_to .'ps_product_lang.csv', 0777);
 
 
     if (file_exists($save_to . 'ps_product_attribute.csv')) {
         unlink($save_to . 'ps_product_attribute.csv');
     }
     $product_attribute_csv = fopen($save_to . 'ps_product_attribute.csv', 'w');
-
+    chmod($save_to .'ps_product_attribute.csv', 0777);
 
     if (file_exists($save_to . 'ps_product_attribute_combination.csv')) {
         unlink($save_to . 'ps_product_attribute_combination.csv');
     }
     $product_attribute_combination_csv = fopen($save_to . 'ps_product_attribute_combination.csv', 'w');
+    chmod($save_to .'ps_product_attribute_combination.csv', 0777);
     if (file_exists($save_to . 'ps_product_attribute_shop.csv')) {
         unlink($save_to . 'ps_product_attribute_shop.csv');
     }
     $product_attribute_shop_csv = fopen($save_to . 'ps_product_attribute_shop.csv', 'w');
-
+    chmod($save_to .'ps_product_attribute_shop.csv', 0777);
     if (file_exists($save_to . 'ps_feature_product.csv')) {
         unlink($save_to . 'ps_feature_product.csv');
     }
     $feature_product_csv = fopen($save_to . 'ps_feature_product.csv', 'w');
+    chmod($save_to .'ps_feature_product.csv', 0777);
     if (file_exists($save_to . 'ps_image.csv')) {
         unlink($save_to . 'ps_image.csv');
     }
     $image_csv = fopen($save_to . 'ps_image.csv', 'w');
-
+    chmod($save_to .'ps_image.csv', 0777);
 
     if (file_exists($save_to . 'ps_image_link.csv')) {
         unlink($save_to . 'ps_image_link.csv');
     }
     $image_link_csv = fopen($save_to . 'ps_image_link.csv', 'w');
+    chmod($save_to .'ps_image_link.csv', 0777);
 
     if (file_exists($save_to . 'ps_image_lang.csv')) {
         unlink($save_to . 'ps_image_lang.csv');
     }
     $image_lang_csv = fopen($save_to . 'ps_image_lang.csv', 'w');
+    chmod($save_to .'ps_image_lang.csv', 0777);
 
     if (file_exists($save_to . 'ps_image_shop.csv')) {
         unlink($save_to . 'ps_image_shop.csv');
@@ -137,12 +144,14 @@ try {
         unlink($save_to . 'ps_stock_available.csv');
     }
     $stock_available_csv = fopen($save_to . 'ps_stock_available.csv', 'w');
+    chmod($save_to .'ps_stock_available.csv', 0777);
 
 
     if (file_exists($save_to . 'ps_stock_mvt.csv')) {
         unlink($save_to . 'ps_stock_mvt.csv');
     }
     $stock_mvt_csv = fopen($save_to . 'ps_stock_mvt.csv', 'w');
+    chmod($save_to .'ps_stock_mvt.csv', 0777);
 
     if (file_exists($save_to . 'ps_manufacturer_shop.csv')) {
         unlink($save_to . 'ps_manufacturer_shop.csv');
