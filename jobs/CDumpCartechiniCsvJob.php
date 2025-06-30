@@ -20,11 +20,12 @@ use bamboo\domain\entities\CProduct;
 use bamboo\core\events\AEventListener;
 use PDO;
 use DateTime;
+use Throwable;
 
 
 
 /**
- * Class CCartAbandonedSendEmail
+ * Class CDumpCartechiniCsvJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -303,28 +304,28 @@ ORDER BY `p`.`id`");
 
             fclose($fp);
 
-            echo "✅ CSV generato con successo: $csvFileName\n";
+            \Monkey::app()->applicationLog( "CDumpCartechiniCsvJob","success","CSV generato con successo: ",$csvFileName,"");
 
             // --- INVIO FILE VIA SFTP ---
             $connection = ssh2_connect($remoteHost, 22);
             if (!$connection) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Connessione SSH fallita",'line 306','');
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Connessione SSH fallita",'line 306','');
             }
 
             if (!ssh2_auth_password($connection, $remoteUser, $remotePass)) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Autenticazione SSH fallita","line 312",'');
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Autenticazione SSH fallita","line 312",'');
             }
 
             $sftp = ssh2_sftp($connection);
             $remoteStream = @fopen("ssh2.sftp://$sftp$remotePath", 'w');
 
             if (!$remoteStream) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Impossibile aprire il file remoto per scrittura","line 319",'');
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Impossibile aprire il file remoto per scrittura","line 319",'');
             }
 
             $localStream = @fopen($tempPath, 'r');
             if (!$localStream) {
-                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error',"❌ Impossibile aprire il file CSV locale","line 324","");           }
+                \Monkey::app()->applicationLog("CDumpCartechiniCsvJob",'error'," Impossibile aprire il file CSV locale","line 324","");           }
 
             while (!feof($localStream)) {
                 fwrite($remoteStream, fread($localStream, 8192));
@@ -333,10 +334,10 @@ ORDER BY `p`.`id`");
             fclose($localStream);
             fclose($remoteStream);
 
-            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","success","✅ File caricato correttamente su $remoteHost\n",'file prodotti caricato','');
+            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","success"," File caricato correttamente su $remoteHost\n","file prodotti caricato","");
 
-        } catch (Exception $e) {
-            echo "⚠️ Errore: " . $e->getMessage();
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog("CDumpCartechiniCsvJob","error", "Errore importazione",$e->getLine().'-'.$e->getMessage(),"");
         }
 
            }
