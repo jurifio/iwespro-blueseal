@@ -98,7 +98,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 if($orderMax==null){
                     $orderMax=1;
                 }
-                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1));
+                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1,'local'=>1));
             }
             unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
