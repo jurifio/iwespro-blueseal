@@ -1,13 +1,14 @@
 <?php
 namespace bamboo\controllers\back\ajax;
 
-use bamboo\domain\entities\CProduct;
-use bamboo\ecommerce\views\VBase;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
+use bamboo\domain\entities\CProduct;
+use bamboo\ecommerce\views\VBase;
+use bamboo\core\utils\upload\ProductImageUploader;
 
 /**
  * Class CProductPhotoAjaxManage
@@ -19,7 +20,7 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
  *
  * @since ${VERSION}
  */
-class CProductPhotoAjaxManage extends AAjaxController
+class CProductPhotoNewAjaxManage extends AAjaxController
 {
     public function get()
     {
@@ -31,7 +32,7 @@ class CProductPhotoAjaxManage extends AAjaxController
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
         $product = \Monkey::app()->repoFactory->create('Product')->findOne([$id, $productVariantId]);
 if($product) {
-    $photos = $this->app->dbAdapter->query("SELECT distinct `name`, `order`,size,`local`
+    $photos = $this->app->dbAdapter->query("SELECT distinct `name`, `order`,size
                                       FROM ProductPhoto pp, ProductHasProductPhoto ppp
                                       WHERE pp.id = ppp.productPhotoId AND
                                       ppp.productId = ? AND
@@ -55,10 +56,11 @@ if($product) {
     {
         /** @var $product CProduct */
         $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$this->app->router->request()->getRequestData('id'),
-        'productVariantId'=>$this->app->router->request()->getRequestData('productVariantId')]);
+            'productVariantId'=>$this->app->router->request()->getRequestData('productVariantId')]);
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
         $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+        $productFolder=$this->app->rootPath().$this->app->cfg()->fetch('paths', 'ProductFolder')."/";
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
@@ -72,7 +74,7 @@ if($product) {
         $fileName['extension'] = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 
         try{
-            $res = $image->process($_FILES['file']['name'], $fileName, $config['bucket'], $product->productBrand->slug);
+            $res = $image->processLocal($_FILES['file']['name'], $fileName, $productFolder);
         }catch( RedPandaAssetException $e){
             $this->app->router->response()->raiseProcessingError();
             return 'Dimensioni della foto errate: il rapporto deve esser 9:16';

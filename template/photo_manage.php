@@ -103,6 +103,20 @@
             data-href="#"
             ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Foto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-file-image-o"
+                data-permission="/admin/product/edit"
+                data-rel="tooltip"
+                data-event="bs.addnew.photo"
+                data-placement="bottom"
+                data-class="btn btn-default"
+                data-title="Aggiungi Foto"
+                data-toggle="modal"
+                data-href="#"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 
 </body>
