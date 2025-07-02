@@ -167,8 +167,17 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
         $s3 = new S3Manager($config['credential']);
 
         foreach($res as $photo){
-
-            $del = $s3->delImage($product->productBrand->slug."/".$photo['name'],$config['bucket']);
+            if ($photo['local']==null) {
+                $del = $s3->delImage($product->productBrand->slug . "/" . $photo['name'], $config['bucket']);
+            }else{
+                if(ENV=='dev'){
+                    unlink('/media/sf_sites/iwespro/client/public/product/'.$photo['name']);
+                    $del=1;
+                }else{
+                    unlink('/home/iwespro/client/public/product/'.$photo['name']);
+                    $del=1;
+                }
+            }
             if(!$del) {
                 \Monkey::app()->repoFactory->rollback();
                 throw new RedPandaException('Could not Delete all the photos');
