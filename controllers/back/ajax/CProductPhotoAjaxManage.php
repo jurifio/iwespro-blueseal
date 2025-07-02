@@ -172,7 +172,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                    unlink('/media/sf_sites/iwespro/client/public/product/'.$photo['name']);
                    $del=1;
                 }else{
-                    unlink('/home/iwespro/client/public/product/'.$photo['name']);
+                    unlink('/home/iwespro/public_html/client/public/product/'.$photo['name']);
                     $del=1;
                 }
             }
