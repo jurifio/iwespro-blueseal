@@ -23,7 +23,7 @@ foreach ($photos as $photo): ?>
     <div id="photo1" style="" class="draggable col-sm-2">
         <div class="row">
             <img class="img-responsive" height="250"
-                 src="https://www.pickyshop.com/assets/bs-dummy-16-9.png">
+                 src="https://iwes.pro/assets/bs-dummy-16-9.png">
         </div>
         <div class="row">
          <span data-toggle="modal" data-target="#bsModal" class="js-remove pull-right">

@@ -167,6 +167,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
         $s3 = new S3Manager($config['credential']);
 
         foreach($res as $photo){
+
             $del = $s3->delImage($product->productBrand->slug."/".$photo['name'],$config['bucket']);
             if(!$del) {
                 \Monkey::app()->repoFactory->rollback();
