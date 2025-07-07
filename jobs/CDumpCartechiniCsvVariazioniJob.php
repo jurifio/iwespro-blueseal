@@ -279,12 +279,12 @@ FROM `Product`   `p`
         JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
 		join ProductSize psz on S2.productSizeId = psz.id
      
-WHERE p.qty>0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
+WHERE ds.qty > 0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 1, 2))= 1
-GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId ");
+GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId");
 
             // --- CREAZIONE FILE CSV ---
             $fp = fopen($tempPath, 'w');
