@@ -279,7 +279,7 @@ FROM `Product`   `p`
         JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
 		join ProductSize psz on S2.productSizeId = psz.id
      
-WHERE ds.qty > 0  AND p.productSeasonId>37 AND pdt.langId=1 AND s.id=1 AND
+WHERE ds.qty > 0  AND p.productSeasonId>40 AND pdt.langId=1 AND s.id=1 AND
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
