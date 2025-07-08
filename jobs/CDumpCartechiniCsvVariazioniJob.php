@@ -87,6 +87,127 @@ if (ENV=='dev') {
 		  CONCAT(`S2`.`productId`,'-',S2.productVariantId,'-',S2.productSizeId)  AS `Reference_combination`,
 		  'Colore|Taglia' as `Attribute Names`,
 		  concat(`pv`.`name`,'|',`psz`.`name`) as `Attribute Values`,
+		  
+		 
+		  S2.ean AS EAN,
+			(SELECT if(`pp21`.`local`=null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
+			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124' limit 1) as Images,
+			
+	(SELECT if(`pp22`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp22`.`name`),concat('https://iwes.pro/product/',`pp22`.`name`)) FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
+			WHERE phpp22.productId=p.id AND phpp22.productVariantId=p.productVariantId AND pp22.size='1124' AND `pp22`.`order`=1 limit 1) AS `Image 1`,
+				
+			(SELECT if(`pp23`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp23`.`name`),concat('https://iwes.pro/product/',`pp23`.`name`))  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
+			WHERE phpp23.productId=p.id AND phpp23.productVariantId=p.productVariantId AND pp23.size='1124' AND `pp23`.`order`=2 limit 1) AS `Image 2`,
+			
+(SELECT if(`pp24`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp24`.`name`),concat('https://iwes.pro/product/',`pp24`.`name`))  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
+			WHERE phpp24.productId=p.id AND phpp24.productVariantId=p.productVariantId AND `pp24`.`size`='1124' AND `pp24`.`order`=3 limit 1) AS `Image 3`,
+			
+(SELECT if(`pp25`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp25`.`name`),concat('https://iwes.pro/product/',`pp25`.`name`))  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
+			WHERE phpp25.productId=p.id AND phpp25.productVariantId=p.productVariantId AND `pp25`.`size`='1124' AND `pp25`.`order`=4 limit 1) AS `Image 4`,
+''  AS `Image 5`,	
+'' AS `Image 6`,
+'' AS `Image 7`,
+'' AS `Image 8`,
+ S2.price as `Retail Price Tax Exc`,
+ S2.price as `Retail Price Tax Inc`, 
+ S2.salePrice as `Discounted Price Tax Exc`,
+ S2.salePrice as `Discounted Price Tax Inc`,
+ '' AS `Discounted Price Tax Exc If Discount Exists`,
+		'' AS 	`Discounted Price Tax Inc If Discount Exists`,
+		'' AS 	`Discount Percent`,
+		'' AS 	`Discount Amount`,
+		'' AS 	`Discount Base Price`,
+		'' AS 	`Discount Starting Unit`,
+		'' AS 	`Discount from`,
+		'' AS 	`Discount to`,
+ 0 AS `Cost price`,	
+S2.price as `Impact on Price`,	
+	0 as `EcoTax`,
+S2.stockQty as Quantity,
+'in Stock' as `Stock Availability`,
+1 as `Minimal Quantity`,
+ '' as `Stock Location`,
+ 0 as `Low Stock Level`,
+ '' as `Email Alert on Low Stock`,
+ '' AS 	`Availability date`,
+0 as `Impact on Weight`,
+if(S2.stockQty > 1,'1','0') AS `Default`,
+		 '15.000000'                                                                      AS `Width`,
+        '25.000000'                                                                      AS `Height`,
+        '10.000000'                                                                      AS `Depth`,
+        '1.000000'                                                                      AS `Weight`,
+CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL IT`,
+CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL DE`,	
+CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL GB`,	
+CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId,'#/colore-',`pv`.`name`,'/taglia-',`psz`.`name`) AS `Combination URL FR`,	
+1 AS 		`Shop ID`,
+	'Cartechini Shop' AS 		`Shop Name`, concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name IT`,
+		   concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name DE`,
+		    concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name GB`,
+			 concat(p.itemno, '  ', pv.name,' ',`pb`.`name` )     AS `Product Name FR`,
+			 1 AS active,
+			  concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description IT`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description DE`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description GB`,	
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Short Description FR`,	
+ concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description IT`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description DE`,
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description GB`,	
+concat(p.itemno, '  ', pv.name,' ',`pb`.`name`,' ',p.externalId) AS `Long Description FR`,	
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL IT`,
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
+CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
+ 0 as `Product Price Tax Exc`,
+ 0 as `Product Price Tax inc`,
+ 0 as `Product Discounted Price Tax Exc`,
+ 0 as `Product Discounted Price Tax Inc`,
+ '' `Product Discounted Price Tax Exc If Discount Exists`,
+ '' as `Product Discounted Price Tax Inc If Discount Exists`,
+ '' as `Product Discount Percent`,
+  '' as `Product Discount Amount`,
+  '' as `Product Discount Base Price`,
+   '' as `Product Discount Starting Unit`,
+   '' as `Product Discount from`,
+   '' as `Product Discount to`,
+    '' as `tax Rule`,
+	 `pb`.`name`    AS `Brand`,
+  (SELECT `node`.`slug` FROM `ProductCategory` `node`  WHERE 
+		  `node`.`id`=`phpc`.`productCategoryId`  ) AS 
+ `Default Category IT`,
+	 (SELECT `node1`.`slug` FROM `ProductCategory` `node1`  WHERE 
+		  `node1`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category DE`,
+	 (SELECT `node2`.`slug` FROM `ProductCategory` `node2`  WHERE 
+		  `node2`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category GB`,
+ (SELECT `node3`.`slug` FROM `ProductCategory` `node3`  WHERE 
+		  `node3`.`id`=`phpc`.`productCategoryId`  ) AS 		`Default Category FR`,
+	(SELECT CONCAT(GROUP_CONCAT(`parent10`.`slug` SEPARATOR ' | '),' | ',`node10`.`slug`) FROM `ProductCategory` AS `node10`,
+        `ProductCategory` AS `parent10` WHERE 
+		  `node10`.`lft` BETWEEN `parent10`.`lft` AND parent10.rght  AND node10.id!=parent10.id AND `node10`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories IT`,
+		  
+	(SELECT CONCAT(GROUP_CONCAT(`parent20`.`slug` SEPARATOR ' | '),' | ',`node20`.`slug`) FROM `ProductCategory` AS `node20`,
+        `ProductCategory` AS `parent20` WHERE 
+		  `node20`.`lft` BETWEEN `parent20`.`lft` AND parent20.rght  AND node20.id!=parent20.id AND `node20`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories DE`,
+		  
+	(SELECT CONCAT(GROUP_CONCAT(`parent30`.`slug` SEPARATOR ' | '),' | ',`node30`.`slug`) FROM `ProductCategory` AS `node30`,
+        `ProductCategory` AS `parent30` WHERE 
+		  `node30`.`lft` BETWEEN `parent30`.`lft` AND parent30.rght  AND node30.id!=parent30.id AND `node30`.`id`=`phpc`.`productCategoryId`  ) AS		`Categories GB`,
+		  
+(SELECT CONCAT(GROUP_CONCAT(`parent40`.`slug` SEPARATOR ' | '),' | ',`node40`.`slug`) FROM `ProductCategory` AS `node40`,
+        `ProductCategory` AS `parent40` WHERE 
+		  `node40`.`lft` BETWEEN `parent40`.`lft` AND parent40.rght  AND node40.id!=parent40.id AND `node40`.`id`=`phpc`.`productCategoryId`  ) AS 		`Categories FR`,
+	 (SELECT if(`pp2`.`local` = null, concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp2`.`name`),concat('https://iwes.pro/product/',`pp2`.`name`))  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
+			WHERE phpp2.productId=p.id AND phpp2.productVariantId=p.productVariantId AND pp2.size='1124' AND   `pp2`.`order`=1 limit 1 ) AS `Cover Image_URL`,
+		
+			'' as Accessories,
+	'' AS `Meta Title IT`,
+		'' AS 	`Meta Title DE`,
+		'' AS	`Meta Title GB`,SELECT p.id as productId,
+		 concat(`p`.`id`,'-',p.productVariantId)  AS `Reference`,
+		  CONCAT(`S2`.`productId`,'-',S2.productVariantId,'-',S2.productSizeId)  AS `Reference_combination`,
+		  'Colore|Taglia' as `Attribute Names`,
+		  concat(`pv`.`name`,'|',`psz`.`name`) as `Attribute Values`,
+		  
 		 
 		  S2.ean AS EAN,
 			(SELECT if(`pp21`.`local`=null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
@@ -270,7 +391,7 @@ FROM `Product`   `p`
         JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`) 
         JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)= (`phpc`.`productId`, `phpc`.`productVariantId`)
         JOIN  `ProductDescriptionTranslation` `pdt` ON `p`.`id` = `pdt`.`productId` AND `p`.`productVariantId` = `pdt`.`productVariantId`
-        JOIN `DirtyProduct` `dp` ON `p`.`id` = `dp`.`productId` AND `dp`.`productVariantId` = `p`.`productVariantId`
+        JOIN `DirtyProduct` `dp` ON `p`.`id` = `dp`.`productId` AND `dp`.`productVariantId` = `p`.`productVariantId` AND dp.fullMatch='1'
         JOIN `DirtySku` `ds` ON `dp`.id=ds.dirtyProductId 
         JOIN Storehouse st ON ds.shopId=st.shopId AND ds.storeHouseId=st.id 
        
@@ -279,12 +400,12 @@ FROM `Product`   `p`
         JOIN ProductSizeMacroGroup pmg ON pghps.productSizeMacroGroupId=pmg.id
 		join ProductSize psz on S2.productSizeId = psz.id
      
-WHERE ds.qty > 0  AND p.productSeasonId>40 AND pdt.langId=1 AND s.id=1 AND
+WHERE S2.stockQty > 0  AND p.productSeasonId >41  AND pdt.langId=1 AND s.id=1 AND CONCAT(st.sigla, ' ',st.address,',',st.`number`,' ',`st`.`city`,' ',`st`.`phone`)  IS  not null AND
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 1, 2))= 1
-GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,ds.storeHouseId");
+GROUP BY `Reference` ,Reference_combination, `Attribute Values`, `Custom Column 1` Order BY `Reference` ,Reference_combination, `Attribute Values`, `Custom Column 1` asc");
 
             // --- CREAZIONE FILE CSV ---
             $fp = fopen($tempPath, 'w');
