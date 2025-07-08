@@ -280,7 +280,7 @@ FROM `Product`   `p`
        
        
         left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
-WHERE p.qty>0  AND p.productSeasonId>40 AND pdt.langId=1 AND
+WHERE p.qty>0  AND p.productSeasonId>41 AND pdt.langId=1 AND
   (if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
