@@ -167,28 +167,28 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
         `ProductCategory` AS `parent40` WHERE 
 		  `node40`.`lft` BETWEEN `parent40`.`lft` AND parent40.rght  AND node40.id!=parent40.id AND `node40`.`id`=`phpc`.`productCategoryId`  ) AS 		`Categories FR`,
 		  
- (SELECT if(`pp2`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp2`.`name`),concat('https://iwes.pro/product/',`pp2`.`name`))  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
+ (SELECT if(`pp2`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp2`.`name`),concat('https://iwes.pro/product/',`pp2`.`name`))  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
 			WHERE phpp2.productId=p.id AND phpp2.productVariantId=p.productVariantId AND pp2.size='1124' AND   `pp2`.`order`=1 LIMIT 1) AS `image_URL`,
 		
-			(SELECT if (`pp21`.`local`=null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
+			(SELECT if (`pp21`.`local`is null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
 			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124') as Images,
 			
-	(SELECT if(`pp22`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp22`.`name`),concat('https://iwes.pro/product/',`pp22`.`name`)) FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
+	(SELECT if(`pp22`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp22`.`name`),concat('https://iwes.pro/product/',`pp22`.`name`)) FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
 			WHERE phpp22.productId=p.id AND phpp22.productVariantId=p.productVariantId AND pp22.size='1124' AND `pp22`.`order`=1 LIMIT 1) AS `Image 1`,
 				
-			(SELECT if(`pp23`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp23`.`name`),concat('https://iwes.pro/product/',`pp23`.`name`))  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
+			(SELECT if(`pp23`.`local`is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp23`.`name`),concat('https://iwes.pro/product/',`pp23`.`name`))  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
 			WHERE phpp23.productId=p.id AND phpp23.productVariantId=p.productVariantId AND pp23.size='1124' AND `pp23`.`order`=2 LIMIT 1 ) AS `Image 2`,
 			
- (SELECT if(`pp24`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp24`.`name`),concat('https://iwes.pro/product/',`pp24`.`name`))  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
+ (SELECT if(`pp24`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp24`.`name`),concat('https://iwes.pro/product/',`pp24`.`name`))  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
 			WHERE phpp24.productId=p.id AND phpp24.productVariantId=p.productVariantId AND `pp24`.`size`='1124' AND `pp24`.`order`=3 LIMIT 1) AS `Image 3`,
 			
- (SELECT if(`pp25`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp25`.`name`),concat('https://iwes.pro/product/',`pp25`.`name`))  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
+ (SELECT if(`pp25`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp25`.`name`),concat('https://iwes.pro/product/',`pp25`.`name`))  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
 			WHERE phpp25.productId=p.id AND phpp25.productVariantId=p.productVariantId AND `pp25`.`size`='1124' AND `pp25`.`order`=4 LIMIT 1) AS `Image 4`,
 ''  AS `Image 5`,	
 '' AS `Image 6`,
 '' AS `Image 7`,
 '' AS `Image 8`,	
- (SELECT if(`pp26`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp26`.`name`),concat('https://iwes.pro/product/',`pp26`.`name`)) FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
+ (SELECT if(`pp26`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp26`.`name`),concat('https://iwes.pro/product/',`pp26`.`name`)) FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
 			WHERE phpp26.productId=p.id AND phpp26.productVariantId=p.productVariantId AND pp26.size='1124' AND `pp26`.`order`=1 LIMIT 1) AS	`Image Captions`,
 			'Catalogo' as `Catalogo`,
 			'' as `Related products (Accessories)`,
@@ -220,9 +220,9 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
 			'' AS  `Attachment Descriptions FR`,
 			'' AS 	`Pack Items`,	
 			CONCAT('https://www.cartechinishop.com/it','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL IT`,
-CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
-CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
-CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
+            CONCAT('https://www.cartechinishop.com/de','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL DE`,	
+            CONCAT('https://www.cartechinishop.com/gb','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL GB`,	
+            CONCAT('https://www.cartechinishop.com/fr','/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Friendly URL FR`,	
 			
         'both' as Visibility,
 		1 as `Available for order`,
@@ -288,8 +288,8 @@ WHERE p.qty>0  AND phpc.productCategoryId > 4 AND p.productSeasonId>41 AND pdt.l
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 1, 2))= 1
-GROUP BY p.id,p.productVariantId 
-ORDER BY `p`.`id`");
+                                                            GROUP BY p.id,p.productVariantId 
+                                                            ORDER BY `p`.`id`");
 
             // --- CREAZIONE FILE CSV ---
             $fp = fopen($tempPath, 'w');

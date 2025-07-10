@@ -94,19 +94,19 @@ if (ENV=='dev') {
 		  
 		 
 		  S2.ean AS EAN,
-			(SELECT if(`pp21`.`local`=null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
+			(SELECT if(`pp21`.`local` is null, GROUP_CONCAT(concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp21`.`name`) SEPARATOR '|'),GROUP_CONCAT(concat('https://iwes.pro/product/',`pp21`.`name`) SEPARATOR '|')) FROM ProductPhoto pp21  JOIN ProductHasProductPhoto phpp21 ON phpp21.productPhotoId=pp21.id
 			WHERE phpp21.productId=p.id AND phpp21.productVariantId=p.productVariantId AND pp21.size='1124' limit 1) as Images,
 			
-	(SELECT if(`pp22`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp22`.`name`),concat('https://iwes.pro/product/',`pp22`.`name`)) FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
+	(SELECT if(`pp22`.`local`is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp22`.`name`),concat('https://iwes.pro/product/',`pp22`.`name`)) FROM ProductPhoto pp22  JOIN ProductHasProductPhoto phpp22 ON phpp22.productPhotoId=pp22.id
 			WHERE phpp22.productId=p.id AND phpp22.productVariantId=p.productVariantId AND pp22.size='1124' AND `pp22`.`order`=1 limit 1) AS `Image 1`,
 				
-			(SELECT if(`pp23`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp23`.`name`),concat('https://iwes.pro/product/',`pp23`.`name`))  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
+			(SELECT if(`pp23`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp23`.`name`),concat('https://iwes.pro/product/',`pp23`.`name`))  FROM ProductPhoto pp23  JOIN ProductHasProductPhoto phpp23 ON phpp23.productPhotoId=pp23.id
 			WHERE phpp23.productId=p.id AND phpp23.productVariantId=p.productVariantId AND pp23.size='1124' AND `pp23`.`order`=2 limit 1) AS `Image 2`,
 			
-(SELECT if(`pp24`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp24`.`name`),concat('https://iwes.pro/product/',`pp24`.`name`))  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
+(SELECT if(`pp24`.`local`is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp24`.`name`),concat('https://iwes.pro/product/',`pp24`.`name`))  FROM ProductPhoto `pp24`  JOIN ProductHasProductPhoto phpp24 ON phpp24.productPhotoId=pp24.id
 			WHERE phpp24.productId=p.id AND phpp24.productVariantId=p.productVariantId AND `pp24`.`size`='1124' AND `pp24`.`order`=3 limit 1) AS `Image 3`,
 			
-(SELECT if(`pp25`.`local`=null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp25`.`name`),concat('https://iwes.pro/product/',`pp25`.`name`))  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
+(SELECT if(`pp25`.`local` is null,concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp25`.`name`),concat('https://iwes.pro/product/',`pp25`.`name`))  FROM ProductPhoto pp25  JOIN ProductHasProductPhoto phpp25 ON phpp25.productPhotoId=pp25.id
 			WHERE phpp25.productId=p.id AND phpp25.productVariantId=p.productVariantId AND `pp25`.`size`='1124' AND `pp25`.`order`=4 limit 1) AS `Image 4`,
 ''  AS `Image 5`,	
 '' AS `Image 6`,
