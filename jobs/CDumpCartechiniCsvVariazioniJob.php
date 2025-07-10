@@ -73,9 +73,9 @@ if (ENV=='dev') {
         /*  $ftpUser = 'export@cartechinishop.com';
          $ftpPass = 'Scoponi2024!';
          $ftpRemotePath = '/' . $csvFileName;*/
-        $ftpUser = 'root';
+        $ftpUser = 'cartechini';
         $ftpPass = 'aqV^bJ7?E.Np';
-        $ftpRemotePath = '/home/cartechini/public_html/import/' . $csvFileName;
+        $ftpRemotePath = '/public_html/import/' . $csvFileName;
 
 // --- CONNESSIONE DATABASE ---
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
