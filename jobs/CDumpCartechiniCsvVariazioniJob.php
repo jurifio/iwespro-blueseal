@@ -70,9 +70,12 @@ if (ENV=='dev') {
 }
 // --- CONFIGURAZIONE SFTP ---
         $ftpHost = '5.189.152.89';
-        $ftpUser = 'export@cartechinishop.com';
-        $ftpPass = 'Scoponi2024!';
-        $ftpRemotePath = '/' . $csvFileName;
+        /*  $ftpUser = 'export@cartechinishop.com';
+         $ftpPass = 'Scoponi2024!';
+         $ftpRemotePath = '/' . $csvFileName;*/
+        $ftpUser = 'root';
+        $ftpPass = 'aqV^bJ7?E.Np';
+        $ftpRemotePath = '/home/cartechini/public_html/import/' . $csvFileName;
 
 // --- CONNESSIONE DATABASE ---
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
