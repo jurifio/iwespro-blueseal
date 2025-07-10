@@ -200,7 +200,7 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
 (SELECT CONCAT(GROUP_CONCAT(`parent40`.`slug` SEPARATOR ' | '),' | ',`node40`.`slug`) FROM `ProductCategory` AS `node40`,
         `ProductCategory` AS `parent40` WHERE 
 		  `node40`.`lft` BETWEEN `parent40`.`lft` AND parent40.rght  AND node40.id!=parent40.id AND `node40`.`id`=`phpc`.`productCategoryId`  ) AS 		`Categories FR`,
-	 (SELECT if(`pp2`.`local` = null, concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp2`.`name`),concat('https://iwes.pro/product/',`pp2`.`name`))  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
+	 (SELECT if(`pp2`.`local` is null, concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp2`.`name`),concat('https://iwes.pro/product/',`pp2`.`name`))  FROM ProductPhoto pp2  JOIN ProductHasProductPhoto phpp2 ON phpp2.productPhotoId=pp2.id
 			WHERE phpp2.productId=p.id AND phpp2.productVariantId=p.productVariantId AND pp2.size='1124' AND   `pp2`.`order`=1 limit 1 ) AS `Cover Image_URL`,
 		
 			'' as Accessories,
@@ -221,7 +221,7 @@ CONCAT('/',pb.slug,'/cpf/',p.itemno,'/p/',p.id,'/v/',p.productVariantId) AS `Fri
   '' as Suppliers,
   '' as `Supplier References`,
  '' as `Supplier Prices`,		
-(SELECT if(`pp26`.`local`=null, concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp26`.`name`),concat('https://iwes.pro/product/',`pp26`.`name`))  FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
+(SELECT if(`pp26`.`local` is null, concat('https://iwes.s3.eu-west-1.amazonaws.com/',pb.slug,'/',`pp26`.`name`),concat('https://iwes.pro/product/',`pp26`.`name`))  FROM ProductPhoto pp26  JOIN ProductHasProductPhoto phpp26 ON phpp26.productPhotoId=pp26.id
 			WHERE phpp26.productId=p.id AND phpp26.productVariantId=p.productVariantId AND pp26.size='1124' AND `pp26`.`order`=1 LIMIT 1) AS	`Image Captions`,
 			'Catalogo' as `Catalogo`,
 			'' as `Related products (Accessories)`,
